@@ -86,7 +86,7 @@ public class WebServiceProtoype {
 		int size = jsonarray.length();
 		for (int i = 0; i < size; i++) {
 			System.out.print("\nNombre: " + jsonarray.getJSONObject(i).getString("name"));
-			System.out.print("\nFecha y hora: " + jsonarray.getJSONObject(i).getString("formattedtime"));
+			System.out.print("\nFecha y hora: " + jsonarray.getJSONObject(i).getString("formattedtime").replaceAll("<.*?>", ""));
 		}
 	}
 }
