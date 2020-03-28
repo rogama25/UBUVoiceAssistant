@@ -15,21 +15,28 @@
 # You should have received a copy of the GNU General Public License
 # along with Mycroft Core.  If not, see <http://www.gnu.org/licenses/>.
 import sys
-sys.path.append('/home/adp1002/')
+sys.path.append('/home/adp1002/UBUCalendar/src')
+import socket, pickle
 from adapt.intent import IntentBuilder
 from mycroft import MycroftSkill, intent_handler
-from UBUCalendar.src.webservice.web_service import WebService
+from webservice.web_service import WebService
 
 class UbuAssistantSkill(MycroftSkill):
-    ws = WebService.get_instance()
+
     def __init__(self):
         super().__init__()
-        #self.ws.set_host('https://school.moodledemo.net')
-        #self.ws.set_url_with_token('student','moodle')
+        self.host = 'localhost'
+        self.port = 5555
         self.learning = True
 
     def initialize(self):
-        my_setting = self.settings.get('my_setting')
+        #my_setting = self.settings.get('my_setting')
+        self.client_socket = socket.socket()
+        self.client_socket.connect((self.host, self.port))
+        webservice_data = self.client_socket.recv(4096)
+        self.ws = pickle.loads(webservice_data)
+        self.client_socket.close()
+
 
     @intent_handler('UpcomingEvents.intent')
     def handle_upcoming_events_intent(self, message):
@@ -39,6 +46,11 @@ class UbuAssistantSkill(MycroftSkill):
             text = text + ' '.join(event)
             text = text + '.'
         self.speak(text)
+
+    @intent_handler('DayEvents.intent')
+    def handle_day_events_intent(self, message):
+        self.ws.get_calendar_upcoming_view()
+        self.speak('Hola')
 
     def stop(self):
         pass

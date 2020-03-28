@@ -3,11 +3,6 @@ import requests
 import re
 
 class WebService:
-    __host = ''
-    __token = ''
-    __userid = 0
-    __url_with_token = ''
-    __userid
     __instance = None
 
     #Singleton
@@ -15,9 +10,9 @@ class WebService:
         WebService.__instance = self
 
     @staticmethod
-    def get_instance(self):
+    def get_instance():
         if WebService.__instance == None:
-            WebService()
+            return WebService()
         return WebService.__instance
 
     def set_host(self,host):
@@ -27,8 +22,8 @@ class WebService:
         url = self.__host + '/login/token.php'
         url_params = {'username':username, 'password':password, 'service':'moodle_mobile_app'}
         r = requests.get(url, params=url_params).json()
-        self.__token = r['token']
-        self.__url_with_token = self.__host + '/webservice/rest/server.php?wstoken=' + self.__token + '&moodlewsrestformat=json&wsfunction='
+        token = r['token']
+        self.__url_with_token = self.__host + '/webservice/rest/server.php?wstoken=' + token + '&moodlewsrestformat=json&wsfunction='
 
     def get_userid(self):
         if self.__userid == 0:

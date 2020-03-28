@@ -1,11 +1,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import subprocess
 import sys
 sys.path.append('.')
 from webservice.web_service import WebService
 from GUI.app import AppMainWindow
 
 class LoginWindow(QtWidgets.QMainWindow):
+
+
     def __init__(self):
         super().__init__()
         self.title = 'UBUAssistant'
@@ -86,6 +87,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.label_host.setText(_translate('MainWindow', 'Host'))
 
     def on_login_pressed(self):
+
         user = str(self.lineEdit_user.text())
         password = str(self.lineEdit_password.text())
         host = str(self.lineEdit_host.text())
@@ -94,11 +96,11 @@ class LoginWindow(QtWidgets.QMainWindow):
         ws.set_host(host)
         ws.set_url_with_token(user,password)
 
+
         self.app_window = AppMainWindow()
         self.app_window.show()
         self.close()
 
-        subprocess.run(['bash', '/home/adp1002/mycroft-core/start-mycroft.sh', 'all'])
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)

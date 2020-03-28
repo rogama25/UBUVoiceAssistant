@@ -5,12 +5,20 @@
 # Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
-
+import socket, pickle
+import subprocess
+from webservice.web_service import WebService
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class AppMainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
+        self.ws = WebService.get_instance()
+        self.host = 'localhost'
+        self.port = 5555
+        self.server_socket = socket.socket()
+        self.server_socket.bind((self.host, self.port))
+
         self.title = 'UBUAssistant'
         self.top = 100
         self.left = 100
@@ -79,6 +87,16 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.horizontalLayout.addLayout(self.vertical_layout_response)
 
         self.retranslate_ui(self)
+
+        subprocess.Popen(['bash', '/home/adp1002/mycroft-core/start-mycroft.sh', 'debug'])
+
+
+        #while(True):
+        self.server_socket.listen(1)
+        client_socket, address = self.server_socket.accept()
+        webservice_data = pickle.dumps(self.ws)
+        client_socket.send(webservice_data)
+
 
     def retranslate_ui(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
