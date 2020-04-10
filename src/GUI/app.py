@@ -9,6 +9,8 @@ import socket, pickle
 import subprocess
 from webservice.web_service import WebService
 from PyQt5 import QtCore, QtGui, QtWidgets
+from mycroft_bus_client import MessageBusClient, Message
+
 
 class AppMainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -69,7 +71,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.vertical_layout_questions.addWidget(self.label_questions1)
 
         self.horizontalLayoutWidget = QtWidgets.QWidget(self)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(40, 240, 400, 200))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(40, 300, 400, 200))
         #self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -97,6 +99,8 @@ class AppMainWindow(QtWidgets.QMainWindow):
         webservice_data = pickle.dumps(self.ws)
         client_socket.send(webservice_data)
 
+        self.client = MessageBusClient()
+        self.client.run_in_thread()
 
     def retranslate_ui(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -107,8 +111,18 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.label_questions_title.setText(_translate("MainWindow", "Puedes preguntar: Hey Mycroft..."))
         self.label_questions1.setText(_translate("MainWindow", "TextLabel"))
 
-    def update_chat(source, message):
-        pass
+
+    def update_chat(self, source, message):
+        label = QtWidgets.QLabel(self)
+        if source == 'r':
+            self.vertical_layout_response.addWidget(label)
+        elif source == 'u':
+            self.vertical_layout_user.addWidget(label)
+        label.setText(message)
+
 
     def on_send_pressed(self):
-        self.pushButton_send.setText("Test")
+        utterance = self.lineEdit_chat_message.text()
+        self.update_chat('u', utterance)
+        self.client.emit(Message('recognizer_loop:utterance', {'utterances': [utterance]}))
+        self.lineEdit_chat_message.setText('')

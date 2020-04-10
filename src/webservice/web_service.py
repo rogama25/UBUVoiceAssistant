@@ -35,7 +35,8 @@ class WebService:
     def get_calendar_day_view(self, year, month, day):
         url = self.__url_with_token + 'core_calendar_get_calendar_day_view&year=' + year + '&month=' + month + '&day=' + day
         r = requests.get(url).json()
-        return r
+        events = self.convert_to_readable_text(r['events'])
+        return events
 
     def get_calendar_events_by_courseid(self, courseid):
         url = self.__url_with_token + 'core_calendar_get_action_events_by_course&courseid=' + courseid
@@ -45,7 +46,10 @@ class WebService:
     def get_calendar_upcoming_view(self):
         url = self.__url_with_token + 'core_calendar_get_calendar_upcoming_view'
         r = requests.get(url).json()
-        events = r['events']
+        events = self.convert_to_readable_text(r['events'])
+        return events
+
+    def convert_to_readable_text(self, events):
         events_info = []
         for event in events:
             event_info = []

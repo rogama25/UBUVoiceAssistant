@@ -85,11 +85,13 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.label_user.setText(_translate('MainWindow', 'Usuario'))
         self.label_password.setText(_translate('MainWindow', 'Contraseña'))
         self.label_host.setText(_translate('MainWindow', 'Host'))
+        self.lineEdit_user.setText(_translate('MainWindow', 'adp1002@alu.ubu.es'))
+        self.lineEdit_host.setText(_translate('MainWindow', 'https://ubuvirtual.ubu.es'))
 
     def on_login_pressed(self):
 
         user = str(self.lineEdit_user.text())
-        password = str(self.lineEdit_password.text())
+        password = self.lineEdit_password.text()
         host = str(self.lineEdit_host.text())
 
         ws = WebService()
