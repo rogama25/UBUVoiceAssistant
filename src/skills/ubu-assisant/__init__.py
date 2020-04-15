@@ -27,7 +27,11 @@ class UbuAssistantSkill(MycroftSkill):
         super().__init__()
         self.host = 'localhost'
         self.port = 5555
+        self.month = ''
         self.learning = True
+        self.months = {'enero':1, 'febrero':2, 'marzo':3, 'abril':4, 'mayo':5,
+                       'junio':6, 'julio':7, 'agosto':8, 'septiembre':9,
+                       'octubre':10, 'noviembre':11, 'diciembre':12}
 
     def initialize(self):
         #my_setting = self.settings.get('my_setting')
@@ -41,20 +45,27 @@ class UbuAssistantSkill(MycroftSkill):
     @intent_handler('UpcomingEvents.intent')
     def handle_upcoming_events_intent(self, message):
         events = self.ws.get_calendar_upcoming_view()
-        text = ''
-        for event in events:
-            text = text + ' '.join(event)
-            text = text + '.'
-        self.speak(text)
+        self.text_to_speech(events)
 
     @intent_handler('DayEvents.intent')
     def handle_day_events_intent(self, message):
-        self.ws.get_calendar_upcoming_view()
-        self.speak('Hola')
+        self.month = str(self.months[message.data['month']])
+        events = self.ws.get_calendar_day_view(year=str(message.data['year']), month=self.month, day=str(message.data['day']))
+        self.text_to_speech(events)
+
+    '''@intent_handler('CourseEvents.intent')
+    def handle_course_events_intent(self, message):
+        self.ws.get_calendar_events_by_courseid()'''
 
     def stop(self):
         pass
 
+    def text_to_speech(self, string_array):
+        text = ''
+        for string in string_array:
+            text = text + ' '.join(string)
+            text = text + '.'
+        self.speak(text)
 
 def create_skill():
     return UbuAssistantSkill()

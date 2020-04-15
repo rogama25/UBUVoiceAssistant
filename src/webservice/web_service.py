@@ -25,12 +25,17 @@ class WebService:
         token = r['token']
         self.__url_with_token = self.__host + '/webservice/rest/server.php?wstoken=' + token + '&moodlewsrestformat=json&wsfunction='
 
-    def get_userid(self):
+    def set_userid(self):
         if self.__userid == 0:
             url = self.__url_with_token + 'core_webservice_get_site_info'
             r = requests.get(url).json()
             self.__userid = r['userid']
         return self.__userid
+
+    def set_user_courses():
+        url = self.__url_with_token + 'core_enrol_get_users_courses&userid=' + self.__userid
+        r = requests.get(url).json()
+        for course in r
 
     def get_calendar_day_view(self, year, month, day):
         url = self.__url_with_token + 'core_calendar_get_calendar_day_view&year=' + year + '&month=' + month + '&day=' + day
