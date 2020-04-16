@@ -11,3 +11,10 @@ Los Amazon Web Services, AWS a partir de ahora, es un conjunto de servicios de c
 Es un servicio de voz en la nube para dispositivos de Amazon y dispositivos de terceros que usan Alexa.
 \section{Problemas con Alexa}
 \section{Mycroft como alternativa}
+Esta herramienta es de código abierto, por lo que tengo la posibilidad de ver como están implementados los diferentes servicios del asistente de voz, modificarlos, etc. Además, para crear una Skill de Alexa, estás restringido en cierto modo de qué y qué no puedes hacer, problema que no existe con Mycroft que te da libertad total para crear lo que quieras. Tampoco tiene las restricciones de tamaño que me impedían continuar con el proyecto en Alexa, así que por todas estas características decidí volver a empezar pero usando Mycroft esta vez.
+Pero con Mycroft no son todo ventajas. De momento esta aplicación no se puede instalar en Windows, teniendo que usar una máquina virtual de Ubuntu o distribución de Linux para usarla. Al ser una aplicación cliente el usuario necesita instalarla para usar la Skill.
+\section{Aplicación cliente}
+En el anterior apartado he comentado la libertad que te ofrece Mycroft. Pues bien, esta herramienta se ejecuta como una aplicación cliente, a diferencia de Alexa que necesitas usar los servicios de Amazon para usar la Skill. Y aunque Mycroft también depende de servicios de text-to-speech y speech-to-text, y por ello una conexión a internet, se puede crear una aplicación cliente usando estos servicios ya que la propia aplicación de Mycroft es cliente.
+Así que gracias a esto el proyecto tomó un camino distinto al inicial, teniendo la posibilidad de crear una aplicación gráfica más atractiva en general.
+\section{Comunicación entre procesos}
+En el inicio de esta nueva etapa surgió un problema que no había planteado cuando decidí usar Mycroft como alternativa a Alexa. Al ejecutar la aplicación gráfica para loguearse en Moodle e invocar una Skill, se crea un nuevo programa con esa Skill, por lo que la comunicación entre la aplicación gráfica y Skill se complicó. Como solución utilicé comunicación entre procesos mediante sockets
