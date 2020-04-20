@@ -97,7 +97,8 @@ class LoginWindow(QtWidgets.QMainWindow):
         ws = WebService()
         ws.set_host(host)
         ws.set_url_with_token(user,password)
-
+        ws.set_userid()
+        ws.set_user_courses()
 
         self.app_window = AppMainWindow()
         self.app_window.show()

@@ -17,7 +17,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         super().__init__()
         self.ws = WebService.get_instance()
         self.host = 'localhost'
-        self.port = 5555
+        self.port = 5055
         self.server_socket = socket.socket()
         self.server_socket.bind((self.host, self.port))
 
