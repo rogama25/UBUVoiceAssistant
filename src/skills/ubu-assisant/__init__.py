@@ -1,4 +1,4 @@
-# Copyright 2016 Mycroft AI, Inc.
+# Copyright 2016 Mycroft AI, Inc.~
 #
 # This file is part of Mycroft Core.
 #
@@ -17,6 +17,7 @@
 import sys
 sys.path.append('/home/adp1002/UBUCalendar/src')
 import socket, pickle
+from datetime import datetime
 from adapt.intent import IntentBuilder
 from mycroft import MycroftSkill, intent_handler
 from webservice.web_service import WebService
@@ -26,7 +27,7 @@ class UbuAssistantSkill(MycroftSkill):
     def __init__(self):
         super().__init__()
         self.host = 'localhost'
-        self.port = 5555
+        self.port = 5055
         self.month = ''
         self.learning = True
         self.months = {'enero':1, 'febrero':2, 'marzo':3, 'abril':4, 'mayo':5,
@@ -41,7 +42,6 @@ class UbuAssistantSkill(MycroftSkill):
         self.ws = pickle.loads(webservice_data)
         self.client_socket.close()
 
-
     @intent_handler('UpcomingEvents.intent')
     def handle_upcoming_events_intent(self, message):
         events = self.ws.get_calendar_upcoming_view()
@@ -53,9 +53,27 @@ class UbuAssistantSkill(MycroftSkill):
         events = self.ws.get_calendar_day_view(year=str(message.data['year']), month=self.month, day=str(message.data['day']))
         self.text_to_speech(events)
 
-    '''@intent_handler('CourseEvents.intent')
+    @intent_handler('CourseEvents.intent')
     def handle_course_events_intent(self, message):
-        self.ws.get_calendar_events_by_courseid()'''
+        events = []
+        course = message.data['course']
+        id = self.get_course_id_by_name(course)
+        events = self.ws.get_calendar_events_by_courseid(str(id))
+        self.text_to_speech(events)
+
+    @intent_handler('Grades.intent')
+    def handle_grades_intent(self, message):
+        grades = self.ws.get_final_grades(self.ws.get_userid())
+        self.text_to_speech(grades)
+
+    @intent_handler('RecentUpdates.intent')
+    def handle_course_updates(self, message):
+        course = message.data['course']
+        date = datetime(int(message.data['year']), int(self.months[message.data['month']]), int(message.data['day']), 0, 0, 0)
+        id = self.get_course_id_by_name(course)
+        cmids = self.ws.get_course_updates_since(str(id),int(datetime.timestamp(date)))
+        module_names = self.ws.get_course_module(cmids)
+        self.speak(str(module_names))
 
     def stop(self):
         pass
@@ -66,6 +84,12 @@ class UbuAssistantSkill(MycroftSkill):
             text = text + ' '.join(string)
             text = text + '.'
         self.speak(text)
+
+    def get_course_id_by_name(self, course):
+        for id, name in self.ws.get_user_courses().items():
+            if course.upper() in name:
+                return id
+        return None
 
 def create_skill():
     return UbuAssistantSkill()

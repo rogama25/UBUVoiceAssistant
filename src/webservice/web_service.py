@@ -77,19 +77,19 @@ class WebService:
 #-------------------------------------TODO--------------------------------------
 
     def get_course_updates_since(self, courseid, timestamp):
-        url = self.__url_with_token + 'core_course_get_updates_since&courseid=' + courseid + '&since=' + timestamp
+        url = self.__url_with_token + 'core_course_get_updates_since&courseid=' + courseid + '&since=' + str(timestamp)
         r = requests.get(url).json()
         updated_modules_ids = []
         for updates in r['instances']:
-            updated_modules.append(updates['id'])
+            updated_modules_ids.append(updates['id'])
         return updated_modules_ids
 
-    def get_course_module(self, cmid_array, courseid):
+    def get_course_module(self, cmid_array):
         updated_modules = []
         for cmid in cmid_array:
-            url = self.__url_with_token + 'core_course_get_course_module&cmid=' + cmid
+            url = self.__url_with_token + 'core_course_get_course_module&cmid=' + str(cmid)
             r = requests.get(url).json()
-            updated_modules.append(r['name'])
+            updated_modules.append(r['cm']['name'])
         return updated_modules
 
     def convert_events_to_readable_text(self, events):
