@@ -74,8 +74,6 @@ class WebService:
             grades.append((course, grade))
         return grades
 
-#-------------------------------------TODO--------------------------------------
-
     def get_course_updates_since(self, courseid, timestamp):
         url = self.__url_with_token + 'core_course_get_updates_since&courseid=' + courseid + '&since=' + str(timestamp)
         r = requests.get(url).json()

@@ -7,9 +7,13 @@
 # WARNING! All changes made in this file will be lost!
 import socket, pickle
 import subprocess
+import re
+import time
+from threading import Thread
 from webservice.web_service import WebService
 from PyQt5 import QtCore, QtGui, QtWidgets
 from mycroft_bus_client import MessageBusClient, Message
+
 
 
 class AppMainWindow(QtWidgets.QMainWindow):
@@ -20,12 +24,14 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.port = 5055
         self.server_socket = socket.socket()
         self.server_socket.bind((self.host, self.port))
-
+        self.mycroft_response = ''
+        self.mycroft_responded = False
         self.title = 'UBUAssistant'
         self.top = 100
         self.left = 100
         self.width = 500
         self.height = 600
+        self.next_form = 0
         self.setup_ui()
 
     def setup_ui(self):
@@ -67,30 +73,20 @@ class AppMainWindow(QtWidgets.QMainWindow):
         #self.vertical_layout_questions.setObjectName("vertical_layout_questions")
 
         self.label_questions1 = QtWidgets.QLabel(self.verticalLayoutWidget)
-        #self.label_questions1.setObjectName("label_questions1")
         self.vertical_layout_questions.addWidget(self.label_questions1)
 
-        self.horizontalLayoutWidget = QtWidgets.QWidget(self)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(40, 300, 400, 200))
-        #self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        #self.horizontalLayout.setObjectName("horizontalLayout")
-
-        self.vertical_layout_user = QtWidgets.QVBoxLayout()
-        #self.vertical_layout_user.setObjectName("vertical_layout_user")
-        self.horizontalLayout.addLayout(self.vertical_layout_user)
-
-        spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem)
-
-        self.vertical_layout_response = QtWidgets.QVBoxLayout()
-        #self.vertical_layout_response.setObjectName("vertical_layout_response")
-        self.horizontalLayout.addLayout(self.vertical_layout_response)
+        self.scrollArea = QtWidgets.QScrollArea(self)
+        self.scrollArea.setGeometry(QtCore.QRect(40, 300, 400, 200))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        self.formLayoutWidget = QtWidgets.QWidget(self.scrollAreaWidgetContents)
+        self.formLayoutWidget.setGeometry(QtCore.QRect(10, 10, 361, 431))
+        self.formLayout = QtWidgets.QFormLayout(self.formLayoutWidget)
+        self.scrollArea.setWidget(self.formLayoutWidget)
 
         self.retranslate_ui(self)
 
-        subprocess.Popen(['bash', '/home/adp1002/mycroft-core/start-mycroft.sh', 'debug'])
+        subprocess.Popen(['bash', '/home/adp1002/mycroft-core/start-mycroft.sh', 'all', 'restart'])
 
 
         #while(True):
@@ -99,8 +95,12 @@ class AppMainWindow(QtWidgets.QMainWindow):
         webservice_data = pickle.dumps(self.ws)
         client_socket.send(webservice_data)
 
-        self.client = MessageBusClient()
-        self.client.run_in_thread()
+        self.bus = MessageBusClient()
+        event_thread = Thread(target=self.connect, args=[self.bus])
+        event_thread.setDaemon(True)
+        event_thread.start()
+
+        self.bus.on('speak', self.handle_speak)
 
     def retranslate_ui(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -113,16 +113,28 @@ class AppMainWindow(QtWidgets.QMainWindow):
 
 
     def update_chat(self, source, message):
-        label = QtWidgets.QLabel(self)
+        tmp_label = QtWidgets.QLabel(self.formLayoutWidget)
+        tmp_label.setWordWrap(True)
         if source == 'r':
-            self.vertical_layout_response.addWidget(label)
+            self.formLayout.setWidget(self.next_form, QtWidgets.QFormLayout.FieldRole, tmp_label)
         elif source == 'u':
-            self.vertical_layout_user.addWidget(label)
-        label.setText(message)
+            self.formLayout.setWidget(self.next_form, QtWidgets.QFormLayout.LabelRole, tmp_label)
+        tmp_label.setText(message)
+        self.next_form+=1
 
+    def handle_speak(self, message):
+        self.mycroft_response = message.data.get('utterance')
+        self.mycroft_responded = True
+
+    def connect(self, bus):
+        self.bus.run_forever()
 
     def on_send_pressed(self):
         utterance = self.lineEdit_chat_message.text()
         self.update_chat('u', utterance)
-        self.client.emit(Message('recognizer_loop:utterance', {'utterances': [utterance]}))
+        self.bus.emit(Message('recognizer_loop:utterance', {'utterances': [utterance]}))
+        time.sleep(1)
+        self.update_chat('r', self.mycroft_response)
+        self.mycroft_responded = False
+        self.mycroft_response = ''
         self.lineEdit_chat_message.setText('')
