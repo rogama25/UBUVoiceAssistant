@@ -1,83 +1,44 @@
 \capitulo{3}{Conceptos teóricos}
 
-En aquellos proyectos que necesiten para su comprensión y desarrollo de unos conceptos teóricos de una determinada materia o de un determinado dominio de conocimiento, debe existir un apartado que sintetice dichos conceptos.
+A continuación se va a detallar qué es una \textit{Skill} de un asistente de voz, que elementos tiene y cómo funcionan. También se explicará el funcionamiento de \textit{Mycroft}, que es el asistente de voz que se ha usado para el desarrollo del proyecto.
 
-Algunos conceptos teóricos de \LaTeX \footnote{Créditos a los proyectos de Álvaro López Cantero: Configurador de Presupuestos y Roberto Izquierdo Amo: PLQuiz}.
+\section{Skill}
 
-\section{Secciones}
+Una \textit{Skill} es una aplicación pero para un asistente de voz, por lo que funciona mediante voz, tanto hablar como escuchar. Estas \textit{skills} tienen diferentes elementos que hacen que funcionen, como las \textit{utterances}, los \textit{intents}, los \textit{dialogs} y la \textit{wake word}
 
-Las secciones se incluyen con el comando section.
+\subsection{Wake Word}
 
-\subsection{Subsecciones}
+La \textit{wake word} es una palabra o palabras que tiene que decir el usuario para que el asistente comience a escuchar.
 
-Además de secciones tenemos subsecciones.
+\subsection{Utterance}
 
-\subsubsection{Subsubsecciones}
+Una \textit{utterance} es la frase completa que dice el usuario a continuación de la \textit{wake word} y que sirve como inicio del proceso de búsqueda de la \textit{Skill} correspondiente a la frase dicha.
 
-Y subsecciones. 
+\subsection{Intent}
+
+Un \textit{intent} es la parte de la frase o \textit{utterance} que el asistente de voz detecta como la parte necesaria para la invocación de una \textit{Skill}. Cada Skill tiene un \textit{intent} asociado.
+
+\subsection{Dialog}
+
+Este término sí que es diferente de otros asistentes como Alexa. Un \textit{dialog} es una frase que dice el propio asistente. Los \textit{dialog} son independientes de las \textit{Skill}, pero es normal que cada \textit{Skill} tenga un \textit{dialog}.
+
+\section{Mycroft}
+
+Mycroft es un asistente de voz de código abierto y software libre. Está disponible para sistemas operativos basados en Linux, Android, en una Raspberry Pi y dispositivos propios de Mycroft, como el Mark 1. Es una aplicación cliente que requiere una instalación previa, a diferencia de otros asistentes de voz que se ejecutan en la nube. Al ser de código abierto te permite explorar y cambiar su implementación y diseño, no como en asistentes de voz como Alexa que son una caja negra en la que no puedes ver nada. Al ser una aplicación cliente existen diferentes componentes que tienen su propia responsabilidad dentro de la aplicación.
+
+\subsection{Voice}
+
+Este componente es el encargado de transformar la voz a texto (\textit{speech-to-text} o \textit{STT}) y el texto a voz (\textit{text-to-speech} o \textit{TTS}).
+Para el STT, Mycroft usa por defecto el motor de Google, ya que se necesita que la transformación sea rápida y precisa. Para añadir una capa adicional de privacidad, todas las peticiones de STT pasan por un proxy de los servidores de Mycroft. Así, Google no puede detectar si hay una persona haciendo miles de peticiones o son miles de personas haciendo pocas peticiones. Además del motor de Google, Mycroft permite usar otros motores de STT como Mozilla DeepSpeech o Kaldi.
+En cuanto al TTS, se puede configurar desde la página del dispositivo. Las opciones de British Male y American Female usan Mimic 1, American Male usa Mimic 2 y Google Voice usa la voz de la API de Google Translate. Además de estos motores configurables desde la web, se puede usar Google TTS o Mycrosoft Azure, entre otros.
+
+\subsection{Skills}
+
+Este componente usa principalmente un servicio, llamado intent service, que es el encargado de, dada una utterance, hacer match entre la utterance y una skill. Esto es posible gracias a los intent parser que usa Mycroft, Adapt y Padatious.
+Adapt es una aplicación de código abierto ligera diseñada para usarse en dispositivos con recursos limitados, lo que es muy útil para Mycroft. Padatious es una aplicación basada en redes neuronales y machine learning y es más efectiva y fácil de usar que Adapt, además de ofrecer más funcionalidad.
+
+\subsection{MessageBus}
+
+El MessageBus es el componente que permite que el resto de componentes se comuniquen entre sí. Es un websocket que se encarga de pasar la información entre el componente de Skills y Voice. Cuando el usuario dice una frase, el componente Voice lo transforma a texto mediante el TTS, lo pasa al componente Skills mediante el MessageBus y éste decide qué Skill hay que ejecutar. Una vez ejecutada la Skill, se envía la respuesta al componente Voice, que la transforma a voz mediante el STT.
 
 
-\section{Referencias}
-
-Las referencias se incluyen en el texto usando cite \cite{wiki:latex}. Para citar webs, artículos o libros \cite{koza92}.
-
-
-\section{Imágenes}
-
-Se pueden incluir imágenes con los comandos standard de \LaTeX, pero esta plantilla dispone de comandos propios como por ejemplo el siguiente:
-
-\imagen{escudoInfor}{Autómata para una expresión vacía}
-
-
-
-\section{Listas de items}
-
-Existen tres posibilidades:
-
-\begin{itemize}
-	\item primer item.
-	\item segundo item.
-\end{itemize}
-
-\begin{enumerate}
-	\item primer item.
-	\item segundo item.
-\end{enumerate}
-
-\begin{description}
-	\item[Primer item] más información sobre el primer item.
-	\item[Segundo item] más información sobre el segundo item.
-\end{description}
-	
-\begin{itemize}
-\item 
-\end{itemize}
-
-\section{Tablas}
-
-Igualmente se pueden usar los comandos específicos de \LaTeX o bien usar alguno de los comandos de la plantilla.
-
-\tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
-{ \multicolumn{1}{l}{Herramientas} & App AngularJS & API REST & BD & Memoria \\}{ 
-HTML5 & X & & &\\
-CSS3 & X & & &\\
-BOOTSTRAP & X & & &\\
-JavaScript & X & & &\\
-AngularJS & X & & &\\
-Bower & X & & &\\
-PHP & & X & &\\
-Karma + Jasmine & X & & &\\
-Slim framework & & X & &\\
-Idiorm & & X & &\\
-Composer & & X & &\\
-JSON & X & X & &\\
-PhpStorm & X & X & &\\
-MySQL & & & X &\\
-PhpMyAdmin & & & X &\\
-Git + BitBucket & X & X & X & X\\
-Mik\TeX{} & & & & X\\
-\TeX{}Maker & & & & X\\
-Astah & & & & X\\
-Balsamiq Mockups & X & & &\\
-VersionOne & X & X & X & X\\
-} 

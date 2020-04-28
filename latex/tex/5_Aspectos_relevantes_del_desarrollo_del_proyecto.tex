@@ -1,20 +1,36 @@
 \capitulo{5}{Aspectos relevantes del desarrollo del proyecto}
 
 Este apartado pretende comentar los aspectos importantes y problemas que han surgido con la realización del proyecto, así como las decisiones de añadir o no más funcionalidad a la aplciación.
+
 \section{Utilización de AmazonWebServices y Alexa para la realización del proyecto}
+
 La idea inicial era utilizar los servicios web de Amazon (Amazon Lambda) y la consola de desarrollador (Amazon Developer) para crear la Skill de Alexa y hostearla en sus servidores.
 
 Ya que nunca había usado nunca estos servicios ni había desarrollado ninguna Skill o aplicación asistente de voz similar, leyendo la documentación de Alexa encontré una guía de cómo crear tu primera skill.
+
 \subsection{Amazon Web Services}
-Los Amazon Web Services, AWS a partir de ahora, es un conjunto de servicios de computación en la nube. En concreto, de todos estos servicios se utilizó Amazon Lambda, que es una plataforma sin servidor basada en eventos, que es la base de los AWS. Lambda ejecuta código como respuesta a eventos y gestiona los recursos necesitados por el código ejecutado.
+
+Los Amazon Web Services, AWS a partir de ahora, son un conjunto de servicios de computación en la nube. En concreto, de todos estos servicios se utilizó Amazon Lambda, que es una plataforma sin servidor basada en eventos, que es la base de los AWS. Lambda ejecuta código como respuesta a eventos y gestiona los recursos necesitados por el código ejecutado.
+
 \subsection{Amazon Alexa}
+
 Es un servicio de voz en la nube para dispositivos de Amazon y dispositivos de terceros que usan Alexa.
+
 \section{Problemas con Alexa}
+
+
 \section{Mycroft como alternativa}
-Esta herramienta es de código abierto, por lo que tengo la posibilidad de ver como están implementados los diferentes servicios del asistente de voz, modificarlos, etc. Además, para crear una Skill de Alexa, estás restringido en cierto modo de qué y qué no puedes hacer, problema que no existe con Mycroft que te da libertad total para crear lo que quieras. Tampoco tiene las restricciones de tamaño que me impedían continuar con el proyecto en Alexa, así que por todas estas características decidí volver a empezar pero usando Mycroft esta vez.
+
+Esta herramienta es de código abierto, por lo que tengo la posibilidad de ver como están implementados los diferentes servicios del asistente de voz, modificarlos, etc. Además, para crear una Skill de Alexa, estás restringido en cierto modo de qué puedes y qué no puedes hacer, problema que no existe con Mycroft que te da libertad total para crear lo que quieras. Tampoco tiene las restricciones de tamaño que me impedían continuar con el proyecto en Alexa, así que por todas estas características decidí volver a empezar pero usando Mycroft esta vez.
+
 Pero con Mycroft no son todo ventajas. De momento esta aplicación no se puede instalar en Windows, teniendo que usar una máquina virtual de Ubuntu o distribución de Linux para usarla. Al ser una aplicación cliente el usuario necesita instalarla para usar la Skill.
+
 \section{Aplicación cliente}
+
 En el anterior apartado he comentado la libertad que te ofrece Mycroft. Pues bien, esta herramienta se ejecuta como una aplicación cliente, a diferencia de Alexa que necesitas usar los servicios de Amazon para usar la Skill. Y aunque Mycroft también depende de servicios de text-to-speech y speech-to-text, y por ello una conexión a internet, se puede crear una aplicación cliente usando estos servicios ya que la propia aplicación de Mycroft es cliente.
-Así que gracias a esto el proyecto tomó un camino distinto al inicial, teniendo la posibilidad de crear una aplicación gráfica más atractiva en general.
+
+Así que debido a esto el proyecto tomó un camino distinto al inicial, teniendo la posibilidad de crear una aplicación gráfica más atractiva en general.
+
 \section{Comunicación entre procesos}
-En el inicio de esta nueva etapa surgió un problema que no había planteado cuando decidí usar Mycroft como alternativa a Alexa. Al ejecutar la aplicación gráfica para loguearse en Moodle e invocar una Skill, se crea un nuevo programa con esa Skill, por lo que la comunicación entre la aplicación gráfica y Skill se complicó. Como solución utilicé comunicación entre procesos mediante sockets
+
+En el inicio de esta nueva etapa surgió un problema que no había planteado cuando decidí usar Mycroft como alternativa a Alexa. Al ejecutar la aplicación gráfica para loguearse en Moodle e invocar una Skill, se crea un nuevo programa con esa Skill, por lo que la comunicación entre la aplicación gráfica y Skill se complicó. Como solución utilicé comunicación entre procesos mediante sockets.
