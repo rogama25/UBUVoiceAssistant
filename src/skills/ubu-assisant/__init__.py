@@ -17,6 +17,7 @@
 import sys
 sys.path.append('/home/adp1002/UBUCalendar/src')
 import socket, pickle
+import re
 from datetime import datetime
 from adapt.intent import IntentBuilder
 from mycroft import MycroftSkill, intent_handler
@@ -58,7 +59,7 @@ class UbuAssistantSkill(MycroftSkill):
         events = []
         course = message.data['course']
         id = self.get_course_id_by_name(course)
-        events = self.ws.get_calendar_events_by_courseid(str(id))
+        events = self.ws.get_calendar_events_by_courseid(id)
         self.text_to_speech(events)
 
     @intent_handler('Grades.intent')
@@ -71,9 +72,19 @@ class UbuAssistantSkill(MycroftSkill):
         course = message.data['course']
         date = datetime(int(message.data['year']), int(self.months[message.data['month']]), int(message.data['day']), 0, 0, 0)
         id = self.get_course_id_by_name(course)
-        cmids = self.ws.get_course_updates_since(str(id),int(datetime.timestamp(date)))
+        cmids = self.ws.get_course_updates_since(id,int(datetime.timestamp(date)))
         module_names = self.ws.get_course_module(cmids)
         self.speak(str(module_names))
+
+    @intent_handler('CourseGrades.intent')
+    def handle_course_grades(self, message):
+        course = message.data['course']
+        id = self.get_course_id_by_name(course)
+        grades = self.ws.get_course_grades(id)
+        text = str(grades).strip('[]').strip()
+        text = re.sub('-', '', text)
+        text = re.sub("'", '', text)
+        self.speak(text)
 
     def stop(self):
         pass
@@ -88,7 +99,7 @@ class UbuAssistantSkill(MycroftSkill):
     def get_course_id_by_name(self, course):
         for id, name in self.ws.get_user_courses().items():
             if course.upper() in name:
-                return id
+                return str(id)
         return None
 
 def create_skill():

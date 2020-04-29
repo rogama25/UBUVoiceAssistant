@@ -1,6 +1,7 @@
 import requests
 #Regular Expressions
 import re
+from bs4 import BeautifulSoup
 
 class WebService:
     __instance = None
@@ -18,10 +19,27 @@ class WebService:
     def set_host(self,host):
         self.__host = host
 
+    def set_session_cookies(self, username, password):
+        self.__session = requests.Session()
+        host_login = "https://ubuvirtual.ubu.es/login/index.php"
+
+        page = self.__session.get(host_login)
+        soup = BeautifulSoup(page.content, 'html.parser')
+        login_token = soup.find('input', {'name': 'logintoken'})
+        login_token = login_token.get('value')
+        form_params = {'username': username, 'password': password, 'logintoken':login_token}
+
+        self.__session.post(host_login, data=form_params)
+        #soup = BeautifulSoup(page.content, 'html.parser')
+        #session_key = soup.find('script', {'type':'text/javascript'})
+        #session_key = str(session_key).split('"sesskey":"')[1].split('"')[0]
+        #print(session_key)
+        self.cookies = self.__session.cookies.get_dict()
+
     def set_url_with_token(self, username, password):
         url = self.__host + '/login/token.php'
         url_params = {'username':username, 'password':password, 'service':'moodle_mobile_app'}
-        r = requests.get(url, params=url_params).json()
+        r = requests.post(url, params=url_params).json()
         token = r['token']
         self.__url_with_token = self.__host + '/webservice/rest/server.php?wstoken=' + token + '&moodlewsrestformat=json&wsfunction='
 
@@ -89,6 +107,18 @@ class WebService:
             r = requests.get(url).json()
             updated_modules.append(r['cm']['name'])
         return updated_modules
+
+    def get_course_grades(self, courseid):
+        page = self.__session.get('https://ubuvirtual.ubu.es/grade/report/user/index.php?id=' + courseid ,cookies=self.cookies)
+        soup = BeautifulSoup(page.content, 'html.parser')
+        grades = []
+        for tr in soup.find_all('tr')[2:]:
+            grades_table = tr.find_all(['th','td'])
+            if len(grades_table) == 7:
+                grades.append(grades_table[0].get_text() + ': ' + grades_table[2].get_text())
+            elif len(grades_table) != 0:
+                grades.append(grades_table[1].get_text())
+        return grades
 
     def convert_events_to_readable_text(self, events):
         events_info = []
