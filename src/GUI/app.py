@@ -25,7 +25,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.server_socket = socket.socket()
         self.server_socket.bind((self.host, self.port))
         self.mycroft_response = ''
-        self.mycroft_responded = False
+        self.mic_muted = False
         self.title = 'UBUAssistant'
         self.top = 100
         self.left = 100
@@ -58,6 +58,17 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.pushButton_send.setGeometry(QtCore.QRect(399, 550, 50, 30))
         self.pushButton_send.clicked.connect(self.on_send_pressed)
 
+        self.pushButton_mic = QtWidgets.QPushButton(self)
+        self.pushButton_mic.setGeometry(QtCore.QRect(350, 260, 24, 24))
+        self.mic_icon = QtGui.QIcon()
+        self.mic_icon.addPixmap(QtGui.QPixmap("mic.png"))
+        self.mic_muted_icon = QtGui.QIcon()
+        self.mic_muted_icon.addPixmap(QtGui.QPixmap("mic_muted.png"))
+        self.pushButton_mic.setIcon(self.mic_icon)
+        #self.pushButton_mic.setIcon(QtGui.QIcon().addPixmap(QtGui.QPixmap('mic.png')))
+        #self.pushButton_mic.setIconSize(QtCore.QSize(24,24))
+        self.pushButton_mic.clicked.connect(self.on_mic_pressed)
+
         self.label_questions_title = QtWidgets.QLabel(self)
         self.label_questions_title.setGeometry(QtCore.QRect(20, 10, 315, 40))
         font_questions_title = QtGui.QFont()
@@ -76,17 +87,17 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.vertical_layout_questions.addWidget(self.label_questions1)
 
         self.scrollArea = QtWidgets.QScrollArea(self)
-        self.scrollArea.setGeometry(QtCore.QRect(40, 300, 400, 200))
+        self.scrollArea.setGeometry(QtCore.QRect(50, 300, 400, 220))
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
         self.formLayoutWidget = QtWidgets.QWidget(self.scrollAreaWidgetContents)
-        self.formLayoutWidget.setGeometry(QtCore.QRect(10, 10, 361, 431))
+        self.formLayoutWidget.setGeometry(QtCore.QRect(50, 300, 400, 220))
         self.formLayout = QtWidgets.QFormLayout(self.formLayoutWidget)
         self.scrollArea.setWidget(self.formLayoutWidget)
 
         self.retranslate_ui(self)
 
-        subprocess.Popen(['bash', '/home/adp1002/mycroft-core/start-mycroft.sh', 'all', 'restart'])
+        subprocess.Popen(['bash', '/home/adp1002/mycroft-core/start-mycroft.sh', 'restart', 'all'])
 
 
         #while(True):
@@ -138,3 +149,13 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.mycroft_responded = False
         self.mycroft_response = ''
         self.lineEdit_chat_message.setText('')
+
+    def on_mic_pressed(self):
+        if self.mic_muted:
+            self.mic_muted = False
+            self.pushButton_mic.setIcon(self.mic_icon)
+            self.bus.emit(Message('mycroft.mic.unmute'))
+        else:
+            self.mic_muted = True
+            self.pushButton_mic.setIcon(self.mic_muted_icon)
+            self.bus.emit(Message('mycroft.mic.mute'))
