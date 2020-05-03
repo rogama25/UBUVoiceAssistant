@@ -65,8 +65,6 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.mic_muted_icon = QtGui.QIcon()
         self.mic_muted_icon.addPixmap(QtGui.QPixmap("mic_muted.png"))
         self.pushButton_mic.setIcon(self.mic_icon)
-        #self.pushButton_mic.setIcon(QtGui.QIcon().addPixmap(QtGui.QPixmap('mic.png')))
-        #self.pushButton_mic.setIconSize(QtCore.QSize(24,24))
         self.pushButton_mic.clicked.connect(self.on_mic_pressed)
 
         self.label_questions_title = QtWidgets.QLabel(self)
@@ -95,6 +93,17 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.formLayout = QtWidgets.QFormLayout(self.formLayoutWidget)
         self.scrollArea.setWidget(self.formLayoutWidget)
 
+        self.log_dialog = QtWidgets.QDialog(self)
+        self.log_dialog.setWindowTitle('UBUAssistant Logs')
+        self.log_dialog.resize(600, 600)
+
+        self.log_text = QtWidgets.QPlainTextEdit(self.log_dialog)
+        self.log_text.resize(600, 600)
+
+        self.pushButton_logs = QtWidgets.QPushButton(self)
+        self.pushButton_logs.setGeometry(QtCore.QRect(400, 10, 80, 40))
+        self.pushButton_logs.clicked.connect(self.on_logs_pressed)
+
         self.retranslate_ui(self)
 
         subprocess.Popen(['bash', '/home/adp1002/mycroft-core/start-mycroft.sh', 'restart', 'all'])
@@ -119,9 +128,9 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.lineEdit_chat_message.setPlaceholderText(_translate("MainWindow", "O puedes escribir tu pregunta..."))
         self.label_chat_title.setText(_translate("MainWindow", "Conversacion"))
         self.pushButton_send.setText(_translate("MainWindow", "Enviar"))
+        self.pushButton_logs.setText(_translate("MainWindow", "Abrir Logs"))
         self.label_questions_title.setText(_translate("MainWindow", "Puedes preguntar: Hey Mycroft..."))
         self.label_questions1.setText(_translate("MainWindow", "TextLabel"))
-
 
     def update_chat(self, source, message):
         tmp_label = QtWidgets.QLabel(self.formLayoutWidget)
@@ -133,12 +142,19 @@ class AppMainWindow(QtWidgets.QMainWindow):
         tmp_label.setText(message)
         self.next_form+=1
 
+
+    def on_logs_pressed(self):
+        logs = open('logs.txt', 'r').read()
+        self.log_text.setPlainText(logs)
+        self.log_dialog.show()
+
     def handle_speak(self, message):
         self.mycroft_response = message.data.get('utterance')
         self.mycroft_responded = True
 
     def connect(self, bus):
         self.bus.run_forever()
+
 
     def on_send_pressed(self):
         utterance = self.lineEdit_chat_message.text()
