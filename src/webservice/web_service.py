@@ -58,7 +58,7 @@ class WebService:
         for course in r:
             id = course['id']
             name = course['displayname']
-            self.__user_courses.update({id:name})
+            self.__user_courses[id] = name
 
     def get_user_courses(self):
         return self.__user_courses
@@ -119,6 +119,28 @@ class WebService:
             elif len(grades_table) != 0:
                 grades.append(grades_table[1].get_text())
         return grades
+
+    def get_course_forums(self, courseid):
+        forums = []
+        url = self.__url_with_token + 'mod_forum_get_forums_by_courses&courseids[0]=' + courseid
+        r = requests.get(url).json()
+        return r
+
+
+    def get_forum_discussions(self, forumid):
+        discussions = []
+        url = self.__url_with_token + 'mod_forum_get_forum_discussions&forumid=' + forumid
+        r = requests.get(url).json()
+        return r
+
+    def get_forum_discussion_posts(self, discussionid):
+        discussion = []
+        url = self.__url_with_token + 'mod_forum_get_forum_discussion_posts&discussionid=' + discussionid
+        r = requests.get(url).json()
+        for post in r['posts'].reverse():
+            post_user = post['userfullname'].split(',').reverse()
+            post_user = ' '.join(post_user)
+            discussion.append((post_user, post['message']))
 
     def convert_events_to_readable_text(self, events):
         events_info = []

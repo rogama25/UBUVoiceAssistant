@@ -9,6 +9,7 @@ import socket, pickle
 import subprocess
 import re
 import time
+from os.path import expanduser
 from threading import Thread
 from webservice.web_service import WebService
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -24,6 +25,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.port = 5055
         self.server_socket = socket.socket()
         self.server_socket.bind((self.host, self.port))
+        self.user_utterance = ''
         self.mycroft_response = ''
         self.mic_muted = False
         self.title = 'UBUAssistant'
@@ -104,9 +106,14 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.pushButton_logs.setGeometry(QtCore.QRect(400, 10, 80, 40))
         self.pushButton_logs.clicked.connect(self.on_logs_pressed)
 
+        self.timer  = QtCore.QTimer(self)
+        self.timer.setInterval(1000)
+        self.timer.timeout.connect(self.check_for_chat_update)
+        self.timer.start()
+
         self.retranslate_ui(self)
 
-        subprocess.Popen(['bash', '/home/adp1002/mycroft-core/start-mycroft.sh', 'restart', 'all'])
+        subprocess.Popen(['bash', expanduser('~') + '/mycroft-core/start-mycroft.sh', 'restart', 'all'])
 
 
         #while(True):
@@ -121,10 +128,11 @@ class AppMainWindow(QtWidgets.QMainWindow):
         event_thread.start()
 
         self.bus.on('speak', self.handle_speak)
+        self.bus.on('recognizer_loop:utterance', self.handle_utterance)
 
     def retranslate_ui(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "UBUAssistant"))
         self.lineEdit_chat_message.setPlaceholderText(_translate("MainWindow", "O puedes escribir tu pregunta..."))
         self.label_chat_title.setText(_translate("MainWindow", "Conversacion"))
         self.pushButton_send.setText(_translate("MainWindow", "Enviar"))
@@ -132,14 +140,17 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.label_questions_title.setText(_translate("MainWindow", "Puedes preguntar: Hey Mycroft..."))
         self.label_questions1.setText(_translate("MainWindow", "TextLabel"))
 
-    def update_chat(self, source, message):
+    def update_chat(self, source):
         tmp_label = QtWidgets.QLabel(self.formLayoutWidget)
         tmp_label.setWordWrap(True)
         if source == 'r':
             self.formLayout.setWidget(self.next_form, QtWidgets.QFormLayout.FieldRole, tmp_label)
+            tmp_label.setText(self.mycroft_response)
+            self.mycroft_response = ''
         elif source == 'u':
             self.formLayout.setWidget(self.next_form, QtWidgets.QFormLayout.LabelRole, tmp_label)
-        tmp_label.setText(message)
+            tmp_label.setText(self.user_utterance)
+            self.user_utterance = ''
         self.next_form+=1
 
 
@@ -150,20 +161,23 @@ class AppMainWindow(QtWidgets.QMainWindow):
 
     def handle_speak(self, message):
         self.mycroft_response = message.data.get('utterance')
-        self.mycroft_responded = True
+
+    def handle_utterance(self, message):
+        print('yep')
+        self.user_utterance = message.data['utterances'][0]
 
     def connect(self, bus):
         self.bus.run_forever()
 
+    def check_for_chat_update(self):
+        if self.user_utterance:
+            self.update_chat('u')
+        if self.mycroft_response:
+            self.update_chat('r')
 
     def on_send_pressed(self):
-        utterance = self.lineEdit_chat_message.text()
-        self.update_chat('u', utterance)
-        self.bus.emit(Message('recognizer_loop:utterance', {'utterances': [utterance]}))
-        time.sleep(1)
-        self.update_chat('r', self.mycroft_response)
-        self.mycroft_responded = False
-        self.mycroft_response = ''
+        self.user_utterance = self.lineEdit_chat_message.text()
+        self.bus.emit(Message('recognizer_loop:utterance', {'utterances': [self.user_utterance]}))
         self.lineEdit_chat_message.setText('')
 
     def on_mic_pressed(self):
@@ -175,3 +189,15 @@ class AppMainWindow(QtWidgets.QMainWindow):
             self.mic_muted = True
             self.pushButton_mic.setIcon(self.mic_muted_icon)
             self.bus.emit(Message('mycroft.mic.mute'))
+
+    def closeEvent(self, event):
+        close = QtWidgets.QMessageBox()
+        close.setText("Estas seguro?")
+        close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
+        close = close.exec()
+
+        if close == QtWidgets.QMessageBox.Yes:
+            subprocess.run(['bash', expanduser('~') + '/mycroft-core/stop-mycroft.sh'])
+            event.accept()
+        else:
+            event.ignore()

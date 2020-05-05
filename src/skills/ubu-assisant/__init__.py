@@ -15,13 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Mycroft Core.  If not, see <http://www.gnu.org/licenses/>.
 import sys
-sys.path.append('/home/adp1002/UBUCalendar/src')
+from os.path import expanduser
+sys.path.append(expanduser('~') + '/UBUCalendar/src')
 import socket, pickle
 import re
 from datetime import datetime
 from adapt.intent import IntentBuilder
 from mycroft import MycroftSkill, intent_handler
 from webservice.web_service import WebService
+from model.forum import Forum
+from model.discussion import Discussion
 
 class UbuAssistantSkill(MycroftSkill):
 
@@ -31,6 +34,7 @@ class UbuAssistantSkill(MycroftSkill):
         self.port = 5055
         self.month = ''
         self.learning = True
+        self.forums = {}
         self.months = {'enero':1, 'febrero':2, 'marzo':3, 'abril':4, 'mayo':5,
                        'junio':6, 'julio':7, 'agosto':8, 'septiembre':9,
                        'octubre':10, 'noviembre':11, 'diciembre':12}
@@ -71,20 +75,38 @@ class UbuAssistantSkill(MycroftSkill):
     def handle_course_updates(self, message):
         course = message.data['course']
         date = datetime(int(message.data['year']), int(self.months[message.data['month']]), int(message.data['day']), 0, 0, 0)
-        id = self.get_course_id_by_name(course)
-        cmids = self.ws.get_course_updates_since(id,int(datetime.timestamp(date)))
+        course_id = self.get_course_id_by_name(course)
+        cmids = self.ws.get_course_updates_since(course_id,int(datetime.timestamp(date)))
         module_names = self.ws.get_course_module(cmids)
         self.speak(str(module_names))
 
     @intent_handler('CourseGrades.intent')
     def handle_course_grades(self, message):
         course = message.data['course']
-        id = self.get_course_id_by_name(course)
-        grades = self.ws.get_course_grades(id)
+        course_id = self.get_course_id_by_name(course)
+        grades = self.ws.get_course_grades(course_id)
         text = str(grades).strip('[]').strip()
-        text = re.sub('-', '', text)
-        text = re.sub("'", '', text)
+        text = re.sub("(-|')", '', text)
         self.speak(text)
+
+    @intent_handler('CourseForums.intent')
+    def handle_course_forums(self, message):
+        course = message.data['course']
+        course_id = self.get_course_id_by_name(course)
+        #If the user never looked the course forums up
+        if not self.forums[course_id]:
+            forums = self.ws.get_course_forums(course_id)
+            course_forums = []
+            for forum in forums:
+                forum_discussions = []
+                discussions_json = self.ws.get_forum_discussions(forum[0])
+                for discussion in discussions_json['discussions']:
+                    forum_discussions.append(Discussion(discussion))
+                course_forums.append(Forum(forum,forum_discussions))
+            self.forums[course_id] = course_forums
+
+        for forum in self.forums[course_id]:
+            pass
 
     def stop(self):
         pass
