@@ -121,26 +121,19 @@ class WebService:
         return grades
 
     def get_course_forums(self, courseid):
-        forums = []
         url = self.__url_with_token + 'mod_forum_get_forums_by_courses&courseids[0]=' + courseid
         r = requests.get(url).json()
         return r
 
-
     def get_forum_discussions(self, forumid):
-        discussions = []
         url = self.__url_with_token + 'mod_forum_get_forum_discussions&forumid=' + forumid
         r = requests.get(url).json()
         return r
 
     def get_forum_discussion_posts(self, discussionid):
-        discussion = []
         url = self.__url_with_token + 'mod_forum_get_forum_discussion_posts&discussionid=' + discussionid
         r = requests.get(url).json()
-        for post in r['posts'].reverse():
-            post_user = post['userfullname'].split(',').reverse()
-            post_user = ' '.join(post_user)
-            discussion.append((post_user, post['message']))
+        return r
 
     def convert_events_to_readable_text(self, events):
         events_info = []

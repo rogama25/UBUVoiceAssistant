@@ -3,7 +3,7 @@ class Discussion():
         self.__discussion_id = discussion['discussion']
         self.__name = discussion['name']
 
-    def get_discussion_id(self):
+    def get_id(self):
         return self.__discussion_id
 
     def get_name(self):
