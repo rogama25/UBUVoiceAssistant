@@ -2,6 +2,7 @@ import requests
 #Regular Expressions
 import re
 from bs4 import BeautifulSoup
+from util import util
 
 class WebService:
     __instance = None
@@ -66,19 +67,19 @@ class WebService:
     def get_calendar_day_view(self, year, month, day):
         url = self.__url_with_token + 'core_calendar_get_calendar_day_view&year=' + year + '&month=' + month + '&day=' + day
         r = requests.get(url).json()
-        events = self.convert_events_to_readable_text(r['events'])
+        events = util.convert_events_to_readable_text(r['events'])
         return events
 
     def get_calendar_events_by_courseid(self, courseid):
         url = self.__url_with_token + 'core_calendar_get_action_events_by_course&courseid=' + courseid
         r = requests.get(url).json()
-        events = self.convert_events_to_readable_text(r['events'])
+        events = util.convert_events_to_readable_text(r['events'])
         return events
 
     def get_calendar_upcoming_view(self):
         url = self.__url_with_token + 'core_calendar_get_calendar_upcoming_view'
         r = requests.get(url).json()
-        events = self.convert_events_to_readable_text(r['events'])
+        events = util.convert_events_to_readable_text(r['events'])
         return events
 
     def get_final_grades(self, userid):
@@ -109,16 +110,13 @@ class WebService:
         return updated_modules
 
     def get_course_grades(self, courseid):
-        page = self.__session.get('https://ubuvirtual.ubu.es/grade/report/user/index.php?id=' + courseid ,cookies=self.cookies)
-        soup = BeautifulSoup(page.content, 'html.parser')
         grades = []
-        for tr in soup.find_all('tr')[2:]:
-            grades_table = tr.find_all(['th','td'])
-            if len(grades_table) == 7:
-                grades.append(grades_table[0].get_text() + ': ' + grades_table[2].get_text())
-            elif len(grades_table) != 0:
-                grades.append(grades_table[1].get_text())
-        return grades
+        url = self.__url_with_token + 'gradereport_user_get_grade_items&courseid=' + courseid + '&userid=' + self.__userid
+        r = requests.get(url).json()
+        for grade in r['usergrades']['gradeitems']:
+            if grade['graderaw']:
+                grades.append((grade['itemname'], grade['graderaw']))
+        return r
 
     def get_course_forums(self, courseid):
         url = self.__url_with_token + 'mod_forum_get_forums_by_courses&courseids[0]=' + courseid
@@ -134,13 +132,3 @@ class WebService:
         url = self.__url_with_token + 'mod_forum_get_forum_discussion_posts&discussionid=' + discussionid
         r = requests.get(url).json()
         return r
-
-    def convert_events_to_readable_text(self, events):
-        events_info = []
-        for event in events:
-            event_info = []
-            date = re.sub('<.*?>', '', event['formattedtime'])
-            event_info.append(date)
-            event_info.append(event['name'])
-            events_info.append(event_info)
-        return events_info
