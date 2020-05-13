@@ -5,17 +5,15 @@
 # Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
-#import socket, pickle
 import subprocess
-import re
 import time
 from os import path, listdir
 from threading import Thread
 from webservice.web_service import WebService
 from PyQt5 import QtCore, QtGui, QtWidgets
 from mycroft_bus_client import MessageBusClient, Message
+from log_window import LogDialog
 from util import util
-
 
 
 class AppMainWindow(QtWidgets.QMainWindow):
@@ -79,24 +77,23 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.vertical_layout_questions = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.vertical_layout_questions.setContentsMargins(0, 0, 0, 0)
 
-
         self.label_questions1 = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.vertical_layout_questions.addWidget(self.label_questions1)
 
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
-        self.scrollArea.setGeometry(QtCore.QRect(50, 300, 400, 220))
+        self.scrollArea.setGeometry(QtCore.QRect(50, 300, 400, 230))
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
 
-        self.formLayout = QtWidgets.QFormLayout(self.scrollAreaWidgetContents)
+        self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-        self.log_dialog = QtWidgets.QDialog(self)
-        self.log_dialog.setWindowTitle('UBUAssistant Logs')
-        self.log_dialog.resize(600, 600)
+        # self.log_dialog = QtWidgets.QDialog(self)
+        # self.log_dialog.setWindowTitle('UBUAssistant Logs')
+        # self.log_dialog.resize(600, 600)
 
-        self.log_text = QtWidgets.QPlainTextEdit(self.log_dialog)
-        self.log_text.resize(600, 600)
+        # self.log_text = QtWidgets.QPlainTextEdit(self.log_dialog)
+        # self.log_text.resize(600, 600)
 
         self.pushButton_logs = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_logs.setGeometry(QtCore.QRect(370, 10, 120, 40))
@@ -123,11 +120,13 @@ class AppMainWindow(QtWidgets.QMainWindow):
 
         self.retranslate_ui(self)
 
-        subprocess.Popen(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'debug'])
+        subprocess.Popen(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'all', 'restart'])
 
-        server_socket = Thread(target=util.create_server_socket, args=[util.SOCKET_HOST, util.SOCKET_PORT, self.ws])
+        server_socket = Thread(target=util.create_server_socket, args=[self.ws])
         server_socket.setDaemon(True)
         server_socket.start()
+        # Wait until the MessageBus is started, there might be a better solution.
+        time.sleep(10)
 
         self.bus = MessageBusClient()
         event_thread = Thread(target=self.connect, args=[self.bus])
@@ -153,11 +152,11 @@ class AppMainWindow(QtWidgets.QMainWindow):
         tmp_label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
         tmp_label.setWordWrap(True)
         if source == 'r':
-            self.formLayout.setWidget(self.next_form, QtWidgets.QFormLayout.FieldRole, tmp_label)
+            self.gridLayout.addWidget(tmp_label, self.next_form, 1)
             tmp_label.setText(self.mycroft_response)
             self.mycroft_response = ''
         elif source == 'u':
-            self.formLayout.setWidget(self.next_form, QtWidgets.QFormLayout.LabelRole, tmp_label)
+            self.gridLayout.addWidget(tmp_label, self.next_form, 0)
             tmp_label.setText(self.user_utterance)
             self.user_utterance = ''
         self.next_form+=1
@@ -193,8 +192,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
             self.bus.emit(Message('mycroft.mic.mute'))
 
     def on_logs_pressed(self):
-        logs = open('logs.txt', 'r').read()
-        self.log_text.setPlainText(logs)
+        self.log_dialog = LogDialog()
         self.log_dialog.show()
 
     def on_skills_pressed(self):
