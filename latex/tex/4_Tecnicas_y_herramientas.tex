@@ -1,27 +1,63 @@
 \capitulo{4}{Técnicas y herramientas}
 
-\section{Metodología de desarrollo}
+\section{REST API}
 
-Para el desarrollo del proyecto se ha utilizado metodología ágil, en concreto SCRUM. Se ha adoptado una estrategia de desarrollo iterativa, con sprints bimensuales en los que se han realizado las entregas parciales. Las reuniones de estado del proyecto se han realizado semanalmente, a diferencia de lo normal en SCRUM que se realizan diariamente.
+Una API \cite{noauthor_API_nodate}(\textit{Application Programming Interface}) es un conjunto de definiciones y protocolos usados para desarrollar e integrar el software de las aplicaciones. REST \cite{noauthor_REST_nodate} es una interfaz entre sistemas y que usa HTTP para obtener datos o realizar distintas operaciones sobre esos datos en todos los formatos posibles.
 
 \section{Moodle}
 
 \href{https://moodle.org/}{Moodle} es una plataforma de aprendizaje que permite a docentes y alumnos impartir y recibir clases a distancia, así como facilitar la gestión de los cursos. Es una herramienta de código abierto y por lo tanto cualquiera puede utilizarlo. En su página se pueden encontrar versiones de prueba como \href{https://school.moodledemo.net/}{Mount Orange School}
 
-\section{PyQt5}
+Es la plataforma en la que está basada UBUVirtual y es ampliamente utilizada en todo el mundo. Además posee una API con servicios web bastante completa que facilita mucho el trabajo.
 
-\href{https://doc.qt.io/qtforpython/}{PyQt5} es un binding (una adaptación de una biblioteca para que sea usada en otro lenguaje). Qt es un framework multiplataforma orientado a objetos para desarrollar programas que utilizan interfaces gráficas de usuario. Es software libre y de código abierto.
+\subsection{WebServices}
 
-\section{requests}
+\textit{Web Services} es el nombre que se usa en Moodle para referirse a la API REST. Estos \textit{Web Services} facilitan la interacción con Moodle para los programadores, quienes no tienen que recurrir a otros métodos como el \textit{web scraping} que requieren un mayor tiempo para implementarlos. Los \textit{Web Services} basan su funcionamiento en un \textit{token}, que es una cadena de caracteres asociada a un usuario y que se obtiene a través de la función \textbf{moodle\_mobile\_app}. Gracias a este \textit{token} se puede acceder al resto de funciones del \textit{web service}, las cuáles te permiten, por ejemplo, obtener los eventos del calendario, cursos de un usuario o sus notas.
 
-\href{https://requests.readthedocs.io/es/latest/}{Requests} es una biblioteca para Python que permite enviar peticiones HTTP de forma muy sencilla.
+\section{Metodología de desarrollo}
 
-\section{MiKTeX}
-
-
-\section{TeXstudio}
+Para el desarrollo del proyecto se ha empleado metodología ágil, en concreto SCRUM. Se ha adoptado una estrategia de desarrollo iterativa, con sprints bimensuales en los que se han realizado las entregas parciales. Las reuniones de estado del proyecto se han realizado semanalmente, a diferencia de lo normal en SCRUM que se realizan diariamente.
 
 \section{Python}
 
+\href{https://www.python.org/}{Python} es un lenguaje de programación interpretado, dinámico, multiplataforma y multiparadigma, soportando orientación a objetos, programación imperativa y programación funcional.
+
+\section{GitHub}
+
+\href{https://github.com/}{GitHub} \cite{noauthor_GitHub_nodate}es una plataforma de desarrollo colaborativo para alojar proyectos usando el sistema de control de versiones Git. Ya que se ha empleado SCRUM se ha utilizado ZenHub, que es una herramienta para la administración de proyectos que se integra con GitHub y ofrece herramientas para la metodología agil como el \textit{Kanban} o distintos gráficos que te muestran la evolución del proyecto entre otras cosas.
+
+\section{Atom}
+
+\href{https://atom.io/}{Atom} es un editor de código fuente de código abierto multiplataforma desarrollado por GitHub. Tiene integrado control de versiones Git y se le pueden añadir plugins.
+
+\subsection{Plugins}
+
+Los plugins que le he añadido a Atom son \href{https://atom.io/packages/atom-ide-ui}{atom-ide-ui} que mejora la UI de Atom y añade la funcion de IDE. Para que el IDE funcione con Python también se ha instalado el plugin \href{https://atom.io/packages/ide-python}{ide-python}.
+
+\section{PyQt5}
+
+\href{https://doc.qt.io/qtforpython/}{PyQt5} es un binding (una adaptación de una biblioteca para que sea usada en otro lenguaje) de Qt para Python. Qt es un framework multiplataforma orientado a objetos para desarrollar programas que utilizan interfaces gráficas de usuario. Es software libre y de código abierto.
+
+\subsection{Qt Designer}
+Es una herramienta para diseñar rápidamente interfaces gráficas a través de los \textit{Widgets} de Qt. Es muy útil para crear prototipos rápidos de lo que quieres hacer, mediante la funcionalidad de drag-and-drop para poner los componentes de la interfaz y te permite traducir el prototipo creado a un lenguaje de programación como C++ o Python.
+
+\section{requests}
+
+\href{https://requests.readthedocs.io/es/latest/}{Requests} es una biblioteca para Python que permite enviar peticiones HTTP. Ha sido extremadamente útil para este proyecto gracias a su simplicidad de uso y cantidad de funcionalidades que tiene.
+
+\section{LaTeX}
+
+\section{MiKTeX}
+
+\href{https://miktex.org/}{MiKTeX} es una distribución de LaTeX que está siempre actualizada, es fácil de instalar e incluye muchos paquetes.
+
+\section{TeXstudio}
+
+\href{https://www.texstudio.org/}{TeXstudio} es un editor de LaTeX y un entorno de desarollo integrado (IDE), de código abierto. Ofrece varios servicios muy útiles, como resaltado de sintaxis	o la corrección ortográfica. Es por esto que TeXstudio es una opción más atractiva que otros editores de LaTeX.
+
 \section{Java}
+
+\section{Amazon Web Services}
+
+Los Amazon Web Services son un conjunto de servicios de computación en la nube. En concreto, de todos estos servicios se utilizó Amazon Lambda, una plataforma de serverless computing, que es un modelo de ejecución de computación en la nube en el que el proveedor proporciona el servidor y gestiona los recursos necesitados por el código ejecutado, lo que permite que el usuario pague únicamente por lo que necesita, en lugar de alquilar un servidor. Lambda ejecuta código como respuesta a eventos y es la base de los AWS.
 

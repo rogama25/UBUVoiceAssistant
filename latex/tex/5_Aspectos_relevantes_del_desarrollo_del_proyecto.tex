@@ -6,31 +6,31 @@ Este apartado pretende comentar los aspectos importantes y problemas que han sur
 
 La idea inicial era utilizar los servicios web de Amazon (Amazon Lambda) y la consola de desarrollador (Amazon Developer) para crear la Skill de Alexa y hostearla en sus servidores.
 
-Ya que nunca había usado nunca estos servicios ni había desarrollado ninguna Skill o aplicación asistente de voz similar, leyendo la documentación de Alexa encontré una guía de cómo crear tu primera skill.
+Ya que nunca había usado estos servicios ni había desarrollado ninguna Skill o aplicación asistente de voz similar, leyendo la documentación de Alexa encontré una guía de cómo crear tu primera skill\cite{noauthor_firstskill_nodate}. En un principio utilicé solo la guía para configurar la Skill dentro de Amazon Lambda y Amazon Developer, usando el código que había hecho ya usando los webservices de Moodle.
 
-\subsection{Amazon Web Services}
+\subsection{Problemas con Alexa}
 
-Los Amazon Web Services, AWS a partir de ahora, son un conjunto de servicios de computación en la nube. En concreto, de todos estos servicios se utilizó Amazon Lambda, que es una plataforma sin servidor basada en eventos, que es la base de los AWS. Lambda ejecuta código como respuesta a eventos y gestiona los recursos necesitados por el código ejecutado.
+Sin embargo, cuando fui a hacer la prueba de esta primera versión de la Skill, no conseguía ninguna respuesta. Así que, al ser la primera vez que usaba la libreria de Amazon Skills Kit y la primera vez también que hacía un programa de este tipo, utilicé el código de prueba básico, que es un hello world para la Skill, que viene en la guía que estaba siguiendo. Y, a pesar de seguir todos los pasos, intentándolo varias veces por si me había saltado algo, seguía sin recibir ninguna respuesta.
 
-\subsection{Amazon Alexa}
-
-Es un servicio de voz en la nube para dispositivos de Amazon y dispositivos de terceros que usan Alexa.
-
-\section{Problemas con Alexa}
-
+En uno de esos reintentos por conseguir que funcionara, me di cuenta de que salía un aviso de que el archivo con el proyecto de la Skill era demasiado pesado (superaba los 10MB). Aún no tengo claro que fuera ese el problema, ya que ese proyecto tenía lo mínimo necesario para hacer una Skill, pero de todas formas decidí continuar con el proyecto por otro camino.
 
 \section{Mycroft como alternativa}
 
-Esta herramienta es de código abierto, por lo que tengo la posibilidad de ver como están implementados los diferentes servicios del asistente de voz, modificarlos, etc. Además, para crear una Skill de Alexa, estás restringido en cierto modo de qué puedes y qué no puedes hacer, problema que no existe con Mycroft que te da libertad total para crear lo que quieras. Tampoco tiene las restricciones de tamaño que me impedían continuar con el proyecto en Alexa, así que por todas estas características decidí volver a empezar pero usando Mycroft esta vez.
+Esta herramienta es de código abierto, por lo que tuve la posibilidad de ver como están implementados los diferentes servicios del asistente de voz, modificarlos, etc. Además, para crear una Skill de Alexa, estás restringido en cierto modo de qué puedes y qué no puedes hacer, problema que no existe con Mycroft que te da libertad total para crear lo que quieras. Tampoco tiene las restricciones de tamaño que me impedían continuar con el proyecto en Alexa, así que por todas estas características decidí volver a empezar pero usando Mycroft esta vez.
 
-Pero con Mycroft no son todo ventajas. De momento esta aplicación no se puede instalar en Windows, teniendo que usar una máquina virtual de Ubuntu o distribución de Linux para usarla. Al ser una aplicación cliente el usuario necesita instalarla para usar la Skill.
+Pero con Mycroft no son todo ventajas. De momento esta aplicación no se puede instalar en Windows, teniendo que usar una máquina virtual de Ubuntu o distribución de Linux para usarla, aunque se puede usar en otras plataformas como Android, Raspberry Pi y Docker. Al ser una aplicación cliente el usuario necesita instalarla para usar la Skill.
 
 \section{Aplicación cliente}
 
-En el anterior apartado he comentado la libertad que te ofrece Mycroft. Pues bien, esta herramienta se ejecuta como una aplicación cliente, a diferencia de Alexa que necesitas usar los servicios de Amazon para usar la Skill. Y aunque Mycroft también depende de servicios de text-to-speech y speech-to-text, y por ello una conexión a internet, se puede crear una aplicación cliente usando estos servicios ya que la propia aplicación de Mycroft es cliente.
+En el anterior apartado he comentado la libertad que te ofrece Mycroft. Pues bien, esta herramienta se ejecuta como una aplicación cliente, a diferencia de Alexa que es un servicio en la nube y que necesitas emplear los servicios de Amazon para usar la Skill. Y, aunque Mycroft también depende de servicios, como el de text-to-speech o el de speech-to-text, y por ello una conexión a internet, se puede crear una aplicación cliente usando estos servicios ya que la propia aplicación de Mycroft es cliente.
 
-Así que debido a esto el proyecto tomó un camino distinto al inicial, teniendo la posibilidad de crear una aplicación gráfica más atractiva en general.
+Así que debido a esto el proyecto tomó un camino distinto al inicial, teniendo la posibilidad de crear una aplicación gráfica que resultaría en una aplicación más atractiva y completa en general.
 
 \section{Comunicación entre procesos}
 
-En el inicio de esta nueva etapa surgió un problema que no había planteado cuando decidí usar Mycroft como alternativa a Alexa. Al ejecutar la aplicación gráfica para loguearse en Moodle e invocar una Skill, se crea un nuevo programa con esa Skill, por lo que la comunicación entre la aplicación gráfica y Skill se complicó. Como solución utilicé comunicación entre procesos mediante sockets.
+En el inicio de esta nueva etapa surgió un problema que no había planteado cuando decidí usar Mycroft como alternativa a Alexa. Al ejecutar la aplicación gráfica para loguearse en Moodle e invocar una Skill, se crea un nuevo programa con esa Skill, por lo que la comunicación entre la aplicación gráfica y Skill se complicó. Como solución utilicé comunicación entre procesos mediante sockets, lo que resultó más sencillo de lo que en un primer momento me había imaginado.
+
+\section{Deshabilitar módulos del asistente}
+
+Otra adición importante en la aplicación es la posibilidad de activar/desactivar distintos \textit{intents}. Sin embargo, en el estado actual de Mycroft no es posible hacer cambios de este nivel de granularidad, pudiendo únicamente desactivar o activar \textit{Skills} completas. Así que la solución fue separar la \textit{Skill} en varias, en función de qué hacen, consiguiendo tres \textit{Skills}, una para los eventos del calendario, otra para distintas acciones de un curso y otra para las notas.
+
