@@ -1,26 +1,24 @@
 import requests
-#Regular Expressions
-import re
-from bs4 import BeautifulSoup
 from util import util
+
 
 class WebService:
     __instance = None
 
-    #Singleton
+    # Singleton
     def __init__(self):
         WebService.__instance = self
 
     @staticmethod
     def get_instance():
-        if WebService.__instance == None:
+        if WebService.__instance is None:
             return WebService()
         return WebService.__instance
 
-    def set_host(self,host):
+    def set_host(self, host):
         self.__host = host
 
-    def set_session_cookies(self, username, password):
+    '''def set_session_cookies(self, username, password):
         self.__session = requests.Session()
         host_login = "https://ubuvirtual.ubu.es/login/index.php"
 
@@ -35,11 +33,11 @@ class WebService:
         #session_key = soup.find('script', {'type':'text/javascript'})
         #session_key = str(session_key).split('"sesskey":"')[1].split('"')[0]
         #print(session_key)
-        self.cookies = self.__session.cookies.get_dict()
+        self.cookies = self.__session.cookies.get_dict()'''
 
     def set_url_with_token(self, username, password):
         url = self.__host + '/login/token.php'
-        url_params = {'username':username, 'password':password, 'service':'moodle_mobile_app'}
+        url_params = {'username': username, 'password': password, 'service': 'moodle_mobile_app'}
         r = requests.post(url, params=url_params).json()
         token = r['token']
         self.__url_with_token = self.__host + '/webservice/rest/server.php?wstoken=' + token + '&moodlewsrestformat=json&wsfunction='

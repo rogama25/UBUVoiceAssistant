@@ -17,7 +17,7 @@ class UbuCalendarSkill(MycroftSkill):
                        'octubre':10, 'noviembre':11, 'diciembre':12}
 
     def initialize(self):
-        self.ws = util.get_data_from_server(util.SOCKET_HOST, util.SOCKET_PORT)
+        self.ws = util.get_data_from_server()
 
     @intent_handler('UpcomingEvents.intent')
     def handle_upcoming_events_intent(self, message):

@@ -17,7 +17,7 @@ class UbuGradesSkill(MycroftSkill):
         self.learning = True
 
     def initialize(self):
-        self.ws = util.get_data_from_server(util.SOCKET_HOST, util.SOCKET_PORT)
+        self.ws = util.get_data_from_server()
 
     @intent_handler('Grades.intent')
     def handle_grades_intent(self, message):

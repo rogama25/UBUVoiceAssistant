@@ -1,11 +1,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 sys.path.append('.')
+from app import AppMainWindow
 from webservice.web_service import WebService
-from GUI.app import AppMainWindow
+
 
 class LoginWindow(QtWidgets.QMainWindow):
-
 
     def __init__(self):
         super().__init__()
@@ -86,8 +86,8 @@ class LoginWindow(QtWidgets.QMainWindow):
 
         ws = WebService()
         ws.set_host(host)
-        ws.set_session_cookies(user,password)
-        ws.set_url_with_token(user,password)
+        # ws.set_session_cookies(user,password)
+        ws.set_url_with_token(user, password)
         ws.set_userid()
         ws.set_user_courses()
 
