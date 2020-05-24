@@ -88,13 +88,6 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-        # self.log_dialog = QtWidgets.QDialog(self)
-        # self.log_dialog.setWindowTitle('UBUAssistant Logs')
-        # self.log_dialog.resize(600, 600)
-
-        # self.log_text = QtWidgets.QPlainTextEdit(self.log_dialog)
-        # self.log_text.resize(600, 600)
-
         self.pushButton_logs = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_logs.setGeometry(QtCore.QRect(370, 10, 120, 40))
         self.pushButton_logs.clicked.connect(self.on_logs_pressed)
@@ -120,21 +113,22 @@ class AppMainWindow(QtWidgets.QMainWindow):
 
         self.retranslate_ui(self)
 
-        subprocess.Popen(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'all', 'restart'])
-
         server_socket = Thread(target=util.create_server_socket, args=[self.ws])
         server_socket.setDaemon(True)
         server_socket.start()
+
+        subprocess.run(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'all', 'restart'])
+
         # Wait until the MessageBus is started, there might be a better solution.
         time.sleep(10)
 
         self.bus = MessageBusClient()
-        event_thread = Thread(target=self.connect, args=[self.bus])
-        event_thread.setDaemon(True)
-        event_thread.start()
+        self.bus.run_in_thread()
 
         self.bus.on('speak', self.handle_speak)
         self.bus.on('recognizer_loop:utterance', self.handle_utterance)
+
+        self.bus.emit(Message('skillmanager.deactivate', {'skill': 'mycroft-volume.mycroftai'}))
 
     def retranslate_ui(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -146,7 +140,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.pushButton_skills.setText(_translate("MainWindow", "Administrar Skills"))
         self.label_questions_title.setText(_translate("MainWindow", "Puedes preguntar: Hey Mycroft..."))
         self.label_questions1.setText(_translate("MainWindow", "TextLabel"))
-        self.pushButton_manage_skills.setText(_translate("MainWindow", "Activar/Desactivar"))
+        self.pushButton_manage_skills.setText(_translate("MainWindow", "Guardar"))
 
     def update_chat(self, source):
         tmp_label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
@@ -197,40 +191,53 @@ class AppMainWindow(QtWidgets.QMainWindow):
 
     def on_skills_pressed(self):
 
-        self.scrollArea_skills = QtWidgets.QScrollArea(self.skills_dialog)
-        self.scrollArea_skills.setGeometry(QtCore.QRect(10, 10, 450, 580))
-        self.scrollArea_skills.setWidgetResizable(True)
-        self.scrollAreaWidgetContents_skills = QtWidgets.QWidget()
-        self.scrollArea_skills.setWidget(self.scrollAreaWidgetContents_skills)
+        scrollArea_skills = QtWidgets.QScrollArea(self.skills_dialog)
+        scrollArea_skills.setGeometry(QtCore.QRect(10, 10, 450, 580))
+        scrollArea_skills.setWidgetResizable(True)
+        scrollAreaWidgetContents_skills = QtWidgets.QWidget()
+        scrollArea_skills.setWidget(scrollAreaWidgetContents_skills)
 
-        self.skills_vlayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_skills)
-        self.skills_vlayout.setGeometry(QtCore.QRect(10, 10, 450, 580))
+        skills_grid_layout = QtWidgets.QGridLayout(scrollAreaWidgetContents_skills)
+        skills_grid_layout.setGeometry(QtCore.QRect(10, 10, 450, 580))
 
         self.active_skills_checkBoxes = []
         self.unactive_skills_checkBoxes = []
-        label = QtWidgets.QLabel(self.scrollAreaWidgetContents_skills)
-        label.setText('Skills activas')
-        self.skills_vlayout.addWidget(label)
-        for name in self.active_skills:
-            checkBox = QtWidgets.QCheckBox(self.scrollAreaWidgetContents_skills)
+
+        for count, name in enumerate(self.active_skills):
+            checkBox = QtWidgets.QCheckBox(scrollAreaWidgetContents_skills)
+            spacer = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
             checkBox.setText(name)
+            checkBox.setChecked(True)
+            logo = QtWidgets.QLabel(scrollAreaWidgetContents_skills)
+            if 'ubu' in name:
+                logo.setPixmap(QtGui.QPixmap('ubu_logo.jpg').scaled(20, 20))
+            else:
+                logo.setPixmap(QtGui.QPixmap('Mycroft_logo.png').scaled(20, 20))
             self.active_skills_checkBoxes.append(checkBox)
-            self.skills_vlayout.addWidget(checkBox)
-        label = QtWidgets.QLabel(self.scrollAreaWidgetContents_skills)
-        label.setText('Skills inactivas')
-        self.skills_vlayout.addWidget(label)
-        for name in self.unactive_skills:
-            checkBox = QtWidgets.QCheckBox(self.scrollAreaWidgetContents_skills)
+            skills_grid_layout.addWidget(logo, count, 0)
+            skills_grid_layout.addWidget(checkBox, count, 1)
+            skills_grid_layout.addItem(spacer, count, 2, QtCore.Qt.AlignLeft)
+
+        for count, name in enumerate(self.unactive_skills, len(self.active_skills)):
+            checkBox = QtWidgets.QCheckBox(scrollAreaWidgetContents_skills)
             checkBox.setText(name)
+            logo = QtWidgets.QLabel(scrollAreaWidgetContents_skills)
+            if 'ubu' in name:
+                logo.setPixmap(QtGui.QPixmap('ubu_logo.jpg').scaled(20, 20))
+            else:
+                logo.setPixmap(QtGui.QPixmap('Mycroft_logo.png').scaled(20, 20))
             self.unactive_skills_checkBoxes.append(checkBox)
-            self.skills_vlayout.addWidget(checkBox)
+            skills_grid_layout.addWidget(logo, count, 0)
+            skills_grid_layout.addWidget(checkBox, count, 1)
+            skills_grid_layout.addItem(spacer, count, 2, QtCore.Qt.AlignLeft)
+
         self.skills_dialog.show()
 
     def on_manage_skills_pressed(self):
         deactivated = []
         activated = []
         for cb in self.active_skills_checkBoxes:
-            if cb.isChecked():
+            if not cb.isChecked():
                 self.bus.emit(Message('skillmanager.deactivate', {'skill': cb.text()}))
                 deactivated.append(cb.text())
 
@@ -239,13 +246,15 @@ class AppMainWindow(QtWidgets.QMainWindow):
                 self.bus.emit(Message('skillmanager.activate', {'skill': cb.text()}))
                 activated.append(cb.text())
 
-        self.skills_dialog.hide()
-
         self.active_skills = [skill for skill in self.active_skills if skill not in deactivated]
         self.active_skills.extend(activated)
 
         self.unactive_skills = [skill for skill in self.unactive_skills if skill not in activated]
         self.unactive_skills.extend(deactivated)
+
+        self.skills_dialog.hide()
+        self.on_skills_pressed()
+
 
     def closeEvent(self, event):
         close = QtWidgets.QMessageBox()

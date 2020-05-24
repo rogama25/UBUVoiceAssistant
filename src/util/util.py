@@ -4,16 +4,19 @@ import re
 
 SOCKET_HOST = 'localhost'
 SOCKET_PORT = 5555
+MAX_CONNS = 3
 
 
 def create_server_socket(unserialized_data, host=SOCKET_HOST, port=SOCKET_PORT):
     server_socket = socket.socket()
     server_socket.bind((host, port))
     data = pickle.dumps(unserialized_data)
-    while True:
-        server_socket.listen(1)
+    n_conns = 0
+    while n_conns < MAX_CONNS:
+        server_socket.listen()
         client_socket, address = server_socket.accept()
         client_socket.send(data)
+        n_conns += 1
 
 
 def get_data_from_server(host=SOCKET_HOST, port=SOCKET_PORT):
