@@ -4,8 +4,58 @@
 
 \section{Requisitos de usuarios}
 
+Sistema operativo GNU/Linux
+Python3
+Conexión a Internet
+
 \section{Instalación}
+
+\subsection{Ubuntu}
+
+Si ya tienes Ubuntu u otra distribución Linux vete al siguiente apartado.
+
+Para utilizar Ubuntu se va a necesitar algún software de virtualización. En esta guía se va a utilizar VirtualBox, que se puede descargar desde \href{https://www.virtualbox.org/wiki/Downloads}{su página}.
+\imagen{descarga_virtualbox}{Descarga de VirtualBox}
+Desde su página elegimos la opción de \textbf{Windows hosts} (u otra en función del sistema operativo que se esté utilizando). Esperamos a que se inicie la descarga y ejecutamos el archivo .exe que hemos descargado. Se nos abrirá el instalador y le damos a \textbf{Next, Next, Next, Yes, Install}.
+
+Una vez instalado VirtualBox vamos a descargar Ubuntu. Vamos a \href{https://releases.ubuntu.com/18.04.4/}{su página} y hacemos click en el enlace que pone \textbf{64-bit PC (AMD64) desktop image}. Una vez haya finalizado la descarga abrimos VirtualBox. En la ventana de VirtualBox, hacemos click en \textbf{Nueva} y la configuramos para \textbf{Ubuntu (64-bit)}. A continuación elegimos la cantidad de memoria y creamos un disco virtual de, al menos, 30 GB.
+
+\imagen{VM_crear0}{Nueva máquina virtual} \imagen{VM_crear1}{Tipo de sistema operativo}
+
+Después hacemos click en el apartado de configuración en la ventana inicial de VirtualBox. En la pestaña \textbf{Almacenamiento} hacemos click en \textbf{Añadir una unidad óptica}, que es el botón a la derecha de \textbf{Controlador: IDE}. En la nueva ventana hacemos click en \textbf{Añadir} y seleccionamos el archivo .iso de Ubuntu. En la ventana de configuración también se puede ajustar el número de procesadores y la cantidad de memoria gráfica desde las pestañas \textbf{Sistema} y \textbf{Pantalla} respectivamente. Recomiendo utilizar, como mínimo, 2048MB de memoria RAM, 2 núcleos de procesador y 128MB de memoria de vídeo.
+
+\imagen{VM_config0}{Configuración de máquina virtual} \imagen{VM_config1}{Parámetros de configuración}
+
+Una vez terminada la configuración, iniciamos Ubuntu desde la ventana principal de VirtualBox con el botón \textbf{Iniciar}. En la primera pantalla de Ubuntu seleccionamos el idioma (español) y le damos a instalar Ubuntu.
+Después seleccionamos el idioma del teclado y la instalación de Ubuntu, en nuestro caso es suficiente con la \textbf{instalación mínima}. A continuación borramos el disco virtual, seleccionamos la franja horaria y completamos los campos que nos pide. Una vez termine de instalar nos pedirá reiniciar y después darle al \textbf{Enter}. Cuando se haya iniciado Ubuntu solo queda instalar las \textbf{huest additions}, que es totalmente opcional pero aumenta el rendimiento. Para instalarlas hacer click en la pestaña \textbf{Dispositivos} y \textbf{Insertar imagen de CD de las <<Guest Additions>>...} y reiniciar el sistema operativo.
+
+\imagen{Ubuntu_install}{Instalación de Ubuntu} \imagen{Ubuntu_install2}{Instalación de Ubuntu}
+
+\subsection{Python3 y sus dependencias}
+
+Python3 viene instalado por defecto en Ubuntu 18.04, pero si no lo tienes instalado solo hay que abrir un terminal y poner \textbf{sudo apt install python3}. Para instalar las dependencias necesitamos pip3, que se instala con el comando \textbf{sudo apt install python3-pip}. Ahora las dependencias que necesitamos se instalan mediante los comandos \textbf{sudo apt-get install python3-pyqt5} y \textbf{pip3 install mycroft-messagebus-client}
+
+\subsection{Mycroft}
+
+Para clonar el repositorio necesitamos git, se instala mediante el comando \textbf{sudo apt install git}.
+
+Para instalar Mycroft hay que seguir los pasos en la sección \textbf{Getting Started} de la guía que hay en \href{https://github.com/MycroftAI/mycroft-core}{su repositorio}. Es importante que clonemos el repositorio en nuestra carpeta personal (para acceder a ella usar el comando \textbf{cd ~}).
+
+Una vez instalado, ir a la sección \textbf{Running Mycroft} para ejecutarlo. Tras iniciar Mycroft tenemos que decir por voz cualquier cosa para que se inicie el proceso de enlazamiento. La aplicación nos dirá un código (si se ha iniciado con la opción de \textbf{debug} también aparecerá en pantalla). Este código hay que ponerlo al añadir un nuevo dispositivo. En \href{https://home.mycroft.ai}{la página de Mycroft} en la esquina superior derecha, en la sección de \textbf{Devices}, \textbf{Add Device} en el apartado de \textbf{Pairing code}. Al añadir el nuevo dispositivo es importante que en el apartado \textbf{Voice} se seleccione \textbf{Google Voice}.
+
+\imagen{cuenta_mycroft}{Crear dispositivo en Mycroft}
 
 \section{Manual del usuario}
 
+En Ubuntu, para ejecutar la aplicación descargar el proyecto de GitHub mediante los comandos \textbf{cd ~} (para descargarlo en la carpeta personal) y \textbf{git clone https://github.com/adp1002/UBUAssistant}. Cuando tengamos el proyecto descargado, mover el contenido de la carpeta \textbf{~/src/skills/} en \textbf{/opt/mycroft/skills/} (se puede hacer ejecutando el comando \textbf{sudo mv ~/UBUAssistant/src/skills/* /opt/mycroft/skills/}). Ahora tenemos que cambiar el idioma con el que funciona Mycroft, para ello abrir el archivo en \textbf{~/mycroft-core/mycroft/configuration/mycroft.conf} y en la línea 23 cambiar \textbf{en-us} por \textbf{es-es}.
 
+Nos vamos a la carpeta \textbf{/src/} del proyecto (comando \textbf{cd ~/UBUAssistant/src}) y ejecutar con el comando \textbf{python3 ./GUI/main.py > logs.log \&}. Se nos abrirá la ventana de inicio de sesión. En esta ventana se introducirán los credenciales del usuario para la plataforma de Moodle a la que se quiera conectar, así como la URL de esta plataforma.
+Es importante que en el campo \textbf{host} se introduzca la URL exactamente con el formato que viene indicado. Por ejemplo, para conectarse a UBUVirtual la URL que habrá que introducir es, literalmente, \textbf{https://ubuvirtual.ubu.es}.
+
+Para usar la aplicación mediante voz, hay que decir la \textit{wake word} (por defecto es "Hey Mycroft") y se escuchará un sonido si ha detectado la \textit{wake word}. Después de escuchar el sonido se puede preguntar lo que queramos. Para utilizar la conversación mediante texto hay que escribir la pregunta, sin la \textit{wake word}, y darle a enviar. Toda la conversación, ya sea mediante texto o voz, será transcrita en la ventana.
+
+Se pueden tener activas las \textit{skills} que queramos, haciendo click en el botón de \textbf{Administrar Skills}. Las skills que están marcadas son las activas y las no marcadas no están activas.
+
+Con el botón de \textbf{Abrir Logs} podemos ver los distintos mensajes de información que se van guardando durante la ejecución de la aplicación.
+
+\textbf{SI DESPUES DE DECIR "HEY MYCROFT" NO OS COGE LA PREGUNTA IR A ADMINISTRASR SKILLS Y DESHABILITAR \textit{mycroft-volume.mycroftai}}
