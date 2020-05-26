@@ -79,6 +79,14 @@ class AppMainWindow(QtWidgets.QMainWindow):
 
         self.label_questions1 = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.vertical_layout_questions.addWidget(self.label_questions1)
+        self.label_questions2 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.vertical_layout_questions.addWidget(self.label_questions2)
+        self.label_questions3 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.vertical_layout_questions.addWidget(self.label_questions3)
+        self.label_questions4 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.vertical_layout_questions.addWidget(self.label_questions4)
+        self.label_questions5 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.vertical_layout_questions.addWidget(self.label_questions5)
 
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
         self.scrollArea.setGeometry(QtCore.QRect(50, 300, 400, 230))
@@ -120,7 +128,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         subprocess.run(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'all', 'restart'])
 
         # Wait until the MessageBus is started, there might be a better solution.
-        time.sleep(10)
+        time.sleep(15)
 
         self.bus = MessageBusClient()
         self.bus.run_in_thread()
@@ -139,7 +147,11 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.pushButton_logs.setText(_translate("MainWindow", "Abrir Logs"))
         self.pushButton_skills.setText(_translate("MainWindow", "Administrar Skills"))
         self.label_questions_title.setText(_translate("MainWindow", "Puedes preguntar: Hey Mycroft..."))
-        self.label_questions1.setText(_translate("MainWindow", "TextLabel"))
+        self.label_questions1.setText(_translate("MainWindow", "abre el calendario"))
+        self.label_questions2.setText(_translate("MainWindow", "dime los foros de (asignatura)"))
+        self.label_questions3.setText(_translate("MainWindow", "dime mis notas"))
+        self.label_questions4.setText(_translate("MainWindow", "dime los eventos de (asignatura)"))
+        self.label_questions5.setText(_translate("MainWindow", ""))
         self.pushButton_manage_skills.setText(_translate("MainWindow", "Guardar"))
 
     def update_chat(self, source):

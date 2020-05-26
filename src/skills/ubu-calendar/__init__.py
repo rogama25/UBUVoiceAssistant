@@ -1,6 +1,6 @@
 import sys
 from os.path import expanduser
-sys.path.append(expanduser('~') + '/UBUCalendar/src')
+sys.path.append(expanduser('~') + '/UBUAssistant/src')
 import re
 from datetime import datetime
 from mycroft import MycroftSkill, intent_handler

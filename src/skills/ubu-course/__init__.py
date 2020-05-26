@@ -2,7 +2,7 @@ import sys
 from os.path import expanduser
 from mycroft import MycroftSkill, intent_handler
 from util import util
-sys.path.append(expanduser('~') + '/UBUCalendar/src')
+sys.path.append(expanduser('~') + '/UBUAssistant/src')
 from model.discussion import Discussion
 from model.forum import Forum
 
@@ -37,7 +37,7 @@ class UbuCourseSkill(MycroftSkill):
         for forum in self.forums[course_id]:
             self.speak(forum.get_name(), wait=True)
             resp = self.get_response('¿Quieres ver las discusiones de este foro?')
-            if resp == 'si':
+            if resp.lower() in ('si', 'sí'):
                 chosen_forum = forum
                 break
         # Read discussions
@@ -45,13 +45,13 @@ class UbuCourseSkill(MycroftSkill):
         for discussion in chosen_forum.get_discussions():
             self.speak(discussion.get_name(), wait=True)
             resp = self.get_response('¿Quieres ver los posts de esta discusión?')
-            if resp == 'si':
+            if resp in ('si', 'sí'):
                 chosen_discussion = discussion
                 break
         # Read posts
         posts = self.ws.get_forum_discussion_posts(str(chosen_discussion.get_id()))
         complete = self.get_response('¿Quieres que te lea la discusión completa?')
-        if complete == 'si':
+        if complete.lower() in ('si', 'sí'):
             discussion = []
             for post in reversed(posts['posts']):
                 discussion.append(post['userfullname'] + ', dijo: ' + post['message'])
@@ -60,7 +60,7 @@ class UbuCourseSkill(MycroftSkill):
             for post in reversed(posts['posts']):
                 self.speak(post['userfullname'] + ', dijo: ' + post['message'], wait=True)
                 resp = self.get_response('¿Quieres que te lea el siguiente post?')
-                if resp == 'no':
+                if resp.lower() == 'no':
                     break
 
     def stop(self):

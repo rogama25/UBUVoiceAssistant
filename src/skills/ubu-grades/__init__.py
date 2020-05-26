@@ -1,6 +1,6 @@
 import sys
 from os.path import expanduser
-sys.path.append(expanduser('~') + '/UBUCalendar/src')
+sys.path.append(expanduser('~') + '/UBUAssistant/src')
 import socket, pickle
 import re
 from datetime import datetime
