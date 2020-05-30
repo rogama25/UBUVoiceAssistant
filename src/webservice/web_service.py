@@ -111,10 +111,12 @@ class WebService:
         grades = []
         url = self.__url_with_token + 'gradereport_user_get_grade_items&courseid=' + courseid + '&userid=' + self.__userid
         r = requests.get(url).json()
-        for grade in r['usergrades']['gradeitems']:
-            if grade['graderaw']:
-                grades.append((grade['itemname'], grade['graderaw']))
-        return r
+        grades_dict = r['usergrades'][0]
+        for grade in grades_dict['gradeitems']:
+            grade_value = grade['graderaw']
+            if grade_value and (grade['itemtype'] == 'mod'):
+                grades.append((grade['itemname'], str(grade_value)))
+        return grades
 
     def get_course_forums(self, courseid):
         url = self.__url_with_token + 'mod_forum_get_forums_by_courses&courseids[0]=' + courseid
