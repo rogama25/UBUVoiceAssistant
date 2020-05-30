@@ -17,8 +17,9 @@ from util import util
 
 
 class AppMainWindow(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self, lang):
         super().__init__()
+        self.lang = lang
         self.ws = WebService.get_instance()
         self.user_utterance = ''
         self.mycroft_response = ''
@@ -119,7 +120,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.timer.timeout.connect(self.check_for_chat_update)
         self.timer.start()
 
-        self.retranslate_ui(self)
+        self.retranslate_ui()
 
         server_socket = Thread(target=util.create_server_socket, args=[self.ws])
         server_socket.setDaemon(True)
@@ -138,21 +139,33 @@ class AppMainWindow(QtWidgets.QMainWindow):
 
         self.bus.emit(Message('skillmanager.deactivate', {'skill': 'mycroft-volume.mycroftai'}))
 
-    def retranslate_ui(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "UBUAssistant"))
-        self.lineEdit_chat_message.setPlaceholderText(_translate("MainWindow", "O puedes escribir tu pregunta..."))
-        self.label_chat_title.setText(_translate("MainWindow", "Conversacion"))
-        self.pushButton_send.setText(_translate("MainWindow", "Enviar"))
-        self.pushButton_logs.setText(_translate("MainWindow", "Abrir Logs"))
-        self.pushButton_skills.setText(_translate("MainWindow", "Administrar Skills"))
-        self.label_questions_title.setText(_translate("MainWindow", "Puedes preguntar: Hey Mycroft..."))
-        self.label_questions1.setText(_translate("MainWindow", "abre el calendario"))
-        self.label_questions2.setText(_translate("MainWindow", "dime los foros de (asignatura)"))
-        self.label_questions3.setText(_translate("MainWindow", "dime mis notas"))
-        self.label_questions4.setText(_translate("MainWindow", "dime los eventos de (asignatura)"))
-        self.label_questions5.setText(_translate("MainWindow", ""))
-        self.pushButton_manage_skills.setText(_translate("MainWindow", "Guardar"))
+    def retranslate_ui(self):
+        if self.lang == 'es-es':
+            self.lineEdit_chat_message.setPlaceholderText("O puedes escribir tu pregunta...")
+            self.label_chat_title.setText("Conversacion")
+            self.pushButton_send.setText("Enviar")
+            self.pushButton_logs.setText("Abrir Logs")
+            self.pushButton_skills.setText("Administrar Skills")
+            self.label_questions_title.setText("Puedes preguntar: Hey Mycroft...")
+            self.label_questions1.setText('"...abre el calendario"')
+            self.label_questions2.setText('"...dime los foros de (asignatura)"')
+            self.label_questions3.setText("...dime mis notas")
+            self.label_questions4.setText('"...dime los eventos de (asignatura)"')
+            self.label_questions5.setText("")
+            self.pushButton_manage_skills.setText("Guardar")
+        elif self.lang == 'en-us':
+            self.lineEdit_chat_message.setPlaceholderText("Or you can ask via text")
+            self.label_chat_title.setText("Conversation")
+            self.pushButton_send.setText("Send")
+            self.pushButton_logs.setText("Open Logs")
+            self.pushButton_skills.setText("Manage Skills")
+            self.label_questions_title.setText("You can ask: Hey Mycroft...")
+            self.label_questions1.setText('"...open the calendar"')
+            self.label_questions2.setText('"...tell me about the forums of (course)"')
+            self.label_questions3.setText('"...tell me my grades"')
+            self.label_questions4.setText('"...tell me about the events of (course)"')
+            self.label_questions5.setText("")
+            self.pushButton_manage_skills.setText("Save")
 
     def update_chat(self, source):
         tmp_label = QtWidgets.QLabel(self.scrollAreaWidgetContents)

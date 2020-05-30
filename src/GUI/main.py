@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 sys.path.append('.')
 from app import AppMainWindow
+from os import path
 from webservice.web_service import WebService
 
 
@@ -14,6 +15,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.left = 100
         self.width = 500
         self.height = 600
+        self.lang = 'es-es'
         self.setup_ui()
 
     def setup_ui(self):
@@ -42,19 +44,24 @@ class LoginWindow(QtWidgets.QMainWindow):
 
         self.comboBox_language = QtWidgets.QComboBox(self)
         self.comboBox_language.setGeometry(QtCore.QRect(350, 10, 140, 25))
+        self.comboBox_language.addItem(QtGui.QIcon('spain_flag.png'), 'Español')
+        self.comboBox_language.addItem(QtGui.QIcon('us_flag.png'), 'English')
+        self.comboBox_language.currentTextChanged.connect(self.on_lang_selected)
 
         self.label_user = QtWidgets.QLabel(self)
         self.label_user.setGeometry(QtCore.QRect(140, 290, 51, 25))
+        self.label_user.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
 
         self.label_password = QtWidgets.QLabel(self)
         self.label_password.setGeometry(QtCore.QRect(113, 320, 81, 25))
+        self.label_password.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
 
         self.label_host = QtWidgets.QLabel(self)
         self.label_host.setGeometry(QtCore.QRect(160, 350, 31, 25))
+        self.label_host.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
 
         self.lineEdit_user = QtWidgets.QLineEdit(self)
         self.lineEdit_user.setGeometry(QtCore.QRect(210, 290, 231, 25))
-        self.lineEdit_user.setObjectName('lineEdit_user')
 
         self.lineEdit_password = QtWidgets.QLineEdit(self)
         self.lineEdit_password.setGeometry(QtCore.QRect(210, 320, 231, 25))
@@ -62,27 +69,61 @@ class LoginWindow(QtWidgets.QMainWindow):
 
         self.lineEdit_host = QtWidgets.QLineEdit(self)
         self.lineEdit_host.setGeometry(QtCore.QRect(210, 350, 231, 25))
-        self.lineEdit_host.setPlaceholderText("https://www.example.com")
 
-        self.retranslateUi(self)
+        self.load_settings()
+        self.retranslateUi()
         self.show()
 
-    def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        self.checkBox_remember_user.setText(_translate('MainWindow', 'Recordar usuario'))
-        self.checkBox_remember_host.setText(_translate('MainWindow', 'Recordar host'))
-        self.pushButton_login.setText(_translate('MainWindow', 'Acceder'))
-        self.label_user.setText(_translate('MainWindow', 'Usuario'))
-        self.label_password.setText(_translate('MainWindow', 'Contraseña'))
-        self.label_host.setText(_translate('MainWindow', 'Host'))
-        self.lineEdit_user.setText(_translate('MainWindow', 'adp1002@alu.ubu.es'))
-        self.lineEdit_host.setText(_translate('MainWindow', 'https://ubuvirtual.ubu.es'))
+    def retranslateUi(self):
+        if self.user:
+            self.lineEdit_user.setText(self.user)
+        if self.host:
+            self.lineEdit_host.setText(self.host)
+
+        if self.lang == 'es-es':
+            self.checkBox_remember_user.setText('Recordar usuario')
+            self.checkBox_remember_host.setText('Recordar host')
+            self.pushButton_login.setText('Acceder')
+            self.label_user.setText('Usuario')
+            self.label_password.setText('Contraseña')
+            self.label_host.setText('Host')
+            self.lineEdit_host.setPlaceholderText("https://www.ejemplo.com")
+        elif self.lang == 'en-us':
+            self.checkBox_remember_user.setText('Remember user')
+            self.checkBox_remember_host.setText('Remember host')
+            self.pushButton_login.setText('Login')
+            self.label_user.setText('User')
+            self.label_password.setText('Password')
+            self.label_host.setText('Host')
+            self.lineEdit_user.setText('adp1002@alu.ubu.es')
+            self.lineEdit_host.setText('https://ubuvirtual.ubu.es')
+            self.lineEdit_host.setPlaceholderText("https://www.example.com")
+
+    def on_lang_selected(self, value):
+        if value == 'Español':
+            self.lang = 'es-es'
+        elif value == 'English':
+            self.lang = 'en-us'
+
+        self.retranslateUi()
 
     def on_login_pressed(self):
-
         user = str(self.lineEdit_user.text())
         password = self.lineEdit_password.text()
         host = str(self.lineEdit_host.text())
+
+        with open('user_data.txt', 'r') as data:
+            data_lines = data.readlines()
+            if self.checkBox_remember_user.isChecked():
+                data_lines[0] = user+'\n'
+            if self.checkBox_remember_host.isChecked():
+                data_lines[1] = host+'\n'
+            data_lines[2] = self.lang
+
+        with open('user_data.txt', 'w') as data:
+            data.writelines(data_lines)
+
+        self.update_lang()
 
         ws = WebService()
         ws.set_host(host)
@@ -91,10 +132,26 @@ class LoginWindow(QtWidgets.QMainWindow):
         ws.set_userid()
         ws.set_user_courses()
 
-        self.app_window = AppMainWindow()
+        self.app_window = AppMainWindow(self.lang)
         self.app_window.show()
         self.close()
 
+    def load_settings(self):
+        with open('user_data.txt', 'r') as data:
+            data_lines = data.readlines()
+            self.user = data_lines[0].strip()
+            self.host = data_lines[1].strip()
+            self.lang = data_lines[2].strip()
+
+    def update_lang(self):
+        settings_path = path.expanduser('~') + '/mycroft-core/mycroft/configuration/mycroft.conf'
+
+        with open(settings_path, 'r') as file:
+            settings = file.readlines()
+            settings[22] = '  "lang": "' + self.lang + '",\n'
+
+        with open(settings_path, 'w') as file:
+            file.writelines(settings)
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
