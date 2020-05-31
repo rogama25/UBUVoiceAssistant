@@ -2,7 +2,7 @@ import sys
 from os.path import expanduser
 sys.path.append(expanduser('~') + '/UBUAssistant/src')
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from mycroft import MycroftSkill, intent_handler
 from webservice.web_service import WebService
 from util import util
@@ -32,20 +32,24 @@ class UbuCalendarSkill(MycroftSkill):
 
     @intent_handler('CourseEvents.intent')
     def handle_course_events_intent(self, message):
-        events = []
         course = message.data['course']
         id = util.get_course_id_by_name(course, self.ws.get_user_courses().items())
-        events = self.ws.get_calendar_events_by_courseid(id)
-        self.speak(util.text_to_speech(events))
+        if id:
+            events = self.ws.get_calendar_events_by_courseid(id)
+            self.speak(util.text_to_speech(events))
+        else:
+            self.speak_dialog('no.course')
 
     @intent_handler('RecentUpdates.intent')
     def handle_course_updates(self, message):
         course = message.data['course']
-        date = datetime(int(message.data['year']), int(self.months[message.data['month']]), int(message.data['day']), 0, 0, 0)
         course_id = util.get_course_id_by_name(course, self.ws.get_user_courses().items())
-        cmids = self.ws.get_course_updates_since(course_id,int(datetime.timestamp(date)))
+        cmids = self.ws.get_course_updates_since(course_id, int(datetime.timestamp(datetime.today() - timedelta(days=1))))
         module_names = self.ws.get_course_module(cmids)
-        self.speak(str(module_names))
+        if module_names:
+            self.speak(util.text_to_speech(module_names))
+        else:
+            self.speak_dialog('changes')
 
     def stop(self):
         pass

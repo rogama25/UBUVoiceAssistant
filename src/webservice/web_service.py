@@ -88,7 +88,7 @@ class WebService:
             id = course_grade['courseid']
             course = self.__user_courses.get(id)
             grade = course_grade['grade']
-            grades.append((course, grade))
+            grades.append(course + ' ' + grade)
         return grades
 
     def get_course_updates_since(self, courseid, timestamp):
@@ -115,7 +115,7 @@ class WebService:
         for grade in grades_dict['gradeitems']:
             grade_value = grade['graderaw']
             if grade_value and (grade['itemtype'] == 'mod'):
-                grades.append((grade['itemname'], str(grade_value)))
+                grades.append(grade['itemname'] + ' ' + str(grade_value))
         return grades
 
     def get_course_forums(self, courseid):

@@ -126,7 +126,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         server_socket.setDaemon(True)
         server_socket.start()
 
-        subprocess.run(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'all', 'restart'])
+        subprocess.Popen(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'debug'])
 
         # Wait until the MessageBus is started, there might be a better solution.
         time.sleep(15)

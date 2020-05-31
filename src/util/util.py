@@ -29,17 +29,14 @@ def convert_events_to_readable_text(events):
     for event in events:
         event_info = []
         date = re.sub('<.*?>', '', event['formattedtime'])
-        event_info.append(date)
-        event_info.append(event['name'])
-        events_info.append(event_info)
+        events_info.append(date + ' ' + event['name'])
     return events_info
 
 
 def text_to_speech(string_array):
     text = ''
     for string in string_array:
-        text = text + ' '.join(string)
-        text = text + '.'
+        text = text + string + '.\n'
     return text
 
 

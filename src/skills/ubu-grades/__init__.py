@@ -28,8 +28,11 @@ class UbuGradesSkill(MycroftSkill):
     def handle_course_grades(self, message):
         course = message.data['course']
         course_id = util.get_course_id_by_name(course, self.ws.get_user_courses().items())
-        grades = self.ws.get_course_grades(course_id)
-        self.speak(util.text_to_speech(grades))
+        if course_id:
+            grades = self.ws.get_course_grades(course_id)
+            self.speak(util.text_to_speech(grades))
+        else:
+            speak_dialog('no.course')
 
     def stop(self):
         pass
