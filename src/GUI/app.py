@@ -44,6 +44,8 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
 
+        self.close = QtWidgets.QMessageBox()
+
         self.label_chat_title = QtWidgets.QLabel(self.centralwidget)
         self.label_chat_title.setGeometry(QtCore.QRect(200, 260, 120, 14))
         font_chat_title = QtGui.QFont()
@@ -113,7 +115,14 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.pushButton_manage_skills.setGeometry(QtCore.QRect(470, 10, 120, 40))
         self.pushButton_manage_skills.clicked.connect(self.on_manage_skills_pressed)
 
-        [self.active_skills.append(name) for name in listdir('/opt/mycroft/skills/') if path.isdir('/opt/mycroft/skills/' + name)]
+        dangerous_skills = ['mycroft-volume.mycroftai',
+                            'mycroft-stop.mycroftai',
+                            'fallback-unknown.mycroftai',
+                            'fallback-query.mycroftai',
+                            'mycroft-configuration.mycroftai']
+
+        [self.active_skills.append(name) for name in listdir('/opt/mycroft/skills/') \
+            if path.isdir('/opt/mycroft/skills/' + name) and name not in dangerous_skills]
 
         self.timer  = QtCore.QTimer(self)
         self.timer.setInterval(1000)
@@ -126,7 +135,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         server_socket.setDaemon(True)
         server_socket.start()
 
-        subprocess.Popen(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'debug'])
+        subprocess.run(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'all', 'restart'])
 
         # Wait until the MessageBus is started, there might be a better solution.
         time.sleep(15)
@@ -141,18 +150,19 @@ class AppMainWindow(QtWidgets.QMainWindow):
 
     def retranslate_ui(self):
         if self.lang == 'es-es':
-            self.lineEdit_chat_message.setPlaceholderText("O puedes escribir tu pregunta...")
+            self.lineEdit_chat_message.setPlaceholderText("O puedes escribir tu pregunta")
             self.label_chat_title.setText("Conversacion")
             self.pushButton_send.setText("Enviar")
             self.pushButton_logs.setText("Abrir Logs")
             self.pushButton_skills.setText("Administrar Skills")
-            self.label_questions_title.setText("Puedes preguntar: Hey Mycroft...")
-            self.label_questions1.setText('"...abre el calendario"')
-            self.label_questions2.setText('"...dime los foros de (asignatura)"')
-            self.label_questions3.setText("...dime mis notas")
-            self.label_questions4.setText('"...dime los eventos de (asignatura)"')
+            self.label_questions_title.setText('Puedes preguntar: "Hey Mycroft...')
+            self.label_questions1.setText('...abre el calendario"')
+            self.label_questions2.setText('...dime los foros de (asignatura)"')
+            self.label_questions3.setText('...dime mis notas"')
+            self.label_questions4.setText('...dime los eventos de (asignatura)"')
             self.label_questions5.setText("")
             self.pushButton_manage_skills.setText("Guardar")
+            self.close.setText("¿Estas seguro?")
         elif self.lang == 'en-us':
             self.lineEdit_chat_message.setPlaceholderText("Or you can ask via text")
             self.label_chat_title.setText("Conversation")
@@ -166,6 +176,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
             self.label_questions4.setText('"...tell me about the events of (course)"')
             self.label_questions5.setText("")
             self.pushButton_manage_skills.setText("Save")
+            self.close.setText("Are you sure?")
 
     def update_chat(self, source):
         tmp_label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
@@ -282,12 +293,10 @@ class AppMainWindow(QtWidgets.QMainWindow):
 
 
     def closeEvent(self, event):
-        close = QtWidgets.QMessageBox()
-        close.setText("Estas seguro?")
-        close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
-        close = close.exec()
+        self.close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
+        self.close = self.close.exec()
 
-        if close == QtWidgets.QMessageBox.Yes:
+        if self.close == QtWidgets.QMessageBox.Yes:
             subprocess.run(['bash', path.expanduser('~') + '/mycroft-core/stop-mycroft.sh'])
             event.accept()
         else:
