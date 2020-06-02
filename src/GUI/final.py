@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file './Desktop/2nd.ui'
+# Form implementation generated from reading ui file '/home/adp/Desktop/final.ui'
 #
 # Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
+
 import subprocess
 import time
 from os import path, listdir
@@ -15,8 +16,8 @@ from mycroft_bus_client import MessageBusClient, Message
 from log_window import LogDialog
 from util import util
 
-
 class AppMainWindow(QtWidgets.QMainWindow):
+
     def __init__(self, lang):
         super().__init__()
         self.lang = lang
@@ -39,69 +40,117 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.setGeometry(self.top, self.left, self.width, self.height)
         self.centralwidget = QtWidgets.QWidget(self)
         self.setCentralWidget(self.centralwidget)
-        self.line = QtWidgets.QFrame(self.centralwidget)
-        self.line.setGeometry(QtCore.QRect(100, 250, 300, 3))
-        self.line.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
+
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem, 1, 2, 1, 3)
 
         self.close = QtWidgets.QMessageBox()
 
+        self.line = QtWidgets.QFrame(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.line.sizePolicy().hasHeightForWidth())
+        self.line.setSizePolicy(sizePolicy)
+        self.line.setLineWidth(1)
+        self.line.setMidLineWidth(0)
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.gridLayout.addWidget(self.line, 6, 1, 1, 5)
+
+        self.lineEdit_chat_message = QtWidgets.QLineEdit(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lineEdit_chat_message.sizePolicy().hasHeightForWidth())
+        self.lineEdit_chat_message.setSizePolicy(sizePolicy)
+        self.gridLayout.addWidget(self.lineEdit_chat_message, 11, 1, 1, 4)
+
+        self.label_intent3 = QtWidgets.QLabel(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_intent3.sizePolicy().hasHeightForWidth())
+        self.label_intent3.setSizePolicy(sizePolicy)
+        self.gridLayout.addWidget(self.label_intent3, 4, 1, 1, 1)
+
+        self.label_intents_title = QtWidgets.QLabel(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_intents_title.sizePolicy().hasHeightForWidth())
+        self.label_intents_title.setSizePolicy(sizePolicy)
+        font_questions_title = QtGui.QFont()
+        font_questions_title.setPointSize(16)
+        self.label_intents_title.setFont(font_questions_title)
+        self.gridLayout.addWidget(self.label_intents_title, 1, 1, 1, 1)
+
+        self.label_intent2 = QtWidgets.QLabel(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_intent2.sizePolicy().hasHeightForWidth())
+        self.label_intent2.setSizePolicy(sizePolicy)
+        self.gridLayout.addWidget(self.label_intent2, 3, 1, 1, 1)
+
+        self.label_intent1 = QtWidgets.QLabel(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_intent1.sizePolicy().hasHeightForWidth())
+        self.label_intent1.setSizePolicy(sizePolicy)
+        self.gridLayout.addWidget(self.label_intent1, 2, 1, 1, 1)
+
+        self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
+        self.scrollArea.setSizePolicy(sizePolicy)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 768, 410))
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
+        self.gridLayout_conversation = QtWidgets.QGridLayout()
+        self.verticalLayout.addLayout(self.gridLayout_conversation)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.gridLayout.addWidget(self.scrollArea, 10, 1, 1, 5)
+
         self.label_chat_title = QtWidgets.QLabel(self.centralwidget)
-        self.label_chat_title.setGeometry(QtCore.QRect(200, 260, 120, 14))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_chat_title.sizePolicy().hasHeightForWidth())
         font_chat_title = QtGui.QFont()
         font_chat_title.setPointSize(14)
+        self.label_chat_title.setSizePolicy(sizePolicy)
         self.label_chat_title.setFont(font_chat_title)
-
-        self.lineEdit_chat_message = self.lineEdit_user = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_chat_message.setGeometry(QtCore.QRect(50, 550, 350, 30))
-
-        self.pushButton_send = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_send.setGeometry(QtCore.QRect(399, 550, 50, 30))
-        self.pushButton_send.clicked.connect(self.on_send_pressed)
+        self.gridLayout.addWidget(self.label_chat_title, 8, 1)
 
         self.pushButton_mic = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_mic.setGeometry(QtCore.QRect(350, 260, 24, 24))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButton_mic.sizePolicy().hasHeightForWidth())
+        self.pushButton_mic.setSizePolicy(sizePolicy)
         self.mic_icon = QtGui.QIcon()
         self.mic_icon.addPixmap(QtGui.QPixmap("mic.png"))
         self.mic_muted_icon = QtGui.QIcon()
         self.mic_muted_icon.addPixmap(QtGui.QPixmap("mic_muted.png"))
         self.pushButton_mic.setIcon(self.mic_icon)
         self.pushButton_mic.clicked.connect(self.on_mic_pressed)
+        self.gridLayout.addWidget(self.pushButton_mic, 8, 2)
 
-        self.label_questions_title = QtWidgets.QLabel(self.centralwidget)
-        self.label_questions_title.setGeometry(QtCore.QRect(20, 10, 315, 40))
-        font_questions_title = QtGui.QFont()
-        font_questions_title.setPointSize(16)
-        self.label_questions_title.setFont(font_questions_title)
-
-        self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(70, 50, 360, 190))
-
-        self.vertical_layout_questions = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
-        self.vertical_layout_questions.setContentsMargins(0, 0, 0, 0)
-
-        self.label_questions1 = QtWidgets.QLabel(self.verticalLayoutWidget)
-        self.vertical_layout_questions.addWidget(self.label_questions1)
-        self.label_questions2 = QtWidgets.QLabel(self.verticalLayoutWidget)
-        self.vertical_layout_questions.addWidget(self.label_questions2)
-        self.label_questions3 = QtWidgets.QLabel(self.verticalLayoutWidget)
-        self.vertical_layout_questions.addWidget(self.label_questions3)
-        self.label_questions4 = QtWidgets.QLabel(self.verticalLayoutWidget)
-        self.vertical_layout_questions.addWidget(self.label_questions4)
-        self.label_questions5 = QtWidgets.QLabel(self.verticalLayoutWidget)
-        self.vertical_layout_questions.addWidget(self.label_questions5)
-
-        self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
-        self.scrollArea.setGeometry(QtCore.QRect(50, 300, 400, 230))
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaWidgetContents = QtWidgets.QWidget()
-
-        self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.pushButton_send = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_send.setGeometry(QtCore.QRect(399, 550, 50, 30))
+        self.pushButton_send.clicked.connect(self.on_send_pressed)
+        self.gridLayout.addWidget(self.pushButton_send, 11, 5, 1, 1)
 
         self.pushButton_logs = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_logs.setGeometry(QtCore.QRect(370, 10, 120, 40))
         self.pushButton_logs.clicked.connect(self.on_logs_pressed)
+        self.gridLayout.addWidget(self.pushButton_logs, 1, 5, 1, 1)
 
         self.skills_dialog = QtWidgets.QDialog(self)
         self.skills_dialog.setWindowTitle('Mycroft Skills')
@@ -110,6 +159,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.pushButton_skills = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_skills.setGeometry(QtCore.QRect(370, 60, 120, 40))
         self.pushButton_skills.clicked.connect(self.on_skills_pressed)
+        self.gridLayout.addWidget(self.pushButton_skills, 3, 5, 1, 1)
 
         self.pushButton_manage_skills = QtWidgets.QPushButton(self.skills_dialog)
         self.pushButton_manage_skills.setGeometry(QtCore.QRect(470, 10, 120, 40))
@@ -155,12 +205,12 @@ class AppMainWindow(QtWidgets.QMainWindow):
             self.pushButton_send.setText("Enviar")
             self.pushButton_logs.setText("Abrir Logs")
             self.pushButton_skills.setText("Administrar Skills")
-            self.label_questions_title.setText('Puedes preguntar: "Hey Mycroft...')
-            self.label_questions1.setText('...abre el calendario"')
-            self.label_questions2.setText('...dime los foros de (asignatura)"')
-            self.label_questions3.setText('...dime mis notas"')
-            self.label_questions4.setText('...dime los eventos de (asignatura)"')
-            self.label_questions5.setText("")
+            self.label_intents_title.setText('Puedes preguntar: "Hey Mycroft...')
+            self.label_intent1.setText('...abre el calendario"')
+            self.label_intent2.setText('...dime los foros de (asignatura)"')
+            self.label_intent3.setText('...dime mis notas"')
+            # self.label_questions4.setText('...dime los eventos de (asignatura)"')
+            # self.label_questions5.setText("")
             self.pushButton_manage_skills.setText("Guardar")
             self.close.setText("¿Estas seguro?")
         elif self.lang == 'en-us':
@@ -169,12 +219,12 @@ class AppMainWindow(QtWidgets.QMainWindow):
             self.pushButton_send.setText("Send")
             self.pushButton_logs.setText("Open Logs")
             self.pushButton_skills.setText("Manage Skills")
-            self.label_questions_title.setText("You can ask: Hey Mycroft...")
-            self.label_questions1.setText('"...open the calendar"')
-            self.label_questions2.setText('"...tell me about the forums of (course)"')
-            self.label_questions3.setText('"...tell me my grades"')
-            self.label_questions4.setText('"...tell me about the events of (course)"')
-            self.label_questions5.setText("")
+            self.label_intents_title.setText("You can ask: Hey Mycroft...")
+            self.label_intent1.setText('"...open the calendar"')
+            self.label_intent2.setText('"...tell me about the forums of (course)"')
+            self.label_intent3.setText('"...tell me my grades"')
+            # self.label_questions4.setText('"...tell me about the events of (course)"')
+            # self.label_questions5.setText("")
             self.pushButton_manage_skills.setText("Save")
             self.close.setText("Are you sure?")
 
@@ -183,10 +233,11 @@ class AppMainWindow(QtWidgets.QMainWindow):
         tmp_label.setWordWrap(True)
         if source == 'r':
             self.gridLayout.addWidget(tmp_label, self.next_form, 1)
+            self.gridLayout_conversation.addWidget(tmp_label, self.next_form, 1)
             tmp_label.setText(self.mycroft_response)
             self.mycroft_response = ''
         elif source == 'u':
-            self.gridLayout.addWidget(tmp_label, self.next_form, 0)
+            self.gridLayout_conversation.addWidget(tmp_label, self.next_form, 0)
             tmp_label.setText(self.user_utterance)
             self.user_utterance = ''
         self.next_form+=1
@@ -290,7 +341,6 @@ class AppMainWindow(QtWidgets.QMainWindow):
 
         self.skills_dialog.hide()
         self.on_skills_pressed()
-
 
     def closeEvent(self, event):
         self.close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)

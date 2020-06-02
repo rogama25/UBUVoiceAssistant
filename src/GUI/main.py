@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 sys.path.append('.')
-from app import AppMainWindow
+from final import AppMainWindow
 from os import path
 from webservice.web_service import WebService
 
