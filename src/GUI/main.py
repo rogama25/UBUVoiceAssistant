@@ -24,6 +24,8 @@ class LoginWindow(QtWidgets.QMainWindow):
 
         self.invalid_credentials = QtWidgets.QMessageBox()
 
+        self.center_on_screen()
+
         self.checkBox_remember_user = QtWidgets.QCheckBox(self)
         self.checkBox_remember_user.setGeometry(QtCore.QRect(70, 420, 140, 25))
 
@@ -138,7 +140,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         with open('user_data.txt', 'w') as data:
             data.writelines(data_lines)
 
-        self.update_lang()
+        LoginWindow.update_lang()
 
         self.app_window = AppMainWindow()
         self.app_window.show()
@@ -151,7 +153,7 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.host = data_lines[1].strip()
             environ['lang'] = data_lines[2].strip()
 
-    def update_lang(self):
+    def update_lang():
         settings_path = path.expanduser('~') + '/mycroft-core/mycroft/configuration/mycroft.conf'
 
         with open(settings_path, 'r') as file:
@@ -160,6 +162,26 @@ class LoginWindow(QtWidgets.QMainWindow):
 
         with open(settings_path, 'w') as file:
             file.writelines(settings)
+
+    def center_on_screen(self):
+        resolution = QtWidgets.QDesktopWidget().screenGeometry()
+        self.move((resolution.width() / 2) - (self.frameSize().width() / 2),
+                    (resolution.height() / 2) - (self.frameSize().height() / 2))
+
+    def closeEvent(self, event):
+        self.close = QtWidgets.QMessageBox()
+        if environ['lang'] == 'es-es':
+            self.close.setText("¿Estas seguro?")
+        elif environ['lang'] == 'en-us':
+            self.close.setText("Are you sure?")
+        self.close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
+        self.close = self.close.exec()
+
+        if self.close == QtWidgets.QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)

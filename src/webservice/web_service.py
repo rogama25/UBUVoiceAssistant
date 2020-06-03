@@ -55,9 +55,9 @@ class WebService:
         r = requests.get(url).json()
         self.__user_courses = {}
         for course in r:
-            id = course['id']
+            course_id = course['id']
             name = course['displayname']
-            self.__user_courses[id] = name
+            self.__user_courses[course_id] = name
 
     def get_user_courses(self):
         return self.__user_courses
@@ -85,8 +85,8 @@ class WebService:
         r = requests.get(url).json()
         grades = []
         for course_grade in r['grades']:
-            id = course_grade['courseid']
-            course = self.__user_courses.get(id)
+            course_id = course_grade['courseid']
+            course = self.__user_courses.get(course_id)
             grade = course_grade['grade']
             grades.append(course + ' ' + grade)
         return grades

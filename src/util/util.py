@@ -14,7 +14,7 @@ def create_server_socket(unserialized_data, host=SOCKET_HOST, port=SOCKET_PORT):
     data = pickle.dumps(unserialized_data)
     while True:
         server_socket.listen()
-        client_socket, address = server_socket.accept()
+        client_socket, _ = server_socket.accept()
         client_socket.send(data)
 
 
@@ -29,7 +29,6 @@ def get_data_from_server(host=SOCKET_HOST, port=SOCKET_PORT):
 def convert_events_to_readable_text(events):
     events_info = []
     for event in events:
-        event_info = []
         date = re.sub('<.*?>', '', event['formattedtime'])
         events_info.append(date + ' ' + event['name'])
     return events_info
@@ -49,7 +48,7 @@ def translate_moodle_words(string):
     return string
 
 def get_course_id_by_name(course_to_find, user_courses):
-    for id, name in user_courses:
+    for course_id, name in user_courses:
         if course_to_find.upper() in name:
-            return str(id)
+            return str(course_id)
     return None

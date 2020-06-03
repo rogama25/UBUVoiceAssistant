@@ -27,8 +27,8 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.active_skills = []
         self.unactive_skills = []
         self.title = 'UBUAssistant'
-        self.top = 100
-        self.left = 100
+        self.top = 0
+        self.left = 0
         self.width = 500
         self.height = 600
         self.next_form = 0
@@ -37,14 +37,13 @@ class AppMainWindow(QtWidgets.QMainWindow):
     def setup_ui(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.top, self.left, self.width, self.height)
+        self.center_on_screen()
         self.centralwidget = QtWidgets.QWidget(self)
         self.setCentralWidget(self.centralwidget)
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
 
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem, 1, 2, 1, 3)
-
-        self.close = QtWidgets.QMessageBox()
 
         self.line = QtWidgets.QFrame(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
@@ -139,7 +138,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.mic_muted_icon.addPixmap(QtGui.QPixmap("mic_muted.png"))
         self.pushButton_mic.setIcon(self.mic_icon)
         self.pushButton_mic.clicked.connect(self.on_mic_pressed)
-        self.gridLayout.addWidget(self.pushButton_mic, 8, 2)
+        self.gridLayout.addWidget(self.pushButton_mic, 8, 5)
 
         self.pushButton_send = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_send.setGeometry(QtCore.QRect(399, 550, 50, 30))
@@ -189,7 +188,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         server_socket.start()
 
         # Start Mycroft services
-        subprocess.run(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'all', 'restart'])
+        subprocess.Popen(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'debug'])
 
         # Wait until the MessageBus is started, there might be a better solution
         time.sleep(15)
@@ -210,6 +209,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
             self.pushButton_send.setText("Enviar")
             self.pushButton_logs.setText("Abrir Logs")
             self.pushButton_skills.setText("Administrar Skills")
+            self.pushButton_mic.setText('Mute')
             self.label_intents_title.setText('Puedes preguntar: "Hey Mycroft...')
             self.label_intent1.setText('...abre el calendario"')
             self.label_intent2.setText('...dime los foros de (asignatura)"')
@@ -217,7 +217,6 @@ class AppMainWindow(QtWidgets.QMainWindow):
             # self.label_questions4.setText('...dime los eventos de (asignatura)"')
             # self.label_questions5.setText("")
             self.pushButton_manage_skills.setText("Guardar")
-            self.close.setText("¿Estas seguro?")
         elif environ['lang'] == 'en-us':
             self.lineEdit_chat_message.setPlaceholderText("Or you can ask via text")
             self.label_chat_title.setText("Conversation")
@@ -231,7 +230,6 @@ class AppMainWindow(QtWidgets.QMainWindow):
             # self.label_questions4.setText('"...tell me about the events of (course)"')
             # self.label_questions5.setText("")
             self.pushButton_manage_skills.setText("Save")
-            self.close.setText("Are you sure?")
 
     def update_chat(self, source):
         tmp_label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
@@ -271,10 +269,12 @@ class AppMainWindow(QtWidgets.QMainWindow):
         if self.mic_muted:
             self.mic_muted = False
             self.pushButton_mic.setIcon(self.mic_icon)
+            self.pushButton_mic.setText('Mute')
             self.bus.emit(Message('mycroft.mic.unmute'))
         else:
             self.mic_muted = True
             self.pushButton_mic.setIcon(self.mic_muted_icon)
+            self.pushButton_mic.setText('Unmute')
             self.bus.emit(Message('mycroft.mic.mute'))
 
     def on_logs_pressed(self):
@@ -347,8 +347,17 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.skills_dialog.hide()
         self.on_skills_pressed()
 
+    def center_on_screen(self):
+        resolution = QtWidgets.QDesktopWidget().screenGeometry()
+        self.move((resolution.width() / 2) - (self.frameSize().width() / 2),
+                  (resolution.height() / 2) - (self.frameSize().height() / 2))
+
     def closeEvent(self, event):
         self.close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
+        if environ['lang'] == 'es-es':
+            self.close.setText("¿Estas seguro?")
+        elif environ['lang'] == 'en-us':
+            self.close.setText("Are you sure?")
         self.close = self.close.exec()
 
         if self.close == QtWidgets.QMessageBox.Yes:
