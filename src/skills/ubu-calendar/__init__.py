@@ -1,10 +1,8 @@
 import sys
 from os.path import expanduser
 sys.path.append(expanduser('~') + '/UBUAssistant/src')
-import re
 from datetime import datetime, timedelta
 from mycroft import MycroftSkill, intent_handler
-from webservice.web_service import WebService
 from util import util
 
 class UbuCalendarSkill(MycroftSkill):
@@ -33,9 +31,9 @@ class UbuCalendarSkill(MycroftSkill):
     @intent_handler('CourseEvents.intent')
     def handle_course_events_intent(self, message):
         course = message.data['course']
-        id = util.get_course_id_by_name(course, self.ws.get_user_courses().items())
+        course_id = util.get_course_id_by_name(course, self.ws.get_user_courses().items())
         if id:
-            events = self.ws.get_calendar_events_by_courseid(id)
+            events = self.ws.get_calendar_events_by_courseid(course_id)
             self.speak(util.text_to_speech(events))
         else:
             self.speak_dialog('no.course')

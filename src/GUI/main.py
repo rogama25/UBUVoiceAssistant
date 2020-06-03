@@ -140,7 +140,14 @@ class LoginWindow(QtWidgets.QMainWindow):
         with open('user_data.txt', 'w') as data:
             data.writelines(data_lines)
 
-        LoginWindow.update_lang()
+        settings_path = path.expanduser('~') + '/mycroft-core/mycroft/configuration/mycroft.conf'
+
+        with open(settings_path, 'r') as file:
+            settings = file.readlines()
+            settings[22] = '  "lang": "' + environ['lang'] + '",\n'
+
+        with open(settings_path, 'w') as file:
+            file.writelines(settings)
 
         self.app_window = AppMainWindow()
         self.app_window.show()
@@ -152,16 +159,6 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.user = data_lines[0].strip()
             self.host = data_lines[1].strip()
             environ['lang'] = data_lines[2].strip()
-
-    def update_lang():
-        settings_path = path.expanduser('~') + '/mycroft-core/mycroft/configuration/mycroft.conf'
-
-        with open(settings_path, 'r') as file:
-            settings = file.readlines()
-            settings[22] = '  "lang": "' + environ['lang'] + '",\n'
-
-        with open(settings_path, 'w') as file:
-            file.writelines(settings)
 
     def center_on_screen(self):
         resolution = QtWidgets.QDesktopWidget().screenGeometry()

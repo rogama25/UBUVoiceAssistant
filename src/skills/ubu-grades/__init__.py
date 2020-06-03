@@ -1,12 +1,7 @@
 import sys
 from os.path import expanduser
 sys.path.append(expanduser('~') + '/UBUAssistant/src')
-import socket, pickle
-import re
-from datetime import datetime
-from adapt.intent import IntentBuilder
 from mycroft import MycroftSkill, intent_handler
-from webservice.web_service import WebService
 from util import util
 
 class UbuGradesSkill(MycroftSkill):
@@ -32,7 +27,7 @@ class UbuGradesSkill(MycroftSkill):
             grades = self.ws.get_course_grades(course_id)
             self.speak(util.text_to_speech(grades))
         else:
-            speak_dialog('no.course')
+            self.speak_dialog('no.course')
 
     def stop(self):
         pass

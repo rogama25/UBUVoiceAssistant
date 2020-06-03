@@ -188,7 +188,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         server_socket.start()
 
         # Start Mycroft services
-        subprocess.Popen(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'debug'])
+        subprocess.run(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'all', 'restart'])
 
         # Wait until the MessageBus is started, there might be a better solution
         time.sleep(15)
@@ -353,6 +353,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
                   (resolution.height() / 2) - (self.frameSize().height() / 2))
 
     def closeEvent(self, event):
+        self.close = QtWidgets.QMessageBox()
         self.close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
         if environ['lang'] == 'es-es':
             self.close.setText("¿Estas seguro?")
