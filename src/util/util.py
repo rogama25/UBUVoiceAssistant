@@ -1,9 +1,11 @@
 import pickle
 import socket
 import re
+from os import environ
 
 SOCKET_HOST = 'localhost'
 SOCKET_PORT = 5555
+moodle_words = { 'opens': 'se abre', 'closes': 'se cierra' }
 
 
 def create_server_socket(unserialized_data, host=SOCKET_HOST, port=SOCKET_PORT):
@@ -37,8 +39,14 @@ def text_to_speech(string_array):
     text = ''
     for string in string_array:
         text = text + string + '.\n'
-    return text
+    return translate_moodle_words(text)
 
+
+def translate_moodle_words(string):
+    if environ['lang'] == 'es-es':
+        for k, v in moodle_words.items():
+            string = re.sub(k, v, string)
+    return string
 
 def get_course_id_by_name(course_to_find, user_courses):
     for id, name in user_courses:

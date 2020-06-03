@@ -8,7 +8,7 @@
 
 import subprocess
 import time
-from os import path, listdir
+from os import path, listdir, environ
 from threading import Thread
 from webservice.web_service import WebService
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -18,9 +18,8 @@ from util import util
 
 class AppMainWindow(QtWidgets.QMainWindow):
 
-    def __init__(self, lang):
+    def __init__(self):
         super().__init__()
-        self.lang = lang
         self.ws = WebService.get_instance()
         self.user_utterance = ''
         self.mycroft_response = ''
@@ -165,15 +164,18 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.pushButton_manage_skills.setGeometry(QtCore.QRect(470, 10, 120, 40))
         self.pushButton_manage_skills.clicked.connect(self.on_manage_skills_pressed)
 
+        # List of the skills that the user should not interact with
         dangerous_skills = ['mycroft-volume.mycroftai',
                             'mycroft-stop.mycroftai',
                             'fallback-unknown.mycroftai',
                             'fallback-query.mycroftai',
                             'mycroft-configuration.mycroftai']
 
+        # List of the skills in the /opt/mycroft/skills folder
         [self.active_skills.append(name) for name in listdir('/opt/mycroft/skills/') \
             if path.isdir('/opt/mycroft/skills/' + name) and name not in dangerous_skills]
 
+        # Check if the chat needs to be updated every second
         self.timer  = QtCore.QTimer(self)
         self.timer.setInterval(1000)
         self.timer.timeout.connect(self.check_for_chat_update)
@@ -181,25 +183,28 @@ class AppMainWindow(QtWidgets.QMainWindow):
 
         self.retranslate_ui()
 
+        # Send the webservice class to Mycroft
         server_socket = Thread(target=util.create_server_socket, args=[self.ws])
         server_socket.setDaemon(True)
         server_socket.start()
 
+        # Start Mycroft services
         subprocess.run(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'all', 'restart'])
 
-        # Wait until the MessageBus is started, there might be a better solution.
+        # Wait until the MessageBus is started, there might be a better solution
         time.sleep(15)
 
+        # Thread connected to Mycroft MessageBusClient
         self.bus = MessageBusClient()
         self.bus.run_in_thread()
-
         self.bus.on('speak', self.handle_speak)
         self.bus.on('recognizer_loop:utterance', self.handle_utterance)
 
+        # Deactivate mycroft-volume.mycroftai skill, mic works weird when it's active
         self.bus.emit(Message('skillmanager.deactivate', {'skill': 'mycroft-volume.mycroftai'}))
 
     def retranslate_ui(self):
-        if self.lang == 'es-es':
+        if environ['lang'] == 'es-es':
             self.lineEdit_chat_message.setPlaceholderText("O puedes escribir tu pregunta")
             self.label_chat_title.setText("Conversacion")
             self.pushButton_send.setText("Enviar")
@@ -213,7 +218,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
             # self.label_questions5.setText("")
             self.pushButton_manage_skills.setText("Guardar")
             self.close.setText("¿Estas seguro?")
-        elif self.lang == 'en-us':
+        elif environ['lang'] == 'en-us':
             self.lineEdit_chat_message.setPlaceholderText("Or you can ask via text")
             self.label_chat_title.setText("Conversation")
             self.pushButton_send.setText("Send")
@@ -347,6 +352,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.close = self.close.exec()
 
         if self.close == QtWidgets.QMessageBox.Yes:
+            self.timer.stop()
             subprocess.run(['bash', path.expanduser('~') + '/mycroft-core/stop-mycroft.sh'])
             event.accept()
         else:
