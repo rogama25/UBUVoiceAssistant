@@ -151,7 +151,7 @@ class LoginWindow(QtWidgets.QMainWindow):
 
         self.app_window = AppMainWindow()
         self.app_window.show()
-        self.close()
+        self.hide()
 
     def load_settings(self):
         with open('user_data.txt', 'r') as data:

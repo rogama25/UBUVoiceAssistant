@@ -4,6 +4,7 @@ sys.path.append(expanduser('~') + '/UBUAssistant/src')
 from mycroft import MycroftSkill, intent_handler
 from util import util
 
+
 class UbuGradesSkill(MycroftSkill):
 
     def __init__(self):
@@ -31,6 +32,7 @@ class UbuGradesSkill(MycroftSkill):
 
     def stop(self):
         pass
+
 
 def create_skill():
     return UbuGradesSkill()
