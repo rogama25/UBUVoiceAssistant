@@ -133,9 +133,9 @@ class AppMainWindow(QtWidgets.QMainWindow):
         sizePolicy.setHeightForWidth(self.pushButton_mic.sizePolicy().hasHeightForWidth())
         self.pushButton_mic.setSizePolicy(sizePolicy)
         self.mic_icon = QtGui.QIcon()
-        self.mic_icon.addPixmap(QtGui.QPixmap("mic.png"))
+        self.mic_icon.addPixmap(QtGui.QPixmap("imgs/mic.png"))
         self.mic_muted_icon = QtGui.QIcon()
-        self.mic_muted_icon.addPixmap(QtGui.QPixmap("mic_muted.png"))
+        self.mic_muted_icon.addPixmap(QtGui.QPixmap("imgs/mic_muted.png"))
         self.pushButton_mic.setIcon(self.mic_icon)
         self.pushButton_mic.clicked.connect(self.on_mic_pressed)
         self.gridLayout.addWidget(self.pushButton_mic, 8, 5)
@@ -302,9 +302,9 @@ class AppMainWindow(QtWidgets.QMainWindow):
             checkBox.setChecked(True)
             logo = QtWidgets.QLabel(scrollAreaWidgetContents_skills)
             if 'ubu' in name:
-                logo.setPixmap(QtGui.QPixmap('ubu_logo.jpg').scaled(20, 20))
+                logo.setPixmap(QtGui.QPixmap('imgs/ubu_logo.jpg').scaled(20, 20))
             else:
-                logo.setPixmap(QtGui.QPixmap('Mycroft_logo.png').scaled(20, 20))
+                logo.setPixmap(QtGui.QPixmap('imgs/Mycroft_logo.png').scaled(20, 20))
             self.active_skills_checkBoxes.append(checkBox)
             skills_grid_layout.addWidget(logo, count, 0)
             skills_grid_layout.addWidget(checkBox, count, 1)
@@ -315,9 +315,9 @@ class AppMainWindow(QtWidgets.QMainWindow):
             checkBox.setText(name)
             logo = QtWidgets.QLabel(scrollAreaWidgetContents_skills)
             if 'ubu' in name:
-                logo.setPixmap(QtGui.QPixmap('ubu_logo.jpg').scaled(20, 20))
+                logo.setPixmap(QtGui.QPixmap('imgs/ubu_logo.jpg').scaled(20, 20))
             else:
-                logo.setPixmap(QtGui.QPixmap('Mycroft_logo.png').scaled(20, 20))
+                logo.setPixmap(QtGui.QPixmap('imgs/Mycroft_logo.png').scaled(20, 20))
             self.unactive_skills_checkBoxes.append(checkBox)
             skills_grid_layout.addWidget(logo, count, 0)
             skills_grid_layout.addWidget(checkBox, count, 1)

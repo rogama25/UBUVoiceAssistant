@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file '/home/adp/Desktop/main1.ui'
+#
+# Created by: PyQt5 UI code generator 5.10.1
+#
+# WARNING! All changes made in this file will be lost!
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 sys.path.append('.')
@@ -10,10 +18,11 @@ class LoginWindow(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.user_data_file = 'user_data.txt'
         self.title = 'UBUAssistant'
         self.top = 100
         self.left = 100
-        self.width = 500
+        self.width = 750
         self.height = 600
         environ['lang'] = 'es-es'
         self.setup_ui()
@@ -26,59 +35,84 @@ class LoginWindow(QtWidgets.QMainWindow):
 
         self.center_on_screen()
 
-        self.checkBox_remember_user = QtWidgets.QCheckBox(self)
-        self.checkBox_remember_user.setGeometry(QtCore.QRect(70, 420, 140, 25))
+        self.centralwidget = QtWidgets.QWidget(self)
 
-        self.checkBox_remember_host = QtWidgets.QCheckBox(self)
-        self.checkBox_remember_host.setGeometry(QtCore.QRect(70, 450, 140, 25))
+        self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
 
-        self.pushButton_login = QtWidgets.QPushButton(self)
-        self.pushButton_login.setGeometry(QtCore.QRect(220, 500, 100, 40))
-        self.pushButton_login.clicked.connect(self.on_login_pressed)
+        self.label_logo = QtWidgets.QLabel(self.centralwidget)
+        self.label_logo.setPixmap(QtGui.QPixmap('imgs/UBUAssistant_logo.png').scaled(443,300))
+        self.label_logo.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        self.gridLayout.addWidget(self.label_logo, 1, 1, 1, 6)
 
+        self.checkBox_remember_user = QtWidgets.QCheckBox(self.centralwidget)
+        self.gridLayout.addWidget(self.checkBox_remember_user, 6, 4, 1, 1)
+
+        self.checkBox_remember_host = QtWidgets.QCheckBox(self.centralwidget)
+        self.gridLayout.addWidget(self.checkBox_remember_host, 6, 5, 1, 1)
+
+        self.pushButton_login = QtWidgets.QPushButton(self.centralwidget)
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(115, 210, 22))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
         self.pushButton_login.setPalette(palette)
-
         font = QtGui.QFont()
         font.setPointSize(16)
         self.pushButton_login.setFont(font)
+        self.pushButton_login.clicked.connect(self.on_login_pressed)
+        self.gridLayout.addWidget(self.pushButton_login, 7, 4, 2, 2)
 
-        self.comboBox_language = QtWidgets.QComboBox(self)
-        self.comboBox_language.setGeometry(QtCore.QRect(350, 10, 140, 25))
-        self.comboBox_language.addItem(QtGui.QIcon('spain_flag.png'), 'Español')
-        self.comboBox_language.addItem(QtGui.QIcon('us_flag.png'), 'English')
-        self.comboBox_language.currentTextChanged.connect(self.on_lang_selected)
-
-        self.label_user = QtWidgets.QLabel(self)
-        self.label_user.setGeometry(QtCore.QRect(140, 290, 51, 25))
+        self.label_user = QtWidgets.QLabel(self.centralwidget)
         self.label_user.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.gridLayout.addWidget(self.label_user, 2, 4, 1, 1)
 
-        self.label_password = QtWidgets.QLabel(self)
-        self.label_password.setGeometry(QtCore.QRect(113, 320, 81, 25))
+        self.label_password = QtWidgets.QLabel(self.centralwidget)
         self.label_password.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.gridLayout.addWidget(self.label_password, 3, 4, 1, 1)
 
-        self.label_host = QtWidgets.QLabel(self)
-        self.label_host.setGeometry(QtCore.QRect(160, 350, 31, 25))
+        self.label_host = QtWidgets.QLabel(self.centralwidget)
         self.label_host.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.gridLayout.addWidget(self.label_host, 4, 4, 1, 1)
 
-        self.lineEdit_user = QtWidgets.QLineEdit(self)
-        self.lineEdit_user.setGeometry(QtCore.QRect(210, 290, 231, 25))
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem, 2, 1, 1, 1)
 
-        self.lineEdit_password = QtWidgets.QLineEdit(self)
-        self.lineEdit_password.setGeometry(QtCore.QRect(210, 320, 231, 25))
+        spacerItem1 = QtWidgets.QSpacerItem(0, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        self.gridLayout.addItem(spacerItem1, 6, 1, 1, 1)
+
+        self.lineEdit_host = QtWidgets.QLineEdit(self.centralwidget)
+        self.gridLayout.addWidget(self.lineEdit_host, 4, 5, 1, 1)
+
+        self.lineEdit_password = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_password.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.gridLayout.addWidget(self.lineEdit_password, 3, 5, 1, 1)
 
-        self.lineEdit_host = QtWidgets.QLineEdit(self)
-        self.lineEdit_host.setGeometry(QtCore.QRect(210, 350, 231, 25))
+        self.comboBox_language = QtWidgets.QComboBox(self.centralwidget)
+        self.comboBox_language.setGeometry(QtCore.QRect(350, 10, 140, 25))
+        self.comboBox_language.addItem(QtGui.QIcon('imgs/spain_flag.png'), 'Español')
+        self.comboBox_language.addItem(QtGui.QIcon('imgs/us_flag.png'), 'English')
+        self.comboBox_language.currentTextChanged.connect(self.on_lang_selected)
+        self.gridLayout.addWidget(self.comboBox_language, 0, 6, 1, 1)
+
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem2, 2, 6, 1, 1)
+
+        self.lineEdit_user = QtWidgets.QLineEdit(self.centralwidget)
+        self.gridLayout.addWidget(self.lineEdit_user, 2, 5, 1, 1)
+
+        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        self.gridLayout.addItem(spacerItem3, 9, 1, 1, 1)
+
+        # spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        # self.gridLayout.addItem(spacerItem4, 1, 1, 1, 1)
+
+        self.setCentralWidget(self.centralwidget)
 
         self.load_settings()
-        self.retranslateUi()
+        self.retranslate_ui()
         self.show()
 
-    def retranslateUi(self):
+    def retranslate_ui(self):
         if self.user:
             self.lineEdit_user.setText(self.user)
         if self.host:
@@ -111,7 +145,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         elif value == 'English':
             environ['lang'] = 'en-us'
 
-        self.retranslateUi()
+        self.retranslate_ui()
 
     def on_login_pressed(self):
         user = str(self.lineEdit_user.text())
@@ -129,7 +163,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         ws.set_userid()
         ws.set_user_courses()
 
-        with open('user_data.txt', 'r') as data:
+        with open(user_data_file, 'r') as data:
             data_lines = data.readlines()
             if self.checkBox_remember_user.isChecked():
                 data_lines[0] = user+'\n'
@@ -137,7 +171,7 @@ class LoginWindow(QtWidgets.QMainWindow):
                 data_lines[1] = host+'\n'
             data_lines[2] = environ['lang']
 
-        with open('user_data.txt', 'w') as data:
+        with open(user_data_file, 'w') as data:
             data.writelines(data_lines)
 
         settings_path = path.expanduser('~') + '/mycroft-core/mycroft/configuration/mycroft.conf'
@@ -154,7 +188,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.hide()
 
     def load_settings(self):
-        with open('user_data.txt', 'r') as data:
+        with open(user_data_file, 'r') as data:
             data_lines = data.readlines()
             self.user = data_lines[0].strip()
             self.host = data_lines[1].strip()
