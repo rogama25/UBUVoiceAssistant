@@ -163,7 +163,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         ws.set_userid()
         ws.set_user_courses()
 
-        with open(user_data_file, 'r') as data:
+        with open(self.user_data_file, 'r') as data:
             data_lines = data.readlines()
             if self.checkBox_remember_user.isChecked():
                 data_lines[0] = user+'\n'
@@ -171,7 +171,7 @@ class LoginWindow(QtWidgets.QMainWindow):
                 data_lines[1] = host+'\n'
             data_lines[2] = environ['lang']
 
-        with open(user_data_file, 'w') as data:
+        with open(self.user_data_file, 'w') as data:
             data.writelines(data_lines)
 
         settings_path = path.expanduser('~') + '/mycroft-core/mycroft/configuration/mycroft.conf'
@@ -188,7 +188,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.hide()
 
     def load_settings(self):
-        with open(user_data_file, 'r') as data:
+        with open(self.user_data_file, 'r') as data:
             data_lines = data.readlines()
             self.user = data_lines[0].strip()
             self.host = data_lines[1].strip()
