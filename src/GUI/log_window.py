@@ -1,7 +1,6 @@
 from PyQt5 import QtWidgets
 
 
-
 class LogDialog(QtWidgets.QDialog):
 
     def __init__(self):
@@ -32,7 +31,7 @@ class LogTab(QtWidgets.QPlainTextEdit):
         if n_lines > MAX_LINES:
             lines = lines[n_lines-MAX_LINES:]
             updated_logs = open(file, 'w+')
-            [ updated_logs.write(line) for line in lines ]
+            [updated_logs.write(line) for line in lines]
 
         logs = open(file, 'r')
 

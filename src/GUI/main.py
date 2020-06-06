@@ -32,6 +32,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.setGeometry(self.top, self.left, self.width, self.height)
 
         self.invalid_credentials = QtWidgets.QMessageBox()
+        self.different_lang = QtWidgets.QMessageBox()
 
         self.center_on_screen()
 
@@ -103,9 +104,6 @@ class LoginWindow(QtWidgets.QMainWindow):
         spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
         self.gridLayout.addItem(spacerItem3, 9, 1, 1, 1)
 
-        # spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        # self.gridLayout.addItem(spacerItem4, 1, 1, 1, 1)
-
         self.setCentralWidget(self.centralwidget)
 
         self.load_settings()
@@ -127,6 +125,8 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.label_host.setText('Host')
             self.lineEdit_host.setPlaceholderText("https://www.ejemplo.com")
             self.invalid_credentials.setText('Los credenciales introducidos no son válidos')
+            self.different_lang.setText('AVISO: El idioma seleccionado y el idioma de Moodle son diferentes')
+            self.comboBox_language.setCurrentIndex(0)
         elif environ['lang'] == 'en-us':
             self.checkBox_remember_user.setText('Remember user')
             self.checkBox_remember_host.setText('Remember host')
@@ -138,6 +138,8 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.lineEdit_host.setText('https://ubuvirtual.ubu.es')
             self.lineEdit_host.setPlaceholderText("https://www.example.com")
             self.invalid_credentials.setText('The given credentials are invalid')
+            self.different_lang.setText('WARNING: The selected language and the Moodle language are different')
+            self.comboBox_language.setCurrentIndex(1)
 
     def on_lang_selected(self, value):
         if value == 'Español':
@@ -154,13 +156,16 @@ class LoginWindow(QtWidgets.QMainWindow):
 
         ws = WebService()
         ws.set_host(host)
-        # ws.set_session_cookies(user,password)
         try:
             ws.set_url_with_token(user, password)
         except KeyError:
             self.invalid_credentials.exec()
             return
-        ws.set_userid()
+        ws.initialize_useful_data()
+
+        # If Moodle lang is different from the selected
+        if ws.get_lang() not in environ['lang']:
+            self.different_lang.exec()
         ws.set_user_courses()
 
         with open(self.user_data_file, 'r') as data:
@@ -197,7 +202,7 @@ class LoginWindow(QtWidgets.QMainWindow):
     def center_on_screen(self):
         resolution = QtWidgets.QDesktopWidget().screenGeometry()
         self.move((resolution.width() / 2) - (self.frameSize().width() / 2),
-                    (resolution.height() / 2) - (self.frameSize().height() / 2))
+                  (resolution.height() / 2) - (self.frameSize().height() / 2))
 
     def closeEvent(self, event):
         self.close = QtWidgets.QMessageBox()

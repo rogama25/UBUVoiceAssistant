@@ -18,6 +18,7 @@ class WebService:
     def set_host(self, host):
         self.__host = host
 
+    # Código para obtener las cookies del usuario para Web Scraping
     '''def set_session_cookies(self, username, password):
         self.__session = requests.Session()
         host_login = "https://ubuvirtual.ubu.es/login/index.php"
@@ -40,15 +41,20 @@ class WebService:
         url_params = {'username': username, 'password': password, 'service': 'moodle_mobile_app'}
         r = requests.post(url, params=url_params).json()
         token = r['token']
-        self.__url_with_token = self.__host + '/webservice/rest/server.php?wstoken=' + token + '&moodlewsrestformat=json&wsfunction='
+        self.__url_with_token = self.__host + '/webservice/rest/server.php?wstoken=' \
+            + token + '&moodlewsrestformat=json&wsfunction='
 
-    def set_userid(self):
+    def initialize_useful_data(self):
         url = self.__url_with_token + 'core_webservice_get_site_info'
         r = requests.get(url).json()
         self.__userid = str(r['userid'])
+        self.__lang = r['lang']
 
     def get_userid(self):
         return self.__userid
+
+    def get_lang(self):
+        return self.__lang
 
     def set_user_courses(self):
         url = self.__url_with_token + 'core_enrol_get_users_courses&userid=' + self.__userid
@@ -63,7 +69,8 @@ class WebService:
         return self.__user_courses
 
     def get_calendar_day_view(self, year, month, day):
-        url = self.__url_with_token + 'core_calendar_get_calendar_day_view&year=' + year + '&month=' + month + '&day=' + day
+        url = self.__url_with_token + 'core_calendar_get_calendar_day_view&year=' \
+            + year + '&month=' + month + '&day=' + day
         r = requests.get(url).json()
         events = util.convert_events_to_readable_text(r['events'])
         return events
@@ -92,7 +99,8 @@ class WebService:
         return grades
 
     def get_course_updates_since(self, courseid, timestamp):
-        url = self.__url_with_token + 'core_course_get_updates_since&courseid=' + courseid + '&since=' + str(timestamp)
+        url = self.__url_with_token + 'core_course_get_updates_since&courseid=' \
+            + courseid + '&since=' + str(timestamp)
         r = requests.get(url).json()
         updated_modules_ids = []
         for updates in r['instances']:
@@ -109,7 +117,8 @@ class WebService:
 
     def get_course_grades(self, courseid):
         grades = []
-        url = self.__url_with_token + 'gradereport_user_get_grade_items&courseid=' + courseid + '&userid=' + self.__userid
+        url = self.__url_with_token + 'gradereport_user_get_grade_items&courseid=' \
+            + courseid + '&userid=' + self.__userid
         r = requests.get(url).json()
         grades_dict = r['usergrades'][0]
         for grade in grades_dict['gradeitems']:

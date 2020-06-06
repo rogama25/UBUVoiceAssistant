@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from mycroft import MycroftSkill, intent_handler
 from util import util
 
+
 class UbuCalendarSkill(MycroftSkill):
 
     def __init__(self):
@@ -25,7 +26,7 @@ class UbuCalendarSkill(MycroftSkill):
     @intent_handler('DayEvents.intent')
     def handle_day_events_intent(self, message):
         self.month = str(self.months[message.data['month']])
-        events = self.ws.get_calendar_day_view(year=str(message.data['year']), month=self.month, day=str(message.data['day']))
+        events = self.ws.get_calendar_day_view(str(message.data['year']), self.month, str(message.data['day']))
         self.speak(util.text_to_speech(events))
 
     @intent_handler('CourseEvents.intent')

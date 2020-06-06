@@ -34,7 +34,7 @@ class UbuCourseSkill(MycroftSkill):
                     course_forums.append(Forum(forum, forum_discussions))
                 self.forums[course_id] = course_forums
             # Read forums
-            self.speak_dialog('forums', data={'course': course} , wait=True)
+            self.speak_dialog('forums', data={'course': course}, wait=True)
             for forum in self.forums[course_id]:
                 self.speak(forum.get_name(), wait=True)
                 resp = self.get_response(dialog='forum.discussions')
