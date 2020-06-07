@@ -102,7 +102,7 @@ class WebService:
         grades = []
         for course_grade in r['grades']:
             course_id = course_grade['courseid']
-            course = self.__user.get_courses().get(course_id)
+            course = self.get_user().get_courses().get(course_id)
             grade = course_grade['grade']
             grades.append(course.get_name() + ' ' + grade)
         return grades

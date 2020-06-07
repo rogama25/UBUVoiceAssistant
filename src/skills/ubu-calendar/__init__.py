@@ -35,7 +35,7 @@ class UbuCalendarSkill(MycroftSkill):
     @intent_handler('CourseEvents.intent')
     def handle_course_events_intent(self, message):
         course = message.data['course']
-        course_id = util.get_course_id_by_name(course, self.ws.get_user().get_courses().items())
+        course_id = util.get_course_id_by_name(course, self.ws.get_user_courses())
         if course_id:
             events = self.ws.get_calendar_events_by_courseid(course_id)
             events = [str(event) for event in events]

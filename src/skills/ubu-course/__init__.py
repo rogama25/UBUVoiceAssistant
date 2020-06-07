@@ -20,7 +20,7 @@ class UbuCourseSkill(MycroftSkill):
     @intent_handler('CourseForums.intent')
     def handle_course_forums(self, message):
         course = message.data['course']
-        course_id = util.get_course_id_by_name(course, self.ws.get_user().get_courses().items())
+        course_id = util.get_course_id_by_name(course, self.ws.get_user_courses())
         if course_id:
             # If the user never looked the course forums up
             if course_id not in self.forums:

@@ -23,7 +23,7 @@ class UbuGradesSkill(MycroftSkill):
     @intent_handler('CourseGrades.intent')
     def handle_course_grades(self, message):
         course = message.data['course']
-        course_id = util.get_course_id_by_name(course, self.ws.get_user().get_courses().items())
+        course_id = util.get_course_id_by_name(course, self.ws.get_user_courses())
         if course_id:
             grades = self.ws.get_course_grades(course_id)
             self.speak(util.text_to_speech(grades))
