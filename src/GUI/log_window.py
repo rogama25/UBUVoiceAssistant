@@ -24,7 +24,7 @@ class LogDialog(QtWidgets.QDialog):
 class LogTab(QtWidgets.QPlainTextEdit):
     def __init__(self, file):
         super().__init__()
-        MAX_LINES = 500
+        MAX_LINES = 1000
         lines = open(file, 'r').readlines()
         n_lines = len(lines)
 
@@ -32,6 +32,7 @@ class LogTab(QtWidgets.QPlainTextEdit):
             lines = lines[n_lines-MAX_LINES:]
             updated_logs = open(file, 'w+')
             [updated_logs.write(line) for line in lines]
+            updated_logs.close()
 
         logs = open(file, 'r')
 

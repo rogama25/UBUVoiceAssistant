@@ -5,7 +5,7 @@ from os import environ
 
 SOCKET_HOST = 'localhost'
 SOCKET_PORT = 5555
-moodle_words = { 'opens': 'se abre', 'closes': 'se cierra' }
+moodle_words = {'opens': 'se abre', 'closes': 'se cierra'}
 
 
 def create_server_socket(unserialized_data, host=SOCKET_HOST, port=SOCKET_PORT):
@@ -26,14 +26,6 @@ def get_data_from_server(host=SOCKET_HOST, port=SOCKET_PORT):
     return pickle.loads(webservice_data)
 
 
-def convert_events_to_readable_text(events):
-    events_info = []
-    for event in events:
-        date = re.sub('<.*?>', '', event['formattedtime'])
-        events_info.append(date + ' ' + event['name'])
-    return events_info
-
-
 def text_to_speech(string_array):
     text = ''
     for string in string_array:
@@ -47,8 +39,9 @@ def translate_moodle_words(string):
             string = re.sub(k, v, string)
     return string
 
+
 def get_course_id_by_name(course_to_find, user_courses):
-    for course_id, name in user_courses:
-        if course_to_find.upper() in name:
-            return str(course_id)
+    for course in user_courses:
+        if course_to_find.upper() in course.get_name():
+            return str(course.get_id())
     return None

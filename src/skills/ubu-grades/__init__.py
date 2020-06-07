@@ -1,7 +1,7 @@
 import sys
 from os.path import expanduser
-sys.path.append(expanduser('~') + '/UBUAssistant/src')
 from mycroft import MycroftSkill, intent_handler
+sys.path.append(expanduser('~') + '/UBUAssistant/src')
 from util import util
 
 
@@ -17,13 +17,13 @@ class UbuGradesSkill(MycroftSkill):
 
     @intent_handler('Grades.intent')
     def handle_grades_intent(self, message):
-        grades = self.ws.get_final_grades(self.ws.get_userid())
+        grades = self.ws.get_final_grades()
         self.speak(util.text_to_speech(grades))
 
     @intent_handler('CourseGrades.intent')
     def handle_course_grades(self, message):
         course = message.data['course']
-        course_id = util.get_course_id_by_name(course, self.ws.get_user_courses().items())
+        course_id = util.get_course_id_by_name(course, self.ws.get_user().get_courses().items())
         if course_id:
             grades = self.ws.get_course_grades(course_id)
             self.speak(util.text_to_speech(grades))

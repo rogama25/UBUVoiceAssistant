@@ -8,10 +8,11 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
-sys.path.append('.')
-from app import AppMainWindow
-from os import path, environ
+from GUI.app import AppMainWindow
 from webservice.web_service import WebService
+
+from os import path, environ
+
 
 
 class LoginWindow(QtWidgets.QMainWindow):

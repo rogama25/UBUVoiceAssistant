@@ -1,10 +1,10 @@
 import sys
 from os.path import expanduser
 from mycroft import MycroftSkill, intent_handler
-from util import util
 sys.path.append(expanduser('~') + '/UBUAssistant/src')
 from model.discussion import Discussion
 from model.forum import Forum
+from util import util
 
 
 class UbuCourseSkill(MycroftSkill):
@@ -20,7 +20,7 @@ class UbuCourseSkill(MycroftSkill):
     @intent_handler('CourseForums.intent')
     def handle_course_forums(self, message):
         course = message.data['course']
-        course_id = util.get_course_id_by_name(course, self.ws.get_user_courses().items())
+        course_id = util.get_course_id_by_name(course, self.ws.get_user().get_courses().items())
         if course_id:
             # If the user never looked the course forums up
             if course_id not in self.forums:
@@ -42,7 +42,7 @@ class UbuCourseSkill(MycroftSkill):
                     chosen_forum = forum
                     break
             # Read discussions
-            self.speak_dialog('discussion', data={'forum': chosen_forum.get_name()}, wait=True)
+            self.speak_dialog('discussions', data={'forum': chosen_forum.get_name()}, wait=True)
             for discussion in chosen_forum.get_discussions():
                 self.speak(discussion.get_name(), wait=True)
                 resp = self.get_response(dialog='discussion.posts')
@@ -56,7 +56,7 @@ class UbuCourseSkill(MycroftSkill):
                 discussion = []
                 for post in reversed(posts['posts']):
                     discussion.append(post['userfullname'] + ': ' + post['message'])
-                self.speak(str(discussion).strip('[]'))
+                self.speak(str(discussion).strip("[]'"))
             else:
                 for post in reversed(posts['posts']):
                     resp = self.get_response(dialog='next.post')

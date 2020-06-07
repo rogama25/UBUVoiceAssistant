@@ -13,7 +13,7 @@ from threading import Thread
 from webservice.web_service import WebService
 from PyQt5 import QtCore, QtGui, QtWidgets
 from mycroft_bus_client import MessageBusClient, Message
-from log_window import LogDialog
+from GUI.log_window import LogDialog
 from util import util
 
 class AppMainWindow(QtWidgets.QMainWindow):
