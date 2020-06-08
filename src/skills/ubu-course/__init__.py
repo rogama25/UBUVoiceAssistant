@@ -22,17 +22,9 @@ class UbuCourseSkill(MycroftSkill):
         course = message.data['course']
         course_id = util.get_course_id_by_name(course, self.ws.get_user_courses())
         if course_id:
-            # If the user never looked the course forums up
+            # If the user has never looked the course forums up
             if course_id not in self.forums:
-                forums = self.ws.get_course_forums(course_id)
-                course_forums = []
-                for forum in forums:
-                    forum_discussions = []
-                    discussions = self.ws.get_forum_discussions(str(forum['id']))
-                    for discussion in discussions['discussions']:
-                        forum_discussions.append(Discussion(discussion))
-                    course_forums.append(Forum(forum, forum_discussions))
-                self.forums[course_id] = course_forums
+                self.load_forums(course_id)
             # Read forums
             self.speak_dialog('forums', data={'course': course}, wait=True)
             for forum in self.forums[course_id]:
@@ -46,7 +38,7 @@ class UbuCourseSkill(MycroftSkill):
             for discussion in chosen_forum.get_discussions():
                 self.speak(discussion.get_name(), wait=True)
                 resp = self.get_response(dialog='discussion.posts')
-                if resp in ('si', 'sí', 'yes'):
+                if resp.lower() in ('si', 'sí', 'yes'):
                     chosen_discussion = discussion
                     break
             # Read posts
@@ -66,6 +58,17 @@ class UbuCourseSkill(MycroftSkill):
 
         else:
             self.speak_dialog('no.course')
+
+    def load_forums(self, course_id):
+        forums = self.ws.get_course_forums(course_id)
+        course_forums = []
+        for forum in forums:
+            forum_discussions = []
+            discussions = self.ws.get_forum_discussions(str(forum['id']))
+            for discussion in discussions['discussions']:
+                forum_discussions.append(Discussion(discussion))
+            course_forums.append(Forum(forum, forum_discussions))
+        self.forums[course_id] = course_forums
 
     def stop(self):
         pass

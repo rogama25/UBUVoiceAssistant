@@ -22,14 +22,14 @@ class UbuCalendarSkill(MycroftSkill):
     @intent_handler('UpcomingEvents.intent')
     def handle_upcoming_events_intent(self, message):
         events = self.ws.get_calendar_upcoming_view()
-        events = [str(event) for event in events]
+        events = [str(Event(event)) for event in events['events']]
         self.speak(util.text_to_speech(events))
 
     @intent_handler('DayEvents.intent')
     def handle_day_events_intent(self, message):
         self.month = str(self.months[message.data['month']])
         events = self.ws.get_calendar_day_view(str(message.data['year']), self.month, str(message.data['day']))
-        events = [str(event) for event in events]
+        events = [str(Event(event)) for event in events['events']]
         self.speak(util.text_to_speech(events))
 
     @intent_handler('CourseEvents.intent')
@@ -37,9 +37,16 @@ class UbuCalendarSkill(MycroftSkill):
         course = message.data['course']
         course_id = util.get_course_id_by_name(course, self.ws.get_user_courses())
         if course_id:
-            events = self.ws.get_calendar_events_by_courseid(course_id)
-            events = [str(event) for event in events]
-            self.speak(util.text_to_speech(events))
+            course = self.ws.get_user().get_course(course_id)
+            course_events = course.get_events()
+            # If the course events have never been looked up
+            if not course_events:
+                course_events = self.ws.get_calendar_events_by_courseid(course_id)
+                course_events = [Event(event) for event in course_events['events']]
+                course.set_events(course_events)
+
+            course_events = [str(event) for event in course_events]
+            self.speak(util.text_to_speech(course_events))
         else:
             self.speak_dialog('no.course')
 

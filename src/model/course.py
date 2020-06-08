@@ -1,23 +1,23 @@
 class Course():
 
     def __init__(self, course):
-        self.__id = course['id']
+        self.__course_id = str(course['id'])
         self.__name = course['displayname']
-        # self.__grades = []
+        self.__grades = []
         self.__events = []
         self.__forums = []
 
     def get_id(self):
-        return self.__id
+        return self.__course_id
 
     def get_name(self):
         return self.__name
 
-    '''def get_grades(self):
+    def get_grades(self):
         return self.__grades
 
     def set_grades(self, grades):
-        self.__grades = grades'''
+        self.__grades = grades
 
     def get_events(self):
         return self.__events

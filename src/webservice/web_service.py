@@ -64,37 +64,28 @@ class WebService:
         r = requests.get(url).json()
         self.__user_courses = []
         for course in r:
-            self.__user_courses.append(Course(course))
-
-        self.__user.set_courses(self.__user_courses)
+            course = Course(course)
+            self.__user_courses.append(course)
+            self.get_user().set_course(course)
 
     def get_user_courses(self):
         return self.__user_courses
 
     def get_calendar_day_view(self, year, month, day):
-        events = []
         url = self.__url_with_token + 'core_calendar_get_calendar_day_view&year=' \
             + year + '&month=' + month + '&day=' + day
         r = requests.get(url).json()
-        for event in r['events']:
-            events.append(Event(event))
-        return events
+        return r
 
     def get_calendar_events_by_courseid(self, courseid):
-        events = []
         url = self.__url_with_token + 'core_calendar_get_action_events_by_course&courseid=' + courseid
         r = requests.get(url).json()
-        for event in r['events']:
-            events.append(Event(event))
-        return events
+        return r
 
     def get_calendar_upcoming_view(self):
-        events = []
         url = self.__url_with_token + 'core_calendar_get_calendar_upcoming_view'
         r = requests.get(url).json()
-        for event in r['events']:
-            events.append(Event(event))
-        return events
+        return r
 
     def get_final_grades(self):
         url = self.__url_with_token + 'gradereport_overview_get_course_grades&userid=' + self.get_user().get_id()
@@ -102,7 +93,7 @@ class WebService:
         grades = []
         for course_grade in r['grades']:
             course_id = course_grade['courseid']
-            course = self.get_user().get_courses().get(course_id)
+            course = self.get_user().get_courses().get(str(course_id))
             grade = course_grade['grade']
             grades.append(course.get_name() + ' ' + grade)
         return grades
@@ -125,16 +116,10 @@ class WebService:
         return updated_modules
 
     def get_course_grades(self, courseid):
-        grades = []
         url = self.__url_with_token + 'gradereport_user_get_grade_items&courseid=' \
             + courseid + '&userid=' + self.get_user().get_id()
         r = requests.get(url).json()
-        grades_dict = r['usergrades'][0]
-        for grade in grades_dict['gradeitems']:
-            grade_value = grade['graderaw']
-            if grade_value and (grade['itemtype'] == 'mod'):
-                grades.append(grade['itemname'] + ' ' + str(grade_value))
-        return grades
+        return r['usergrades'][0]
 
     def get_course_forums(self, courseid):
         url = self.__url_with_token + 'mod_forum_get_forums_by_courses&courseids[0]=' + courseid

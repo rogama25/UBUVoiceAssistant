@@ -3,6 +3,7 @@ from os.path import expanduser
 from mycroft import MycroftSkill, intent_handler
 sys.path.append(expanduser('~') + '/UBUAssistant/src')
 from util import util
+from model.grade_item import GradeItem
 
 
 class UbuGradesSkill(MycroftSkill):
@@ -25,8 +26,17 @@ class UbuGradesSkill(MycroftSkill):
         course = message.data['course']
         course_id = util.get_course_id_by_name(course, self.ws.get_user_courses())
         if course_id:
-            grades = self.ws.get_course_grades(course_id)
-            self.speak(util.text_to_speech(grades))
+            course = self.ws.get_user().get_course(course_id)
+            course_grades = course.get_grades()
+            # If the course grades have never been looked up
+            if not course_grades:
+                course_grades = self.ws.get_course_grades(course_id)
+                course_grades = [GradeItem(grade) for grade in course_grades['gradeitems']]
+                course.set_grades(course_grades)
+
+            course_grades = [str(grade) for grade in course_grades
+                             if grade.get_type() == 'mod' and grade.get_value() is not None]
+            self.speak(util.text_to_speech(course_grades))
         else:
             self.speak_dialog('no.course')
 

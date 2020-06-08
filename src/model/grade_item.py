@@ -1,13 +1,17 @@
 class GradeItem():
+    def __init__(self, grade):
+        self.__value = grade['graderaw']
+        self.__name = grade['itemname']
+        self.__type = grade['itemtype']
 
-    def __init__(self, grade_item):
-        self.__grade = grade_item['graderaw']
+    def get_value(self):
+        return self.__value
 
-    def get_grade(self):
-        return self.__grade
+    def get_name(self):
+        return self.__name
 
-    def get_course(self):
-        return self.get_course()
+    def get_type(self):
+        return self.__type
 
-    def set_course(self, course):
-        self.__course = course
+    def __str__(self):
+        return self.get_name() + ' ' + str(self.get_value())
