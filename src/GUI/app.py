@@ -133,10 +133,15 @@ class AppMainWindow(QtWidgets.QMainWindow):
         sizePolicy.setHeightForWidth(self.pushButton_mic.sizePolicy().hasHeightForWidth())
         self.pushButton_mic.setSizePolicy(sizePolicy)
         self.mic_icon = QtGui.QIcon()
-        self.mic_icon.addPixmap(QtGui.QPixmap("imgs/mic.png"))
+        self.mic_icon.addPixmap(QtGui.QPixmap("imgs/mic.svg"))
         self.mic_muted_icon = QtGui.QIcon()
-        self.mic_muted_icon.addPixmap(QtGui.QPixmap("imgs/mic_muted.png"))
+        self.mic_muted_icon.addPixmap(QtGui.QPixmap("imgs/mic_muted.svg"))
         self.pushButton_mic.setIcon(self.mic_icon)
+        palette = QtGui.QPalette()
+        brush = QtGui.QBrush(QtGui.QColor(115, 210, 22))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
+        self.pushButton_mic.setPalette(palette)
         self.pushButton_mic.clicked.connect(self.on_mic_pressed)
         self.gridLayout.addWidget(self.pushButton_mic, 8, 5)
 
@@ -147,6 +152,9 @@ class AppMainWindow(QtWidgets.QMainWindow):
 
         self.pushButton_logs = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_logs.setGeometry(QtCore.QRect(370, 10, 120, 40))
+        self.logs_file_icon = QtGui.QIcon()
+        self.logs_file_icon.addPixmap(QtGui.QPixmap("imgs/file.svg"))
+        self.pushButton_logs.setIcon(self.logs_file_icon)
         self.pushButton_logs.clicked.connect(self.on_logs_pressed)
         self.gridLayout.addWidget(self.pushButton_logs, 1, 5, 1, 1)
 
@@ -156,6 +164,9 @@ class AppMainWindow(QtWidgets.QMainWindow):
 
         self.pushButton_skills = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_skills.setGeometry(QtCore.QRect(370, 60, 120, 40))
+        self.skills_list_icon = QtGui.QIcon()
+        self.skills_list_icon.addPixmap(QtGui.QPixmap("imgs/list.svg"))
+        self.pushButton_skills.setIcon(self.skills_list_icon)
         self.pushButton_skills.clicked.connect(self.on_skills_pressed)
         self.gridLayout.addWidget(self.pushButton_skills, 3, 5, 1, 1)
 
@@ -270,11 +281,21 @@ class AppMainWindow(QtWidgets.QMainWindow):
             self.mic_muted = False
             self.pushButton_mic.setIcon(self.mic_icon)
             self.pushButton_mic.setText('Mute')
+            palette = QtGui.QPalette()
+            brush = QtGui.QBrush(QtGui.QColor(115, 210, 22))
+            brush.setStyle(QtCore.Qt.SolidPattern)
+            palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
+            self.pushButton_mic.setPalette(palette)
             self.bus.emit(Message('mycroft.mic.unmute'))
         else:
             self.mic_muted = True
             self.pushButton_mic.setIcon(self.mic_muted_icon)
             self.pushButton_mic.setText('Unmute')
+            palette = QtGui.QPalette()
+            brush = QtGui.QBrush(QtGui.QColor(255, 35, 35))
+            brush.setStyle(QtCore.Qt.SolidPattern)
+            palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
+            self.pushButton_mic.setPalette(palette)
             self.bus.emit(Message('mycroft.mic.mute'))
 
     def on_logs_pressed(self):
