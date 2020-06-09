@@ -2,10 +2,62 @@
 
 \section{Introducción}
 
+A continuación se va a detallar la estructura del proyecto, como montar el entorno de desarrollo, como ejecutar la aplicación y como realizar pruebas.
+
 \section{Estructura de directorios}
+
+El proyecto está dividido de esta forma:
+
+\begin{itemize}
+	\item /latex/: contiene los ficheros que se necesitan para generar le PDF con la memoria y los anexos, así como las imágenes utilizadas y la bibliografía.
+	\item /src/: contiene los ficheros fuentes del proyecto..
+	\item /src/GUI/: ficheros encargados del cliente gráfico
+	\item /src/model/: ficheros para representar los datos de Moodle.
+	\item /src/prototipo/: ficheros del prototipo para Alexa
+	\item /src/webservice/: contiene los ficheros encargados de hacer las peticiones al servidor de Moodle para recuperar los datos.
+	\item /src/util/: utilidades para los distintos módulos de la aplicación.
+	\item /src/skills/: contiene las 3 \textit{Skills} del proyecto.	
+\end{itemize}
 
 \section{Manual del programador}
 
+Para el entorno de desarrollo se necesita Python3 con sus dependencias, Mycroft y un editor de código fuente.
+
+\subsection{Python 3}
+
+Python 3 viene instalado por defecto en Ubuntu, pero necesitamos instalar las dependencias para la aplicación. Estas dependencias son PyQt5 y MycroftMessageBus y se instalan mediante los comandos \textbf{sudo apt-get install python3-pyqt5} y \textbf{pip3 install mycroft-messagebus-client}
+
+\subsection{Mycroft}
+
+Una vez instalado, ir a la sección \textbf{Running Mycroft} para ejecutarlo, mediante el los comandos \textbf{cd \detokenize{~}/mycroft-core} para ir a la carpeta y \textbf{./start-mycroft.sh debug} para ejecutarlo. Tras iniciar Mycroft tenemos que decir por voz cualquier cosa para que se inicie el proceso de enlazamiento. La aplicación nos dirá un código (si se ha iniciado con la opción de \textbf{debug} también aparecerá en pantalla). Este código hay que ponerlo al añadir un nuevo dispositivo. En \href{https://home.mycroft.ai}{la página de Mycroft} en la esquina superior derecha, en la sección de \textbf{Devices}, \textbf{Add Device} en el apartado de \textbf{Pairing code}. Al añadir el nuevo dispositivo es importante que en el apartado \textbf{Voice} se seleccione \textbf{Google Voice}.
+
+Para para Mycroft si se ha iniciado con la opción de \textit{debug} se puede presionar la combinación de teclas \textbf{ctrl + c} o escribir en la interfaz \textbf{:exit}
+
+Una vez instalado, ir a la sección \textbf{Running Mycroft} para ejecutarlo. Tras iniciar Mycroft tenemos que decir por voz cualquier cosa para que se inicie el proceso de enlazamiento. La aplicación nos dirá un código (si se ha iniciado con la opción de \textbf{debug} también aparecerá en pantalla). Este código hay que ponerlo al añadir un nuevo dispositivo. En \href{https://home.mycroft.ai}{la página de Mycroft} en la esquina superior derecha, en la sección de \textbf{Devices}, \textbf{Add Device} en el apartado de \textbf{Pairing code}. Al añadir el nuevo dispositivo es importante que en el apartado \textbf{Voice} se seleccione \textbf{Google Voice}.
+
+\subsection{Editor}
+
+Se puede utilizar el editor de código fuente con el que más cómodo se sienta cada uno, en esta sección voy a explicar como configurar el editor Atom que es el que he estado usando y el que más cómodo me parece, aunque hay alternativas como VisualStudio Code que son muy similares.
+
+Para instalar Atom nos vamos a \href{https://atom.io/}{su página}, lo descargamos y lo ejecutamos. Una vez instalado vamos a instalar dos paquetes para que sea mucho más cómodo programar con Python. En la pestaña \textbf{Edit} hacemos click en \textbf{Preferences}.
+
+\imagen{atom_preferences}{Preferencias Atom}
+
+En esta nueva ventana que se nos ha abierto hacemos click en \textbf{Install} y en el buscador escribimos \textbf{atom-ide-ui} e instalamos el paquete. Hacemos lo mismo buscando \textbf{ide-python}.
+
+\imagen{install_atom_ide}{Instalar atom-ide} \imagen{install_ide_python}{Instalar ide-python}
+
+Para que funcione el paquete \textbf{ide-python} tenemos que instalar \textbf{python-language-server} con el comando \textbf{python3 -m pip install python-language-server[all]} en la consola. Ahora vamos a configurar el paquete, para ello hacemos click en la pestaña \textbf{Packages}, después en \textbf{Settings} de \textbf{ide-python}. En la nueva ventana que se nos ha abierto se puede configurar el comportamiento de todos los componentes de \textbf{python-language-server}, pero para que funcione de momento solo nos interesa cambiar la primera línea en la que pone python y poner \textbf{python3}
+
+\imagen{ide_python_settings}{Configuración del paquete ide-python} \imagen{ide_python_settings2}{Configuración del paquete ide-python}
+
+
 \section{Compilación, instalación y ejecución del proyecto}
 
+Clonamos el repositorio en nuestra carpeta personal. Si no estamos en la carpeta personal ejecutar el comando \textbf{cd \detokenize{~}}. Para clonar el repositorio ejecutar el comando \textbf{git clone https://github.com/adp1002/UBUAssistant}.
+
+Para iniciar la aplicación vamos al directorio /src/ con el comando \textbf{cd \detokenize{~}/UBUAssistant/src/} y ejecutamos con \textbf{python3 -m ./GUI/main.py \detokenize{>}> logs.log}
+
 \section{Pruebas del sistema}
+
+Para probar nueva funcionalidad introducida se puede utilizar la plataforma de pruebas de Moodle \href{https://school.moodledemo.net/}{Mount Orage School} o la plataforma con la que se vaya a utilizar la aplicación, que en mi caso es UBUVirtual y es con lo que he realizado pruebas principalmente.

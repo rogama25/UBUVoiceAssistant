@@ -30,7 +30,16 @@ Así que debido a esto el proyecto tomó un camino distinto al inicial, teniendo
 
 En el inicio de esta nueva etapa surgió un problema que no había planteado cuando decidí usar Mycroft como alternativa a Alexa. Al ejecutar la aplicación gráfica para loguearse en Moodle e invocar una Skill, se crea un nuevo programa con esa Skill, por lo que la comunicación entre la aplicación gráfica y Skill se complicó. Como solución utilicé comunicación entre procesos mediante sockets, lo que resultó más sencillo de lo que en un primer momento me había imaginado.
 
+\section{Webservices de Moodle}
+
+Uno de los objetivos de este proyecto es que el usuario pueda consultar sus calificaciones, sin embargo solo existía un \textit{web service} que permitía obtener las calificaciones finales de los cursos del usuario. Entonces, a falta de un \textit{web service} que me permitiera obtener las calificaciones completas de cada curso del usuario, se optó por utilizar \textit{web scraping}.
+
+Un tiempo después de haber implementado esta forma de obtener las calificaciones del usuario Moodle actualizó sus \textit{web services} y en esta actualización existía un \textit{web service} que permitía obtener las calificaciones de un curso de un usuario, así que deseché la implementación usando \textit{web scraping} y lo implementé usando este \textit{web service} para continuar con la compatibilidad de la aplicación para cualquier Moodle.
+
 \section{Deshabilitar módulos del asistente}
 
 Otra adición importante en la aplicación es la posibilidad de activar/desactivar distintos \textit{intents}. Sin embargo, en el estado actual de Mycroft no es posible hacer cambios de este nivel de granularidad, pudiendo únicamente desactivar o activar \textit{Skills} completas. Así que la solución fue separar la \textit{Skill} en varias, en función de qué hacen, consiguiendo tres \textit{Skills}, una para los eventos del calendario, otra para distintas acciones de un curso y otra para las notas.
 
+\section{Skill mycroft-volume.mycroftai}
+
+De un día para otro empecé a tener problemas con el sonido en general de la aplicación. A veces el micrófono no estaba activo, otras veces se desactivaba tras detectar la \textit{wake word}, el audio del TTS se silenciaba, etc. Sin embargo no había realizado ningún cambio relacionado con el audio o Mycroft en sí, así que tras mucho probar, buscar en los foros de Mycroft y mirar los logs de la aplicación encontré un post que hablaba sobre problemas muy similares a los que estaba teniendo y que estaban relacionados con la \textit{skill} \textbf{mycroft-volume.mycroftai}, que es una \textit{skill} propia de Mycroft. Tras desactivarla para comprobar que ese era el problema todo empezó a funcionar como debería así que por esta razón decidí dejar esta \textit{skill} desactivada para la aplicación.

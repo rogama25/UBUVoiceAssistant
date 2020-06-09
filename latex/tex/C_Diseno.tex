@@ -4,8 +4,20 @@
 
 \section{Diseño de datos}
 
+Los datos están correlacionados con el formato con el que se guardan en Moodle, aunque solo están modelados aquellos datos que me son útiles. En el paquete /src/model/ están las clases que modelan estos datos y son:
+\begin{itemize}
+	\item \textbf{User} para guardar datos relativos al usuario.
+	\item \textbf{Course} para guardar los datos de los cursos.
+	\item \textbf{Forum} para los foros de un curso.
+	\item \textbf{Discussion} para las discusiones de un foro.
+	\item \textbf{GradeItem} para las notas.
+	\item \textbf{Event} para los eventos del calendario.
+\end{itemize}
+
 \section{Diseño procedimental}
+
+
 
 \section{Diseño arquitectónico}
 
-
+El proyecto realmente consiste en dos aplicaciones, una la aplicación con la interfaz gráfica y la otra sería Mycroft. Ambas aplicaciones utilizan una arquitectura cliente-servidor, que es una arquitectura en la que el cliente realiza peticiones a través de un medio y el servidor envía una respuesta en función de la petición a través del mismo medio. La aplicación gráfica actúa como cliente y el servidor es la API REST de la plataforma de Moodle, es decir, los \textit{web services}. Mycroft tiene como cliente sus \textit{skills} que se comunican con dos servidores, uno para las funciones de STT y otro para TTS. Y entre las dos aplicaciones también existe una arquitectura cliente-servidor, siendo la aplicación gráfica el servidor y los clientes las diferentes \textit{skills}.
