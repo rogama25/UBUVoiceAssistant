@@ -1,6 +1,15 @@
 class Course():
+    """ Represents a Moodle's course.
+    ---
+    Contains the course's id and name, along with the forums, events and grades.
+    """
 
     def __init__(self, course):
+        """ Constructor.
+        ---
+            Parameters:
+                - course: JSONObject from Moodle webservice containing the course.
+        """
         self.__course_id = str(course['id'])
         self.__name = course['displayname']
         self.__grades = []
@@ -24,3 +33,9 @@ class Course():
 
     def set_events(self, events):
         self.__events = events
+
+    def get_forums(self):
+        return self.__forums
+
+    def set_forums(self, forums):
+        self.__forums = forums

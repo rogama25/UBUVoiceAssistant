@@ -61,9 +61,6 @@ class UbuCalendarSkill(MycroftSkill):
         else:
             self.speak_dialog('changes')
 
-    def stop(self):
-        pass
-
 
 def create_skill():
     return UbuCalendarSkill()

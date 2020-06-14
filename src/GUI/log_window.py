@@ -28,6 +28,7 @@ class LogTab(QtWidgets.QPlainTextEdit):
         lines = open(file, 'r').readlines()
         n_lines = len(lines)
 
+        # Trim the log file if the lines are superior than MAX_LINES
         if n_lines > MAX_LINES:
             lines = lines[n_lines-MAX_LINES:]
             updated_logs = open(file, 'w+')

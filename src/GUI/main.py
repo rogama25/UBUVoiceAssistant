@@ -76,11 +76,11 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.label_host.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.gridLayout.addWidget(self.label_host, 4, 4, 1, 1)
 
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem, 2, 1, 1, 1)
+        spacer_item = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacer_item, 2, 1, 1, 1)
 
-        spacerItem1 = QtWidgets.QSpacerItem(0, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
-        self.gridLayout.addItem(spacerItem1, 6, 1, 1, 1)
+        spacer_item1 = QtWidgets.QSpacerItem(0, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        self.gridLayout.addItem(spacer_item1, 6, 1, 1, 1)
 
         self.lineEdit_host = QtWidgets.QLineEdit(self.centralwidget)
         self.gridLayout.addWidget(self.lineEdit_host, 4, 5, 1, 1)
@@ -96,14 +96,14 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.comboBox_language.currentTextChanged.connect(self.on_lang_selected)
         self.gridLayout.addWidget(self.comboBox_language, 0, 6, 1, 1)
 
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem2, 2, 6, 1, 1)
+        spacer_item2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacer_item2, 2, 6, 1, 1)
 
         self.lineEdit_user = QtWidgets.QLineEdit(self.centralwidget)
         self.gridLayout.addWidget(self.lineEdit_user, 2, 5, 1, 1)
 
-        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
-        self.gridLayout.addItem(spacerItem3, 9, 1, 1, 1)
+        spacer_item3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        self.gridLayout.addItem(spacer_item3, 9, 1, 1, 1)
 
         self.setCentralWidget(self.centralwidget)
 
@@ -143,6 +143,7 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.comboBox_language.setCurrentIndex(1)
 
     def on_lang_selected(self, value):
+        """ Set the enviroment variable to the corresponding langugage """
         if value == 'Español':
             environ['lang'] = 'es-es'
         elif value == 'English':
@@ -155,10 +156,12 @@ class LoginWindow(QtWidgets.QMainWindow):
         password = self.lineEdit_password.text()
         host = str(self.lineEdit_host.text())
 
+        # Create and initialize the web service class
         ws = WebService()
         ws.set_host(host)
         try:
             ws.set_url_with_token(user, password)
+        # If the credentials are incorrect
         except KeyError:
             self.invalid_credentials.exec()
             return
@@ -169,6 +172,7 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.different_lang.exec()
         ws.set_user_courses()
 
+        # Update the user_data.txt file with the corresponding values
         with open(self.user_data_file, 'r') as data:
             data_lines = data.readlines()
             if self.checkBox_remember_user.isChecked():
@@ -194,6 +198,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.hide()
 
     def load_settings(self):
+        """ Read the user_data.txt file and load the values in it """
         with open(self.user_data_file, 'r') as data:
             data_lines = data.readlines()
             self.user = data_lines[0].strip()

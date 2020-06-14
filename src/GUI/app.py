@@ -31,7 +31,8 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.left = 0
         self.width = 500
         self.height = 600
-        self.next_form = 0
+        self.next_message = 0
+        self.intent_labels = []
         self.setup_ui()
 
     def setup_ui(self):
@@ -42,70 +43,59 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.centralwidget)
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
 
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem, 1, 2, 1, 3)
+        spacer_item = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacer_item, 1, 2, 1, 3)
+
+        self.verticalLayout_intents = QtWidgets.QVBoxLayout()
+        self.gridLayout.addLayout(self.verticalLayout_intents, 2, 1, 1, 1)
+
+        self.label_intent1 = self.create_intent_label()
+        self.label_intent2 = self.create_intent_label()
+        self.label_intent3 = self.create_intent_label()
+        self.label_intent4 = self.create_intent_label()
+        self.label_intent5 = self.create_intent_label()
+        self.label_intent6 = self.create_intent_label()
+        self.label_intent7 = self.create_intent_label()
 
         self.line = QtWidgets.QFrame(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.line.sizePolicy().hasHeightForWidth())
-        self.line.setSizePolicy(sizePolicy)
+        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(self.line.sizePolicy().hasHeightForWidth())
+        self.line.setSizePolicy(size_policy)
         self.line.setLineWidth(1)
         self.line.setMidLineWidth(0)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.gridLayout.addWidget(self.line, 6, 1, 1, 5)
+        self.gridLayout.addWidget(self.line, 3, 1, 1, 5)
 
         self.lineEdit_chat_message = QtWidgets.QLineEdit(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lineEdit_chat_message.sizePolicy().hasHeightForWidth())
-        self.lineEdit_chat_message.setSizePolicy(sizePolicy)
-        self.gridLayout.addWidget(self.lineEdit_chat_message, 11, 1, 1, 4)
+        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(self.lineEdit_chat_message.sizePolicy().hasHeightForWidth())
+        self.lineEdit_chat_message.setSizePolicy(size_policy)
+        self.gridLayout.addWidget(self.lineEdit_chat_message, 8, 1, 1, 4)
 
-        self.label_intent3 = QtWidgets.QLabel(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label_intent3.sizePolicy().hasHeightForWidth())
-        self.label_intent3.setSizePolicy(sizePolicy)
-        self.gridLayout.addWidget(self.label_intent3, 4, 1, 1, 1)
 
         self.label_intents_title = QtWidgets.QLabel(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label_intents_title.sizePolicy().hasHeightForWidth())
-        self.label_intents_title.setSizePolicy(sizePolicy)
+        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(self.label_intents_title.sizePolicy().hasHeightForWidth())
+        self.label_intents_title.setSizePolicy(size_policy)
         font_questions_title = QtGui.QFont()
         font_questions_title.setPointSize(16)
         self.label_intents_title.setFont(font_questions_title)
         self.gridLayout.addWidget(self.label_intents_title, 1, 1, 1, 1)
 
-        self.label_intent2 = QtWidgets.QLabel(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label_intent2.sizePolicy().hasHeightForWidth())
-        self.label_intent2.setSizePolicy(sizePolicy)
-        self.gridLayout.addWidget(self.label_intent2, 3, 1, 1, 1)
-
-        self.label_intent1 = QtWidgets.QLabel(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label_intent1.sizePolicy().hasHeightForWidth())
-        self.label_intent1.setSizePolicy(sizePolicy)
-        self.gridLayout.addWidget(self.label_intent1, 2, 1, 1, 1)
 
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
-        self.scrollArea.setSizePolicy(sizePolicy)
+        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
+        self.scrollArea.setSizePolicy(size_policy)
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
         self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 768, 410))
@@ -113,25 +103,25 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.gridLayout_conversation = QtWidgets.QGridLayout()
         self.verticalLayout.addLayout(self.gridLayout_conversation)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-        self.gridLayout.addWidget(self.scrollArea, 10, 1, 1, 5)
+        self.gridLayout.addWidget(self.scrollArea, 7, 1, 1, 5)
 
         self.label_chat_title = QtWidgets.QLabel(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label_chat_title.sizePolicy().hasHeightForWidth())
+        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Maximum)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(self.label_chat_title.sizePolicy().hasHeightForWidth())
         font_chat_title = QtGui.QFont()
         font_chat_title.setPointSize(14)
-        self.label_chat_title.setSizePolicy(sizePolicy)
+        self.label_chat_title.setSizePolicy(size_policy)
         self.label_chat_title.setFont(font_chat_title)
-        self.gridLayout.addWidget(self.label_chat_title, 8, 1)
+        self.gridLayout.addWidget(self.label_chat_title, 5, 1)
 
         self.pushButton_mic = QtWidgets.QPushButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButton_mic.sizePolicy().hasHeightForWidth())
-        self.pushButton_mic.setSizePolicy(sizePolicy)
+        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(self.pushButton_mic.sizePolicy().hasHeightForWidth())
+        self.pushButton_mic.setSizePolicy(size_policy)
         self.mic_icon = QtGui.QIcon()
         self.mic_icon.addPixmap(QtGui.QPixmap("imgs/mic.svg"))
         self.mic_muted_icon = QtGui.QIcon()
@@ -143,12 +133,13 @@ class AppMainWindow(QtWidgets.QMainWindow):
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
         self.pushButton_mic.setPalette(palette)
         self.pushButton_mic.clicked.connect(self.on_mic_pressed)
-        self.gridLayout.addWidget(self.pushButton_mic, 8, 5)
+        self.gridLayout.addWidget(self.pushButton_mic, 5, 5)
 
         self.pushButton_send = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_send.setGeometry(QtCore.QRect(399, 550, 50, 30))
+        self.pushButton_send.setPalette(palette)
         self.pushButton_send.clicked.connect(self.on_send_pressed)
-        self.gridLayout.addWidget(self.pushButton_send, 11, 5, 1, 1)
+        self.gridLayout.addWidget(self.pushButton_send, 8, 5, 1, 1)
 
         self.pushButton_logs = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_logs.setGeometry(QtCore.QRect(370, 10, 120, 40))
@@ -168,7 +159,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.skills_list_icon.addPixmap(QtGui.QPixmap("imgs/list.svg"))
         self.pushButton_skills.setIcon(self.skills_list_icon)
         self.pushButton_skills.clicked.connect(self.on_skills_pressed)
-        self.gridLayout.addWidget(self.pushButton_skills, 3, 5, 1, 1)
+        self.gridLayout.addWidget(self.pushButton_skills, 2, 5, 1, 1)
 
         self.pushButton_manage_skills = QtWidgets.QPushButton(self.skills_dialog)
         self.pushButton_manage_skills.setGeometry(QtCore.QRect(470, 10, 120, 40))
@@ -201,7 +192,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         # Start Mycroft services
         subprocess.run(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'all', 'restart'])
 
-        # Wait until the MessageBus is started, there might be a better solution
+        # Wait until Mycroft services are started, there might be a better solution
         time.sleep(15)
 
         # Thread connected to Mycroft MessageBusClient
@@ -223,10 +214,12 @@ class AppMainWindow(QtWidgets.QMainWindow):
             self.pushButton_mic.setText('Mute')
             self.label_intents_title.setText('Puedes preguntar: "Hey Mycroft...')
             self.label_intent1.setText('...abre el calendario"')
-            self.label_intent2.setText('...dime los foros de (asignatura)"')
-            self.label_intent3.setText('...dime mis notas"')
-            # self.label_questions4.setText('...dime los eventos de (asignatura)"')
-            # self.label_questions5.setText("")
+            self.label_intent2.setText('...dime los eventos de (asignatura)"')
+            self.label_intent5.setText('...dime los foros de (asignatura)"')
+            self.label_intent6.setText('...dime mis notas"')
+            self.label_intent3.setText('...dime los eventos del (dia) de (mes) de (año)"')
+            self.label_intent4.setText('...dime los cambios en (asignatura)"')
+            self.label_intent7.setText('...dime las notas de (asignatura)"')
             self.pushButton_manage_skills.setText("Guardar")
         elif environ['lang'] == 'en-us':
             self.lineEdit_chat_message.setPlaceholderText("Or you can ask via text")
@@ -234,27 +227,46 @@ class AppMainWindow(QtWidgets.QMainWindow):
             self.pushButton_send.setText("Send")
             self.pushButton_logs.setText("Open Logs")
             self.pushButton_skills.setText("Manage Skills")
-            self.label_intents_title.setText("You can ask: Hey Mycroft...")
-            self.label_intent1.setText('"...open the calendar"')
-            self.label_intent2.setText('"...tell me about the forums of (course)"')
-            self.label_intent3.setText('"...tell me my grades"')
-            # self.label_questions4.setText('"...tell me about the events of (course)"')
-            # self.label_questions5.setText("")
+            self.pushButton_mic.setText('Mute')
+            self.label_intents_title.setText('You can ask: "Hey Mycroft...')
+            self.label_intent1.setText('...open the calendar"')
+            self.label_intent5.setText('...tell me about the forums of (course)"')
+            self.label_intent6.setText('...tell me my grades"')
+            self.label_intent2.setText('...tell me about the events of (course)"')
+            self.label_intent3.setText('...tell me about the events on (month) (day) (year)"')
+            self.label_intent4.setText('...tell me about the changes of (course)"')
+            self.label_intent7.setText('...tell me the grades of (course)')
             self.pushButton_manage_skills.setText("Save")
 
+    def create_intent_label(self):
+        intent_label = QtWidgets.QLabel(self.centralwidget)
+        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(intent_label.sizePolicy().hasHeightForWidth())
+        intent_label.setSizePolicy(size_policy)
+        self.verticalLayout_intents.addWidget(intent_label)
+        return intent_label
+
     def update_chat(self, source):
+        """ Adds a new label to the chat's gridLayout to the corresponding side
+        ---
+            Parameters:
+                - Char source: 'r' to add to the right side (the response)
+                               'u' to add to the left side (the user)
+        """
         tmp_label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
         tmp_label.setWordWrap(True)
         if source == 'r':
-            self.gridLayout.addWidget(tmp_label, self.next_form, 1)
-            self.gridLayout_conversation.addWidget(tmp_label, self.next_form, 1)
+            self.gridLayout.addWidget(tmp_label, self.next_message, 1)
+            self.gridLayout_conversation.addWidget(tmp_label, self.next_message, 1)
             tmp_label.setText(self.mycroft_response)
             self.mycroft_response = ''
         elif source == 'u':
-            self.gridLayout_conversation.addWidget(tmp_label, self.next_form, 0)
+            self.gridLayout_conversation.addWidget(tmp_label, self.next_message, 0)
             tmp_label.setText(self.user_utterance)
             self.user_utterance = ''
-        self.next_form+=1
+        self.next_message+=1
 
     def handle_speak(self, message):
         self.mycroft_response = message.data.get('utterance')
@@ -262,10 +274,10 @@ class AppMainWindow(QtWidgets.QMainWindow):
     def handle_utterance(self, message):
         self.user_utterance = message.data['utterances'][0]
 
-    def connect(self, bus):
-        self.bus.run_forever()
-
     def check_for_chat_update(self):
+        """ Checks if there's a new message either in self.user_utterance or
+            self.mycroft_response and updates the chat if so
+        """
         if self.user_utterance:
             self.update_chat('u')
         if self.mycroft_response:
@@ -277,6 +289,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.lineEdit_chat_message.setText('')
 
     def on_mic_pressed(self):
+        # Switch between muted and unmuted when the mic is pressed
         if self.mic_muted:
             self.mic_muted = False
             self.pushButton_mic.setIcon(self.mic_icon)
@@ -304,49 +317,54 @@ class AppMainWindow(QtWidgets.QMainWindow):
 
     def on_skills_pressed(self):
 
-        scrollArea_skills = QtWidgets.QScrollArea(self.skills_dialog)
-        scrollArea_skills.setGeometry(QtCore.QRect(10, 10, 450, 580))
-        scrollArea_skills.setWidgetResizable(True)
-        scrollAreaWidgetContents_skills = QtWidgets.QWidget()
-        scrollArea_skills.setWidget(scrollAreaWidgetContents_skills)
+        scroll_area_skills = QtWidgets.QScrollArea(self.skills_dialog)
+        scroll_area_skills.setGeometry(QtCore.QRect(10, 10, 450, 580))
+        scroll_area_skills.setWidgetResizable(True)
+        scroll_area_widget_skills = QtWidgets.QWidget()
+        scroll_area_skills.setWidget(scroll_area_widget_skills)
 
-        skills_grid_layout = QtWidgets.QGridLayout(scrollAreaWidgetContents_skills)
+        skills_grid_layout = QtWidgets.QGridLayout(scroll_area_widget_skills)
         skills_grid_layout.setGeometry(QtCore.QRect(10, 10, 450, 580))
 
         self.active_skills_checkBoxes = []
         self.unactive_skills_checkBoxes = []
 
+        # Create checkboxes for every skill in self.active_skills
         for count, name in enumerate(self.active_skills):
-            checkBox = QtWidgets.QCheckBox(scrollAreaWidgetContents_skills)
+            check_box = QtWidgets.QCheckBox(scroll_area_widget_skills)
             spacer = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-            checkBox.setText(name)
-            checkBox.setChecked(True)
-            logo = QtWidgets.QLabel(scrollAreaWidgetContents_skills)
+            check_box.setText(name)
+            check_box.setChecked(True)
+            logo = QtWidgets.QLabel(scroll_area_widget_skills)
             if 'ubu' in name:
                 logo.setPixmap(QtGui.QPixmap('imgs/ubu_logo.jpg').scaled(20, 20))
             else:
                 logo.setPixmap(QtGui.QPixmap('imgs/Mycroft_logo.png').scaled(20, 20))
-            self.active_skills_checkBoxes.append(checkBox)
+            self.active_skills_checkBoxes.append(check_box)
             skills_grid_layout.addWidget(logo, count, 0)
-            skills_grid_layout.addWidget(checkBox, count, 1)
+            skills_grid_layout.addWidget(check_box, count, 1)
             skills_grid_layout.addItem(spacer, count, 2, QtCore.Qt.AlignLeft)
 
+        # Create checkboxes for every skill in self.unactive_skills
         for count, name in enumerate(self.unactive_skills, len(self.active_skills)):
-            checkBox = QtWidgets.QCheckBox(scrollAreaWidgetContents_skills)
-            checkBox.setText(name)
-            logo = QtWidgets.QLabel(scrollAreaWidgetContents_skills)
+            check_box = QtWidgets.QCheckBox(scroll_area_widget_skills)
+            check_box.setText(name)
+            logo = QtWidgets.QLabel(scroll_area_widget_skills)
             if 'ubu' in name:
                 logo.setPixmap(QtGui.QPixmap('imgs/ubu_logo.jpg').scaled(20, 20))
             else:
                 logo.setPixmap(QtGui.QPixmap('imgs/Mycroft_logo.png').scaled(20, 20))
-            self.unactive_skills_checkBoxes.append(checkBox)
+            self.unactive_skills_checkBoxes.append(check_box)
             skills_grid_layout.addWidget(logo, count, 0)
-            skills_grid_layout.addWidget(checkBox, count, 1)
+            skills_grid_layout.addWidget(check_box, count, 1)
             skills_grid_layout.addItem(spacer, count, 2, QtCore.Qt.AlignLeft)
 
         self.skills_dialog.show()
 
     def on_manage_skills_pressed(self):
+        """ Adds the checked skills to self.active_skills and the unchecked to
+            self.unactive_skills and activates or deactivates those skills.
+        """
         deactivated = []
         activated = []
         for cb in self.active_skills_checkBoxes:

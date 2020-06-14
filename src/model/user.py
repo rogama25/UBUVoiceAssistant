@@ -1,7 +1,17 @@
 class User():
+    """ Represents a Moodle's user.
+    ---
+    Contains the user's id and courses.
+    """
 
     def __init__(self, user_id):
+        """ Constructor.
+        ---
+            Parameters:
+                - user_id: int with the user's id.
+        """
         self.__user_id = user_id
+        # dict with the key being the course's id and the value the Course object
         self.__courses = {}
         self.__final_grades = []
 

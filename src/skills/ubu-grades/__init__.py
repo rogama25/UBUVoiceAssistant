@@ -40,9 +40,6 @@ class UbuGradesSkill(MycroftSkill):
         else:
             self.speak_dialog('no.course')
 
-    def stop(self):
-        pass
-
 
 def create_skill():
     return UbuGradesSkill()
