@@ -1,10 +1,10 @@
 \capitulo{3}{Conceptos teóricos}
 
-A continuación se va a detallar qué es un asistente de voz, una \textit{Skill}, que elementos tiene y cómo funcionan. También se explicará el funcionamiento de \textit{Mycroft}, que es el asistente de voz que se ha usado para el desarrollo del proyecto.
+A continuación se va a detallar qué es un asistente de voz, una \textit{Skill}, qué elementos tiene y cómo funcionan. También se explicará el funcionamiento de \textit{Mycroft}, que es el asistente de voz que se ha usado para el desarrollo del proyecto.
 
 \section{Asistente de voz}
 
-Un asistente de voz es un programa que actúa para un usuario, al que ayuda automatizando y relizando tareas con una interacción hombre-máquina mínima. La interacción entre el asistente y la persona debe ser una interacción lo más natural posible, es decir, la persona se comunica con la voz como es habitual y el asistente procesa, interpreta y responde de la misma forma.
+Un asistente de voz es un programa que actúa para un usuario, al que ayuda automatizando y realizando tareas con una interacción hombre-máquina mínima. La interacción entre el asistente y la persona debe ser una interacción lo más natural posible, es decir, la persona se comunica con la voz como es habitual y el asistente procesa, interpreta y responde de la misma forma.
 
 \section{Skill}
 
@@ -16,33 +16,12 @@ La \textit{wake word} es una palabra o palabras que tiene que decir el usuario p
 
 \subsection{Utterance}
 
-Una \textit{utterance} es la frase completa que dice el usuario a continuación de la \textit{wake word} y que sirve como inicio del proceso de búsqueda de la \textit{Skill} correspondiente a la frase dicha. Un ejemplo de \textit{utterance} sería: ¿que temperatura hace en Burgos?
+Una \textit{utterance} es la frase completa que dice el usuario a continuación de la \textit{wake word} y que sirve como inicio del proceso de búsqueda de la \textit{Skill} correspondiente a la frase dicha. Un ejemplo de \textit{utterance} sería: "¿qué temperatura hace en Burgos?"
 
 \subsection{Intent}
 
-Un \textit{intent} es la parte de la frase o \textit{utterance} que el asistente de voz detecta como la parte necesaria para la invocación de una \textit{Skill}. Cada Skill tiene un \textit{intent} asociado. Siguiendo con el ejemplo anterior, el intent sería: temperatura Burgos
+Un \textit{intent} es la parte de la frase o \textit{utterance} que el asistente de voz detecta como la parte necesaria para la invocación de una \textit{Skill}. Cada \textit{Skill} tiene un \textit{intent} asociado. Siguiendo con el ejemplo anterior, el intent sería: temperatura Burgos
 
 \subsection{Dialog}
 
-Este término sí que es diferente de otros asistentes. Un \textit{dialog} es una frase que dice el propio asistente, normalmente en respuesta a una pregunta por parte del usuario. Los \textit{dialog} son independientes de las \textit{Skill}, pero es normal que cada \textit{Skill} tenga un \textit{dialog}. Es el último paso cuando usamos una \textit{Skill}, pero no tiene por qué estar presente. Finalizando con el ejemplo, el \textit{dialog} sería: Hay 11ºC en Burgos.
-
-\section{Mycroft}
-
-Mycroft es un asistente de voz de código abierto y software libre. Está disponible para sistemas operativos basados en Linux, Android, Raspberry Pi y dispositivos propios de Mycroft, como el \href{https://mycroft.ai/product/mycroft-mark-1/}{Mark 1}. Es una aplicación cliente que requiere una instalación previa, a diferencia de otros asistentes de voz que se ejecutan en la nube. Al ser de código abierto te permite explorar y cambiar su implementación y diseño, no como en asistentes de voz como Alexa que son una caja negra en la que no puedes ver nada. Al ser una aplicación cliente existen diferentes componentes que tienen su propia responsabilidad dentro de la aplicación.
-
-\subsection{Voice}
-
-Este componente es el encargado de transformar la voz a texto (\textit{speech-to-text} o \textit{STT}) y el texto a voz (\textit{text-to-speech} o \textit{TTS}).
-Para el STT, Mycroft usa por defecto el motor de Google, ya que se necesita que la transformación sea rápida y precisa. Para añadir una capa adicional de privacidad, todas las peticiones de STT pasan por un proxy de los servidores de Mycroft. Así, Google no puede detectar si hay una persona haciendo miles de peticiones o son miles de personas haciendo pocas peticiones. Además del motor de Google, Mycroft permite usar otros motores de STT como Mozilla DeepSpeech o Kaldi.
-En cuanto al TTS, se puede configurar desde la página del dispositivo. Las opciones de British Male y American Female usan Mimic 1, American Male usa Mimic 2 y Google Voice usa la voz de la API de Google Translate. Además de estos motores configurables desde la web, se puede usar Google TTS o Mycrosoft Azure, entre otros.
-
-\subsection{Skills}
-
-Este componente usa principalmente un servicio, llamado \textit{intent service}, que es el encargado de, dada una \textit{utterance}, hacer \textit{match} entre la \textit{utterance} y una \textit{skill}. Esto es posible gracias a los \textit{intent parser} que usa Mycroft, Adapt y Padatious.
-Adapt es una aplicación de código abierto ligera diseñada para usarse en dispositivos con recursos limitados, lo que es muy útil para Mycroft. Padatious es una aplicación basada en redes neuronales y \textit{machine learning} y es más efectiva y fácil de usar que Adapt, además de ofrecer más funcionalidad.
-
-\subsection{MessageBus}
-
-El MessageBus es el componente que permite que el resto de componentes se comuniquen entre sí. Es un \textit{websocket} que se encarga de pasar la información entre el componente de Skills y Voice. Cuando el usuario dice una frase, el componente Voice lo transforma a texto mediante el \textit{TTS}, lo pasa al componente Skills mediante el MessageBus y éste decide qué \textit{Skill} hay que ejecutar. Una vez ejecutada la \textit{Skill}, se envía la respuesta al componente Voice, que la transforma a voz mediante el \textit{STT}.
-
-
+Este término es diferente al de otros asistentes. Un \textit{dialog} es una frase que dice el propio asistente, normalmente en respuesta a una pregunta por parte del usuario. Los \textit{dialog} son independientes de las \textit{Skill}, pero es normal que cada \textit{Skill} tenga un \textit{dialog}. Es el último paso cuando usamos una \textit{Skill}, pero no tiene por qué estar presente. Finalizando con el ejemplo, el \textit{dialog} sería: "Hay 11ºC en Burgos".

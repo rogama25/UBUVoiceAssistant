@@ -9,6 +9,9 @@
 \usepackage{microtype}
 \usepackage{placeins}
 
+\usepackage[backend=bibtex,dateabbrev=false]{biblatex}
+\addbibresource{bibliografiaAnexos.bib}
+
 \RequirePackage{booktabs}
 \RequirePackage[table]{xcolor}
 \RequirePackage{xtab}
@@ -345,9 +348,9 @@
 
 
 % Datos de portada
-\title{título del TFG \\Documentación Técnica}
-\author{nombre alumno}
-\tutor{nombre tutor}
+\title{UBUAssistant \\Documentación Técnica}
+\author{Álvaro Delgado Pascual}
+\tutor{D. Raúl Marticorena Sánchez}
 \date{\today}
 
 \begin{document}
@@ -376,9 +379,6 @@
 
 \listoffigures
 
-\clearpage
-
-\listoftables
 
 \clearpage
 
@@ -392,8 +392,6 @@
 \include{./tex/D_Manual_programador}
 \include{./tex/E_Manual_usuario}
 
-
-\bibliographystyle{plain}
-\bibliography{bibliografiaAnexos}
+\printbibliography
 
 \end{document}

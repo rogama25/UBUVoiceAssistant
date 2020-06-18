@@ -25,15 +25,34 @@ Para el entorno de desarrollo se necesita Python3 con sus dependencias, Mycroft 
 
 \subsection{Python 3}
 
-Python 3 viene instalado por defecto en Ubuntu, pero necesitamos instalar las dependencias para la aplicación. Estas dependencias son PyQt5 y MycroftMessageBus y se instalan mediante los comandos \textbf{sudo apt-get install python3-pyqt5} y \textbf{pip3 install mycroft-messagebus-client}
+Python 3 viene instalado por defecto en Ubuntu, pero necesitamos instalar las dependencias para la aplicación. Estas dependencias son PyQt5 y MycroftMessageBus y se instalan mediante los comandos:
+\begin{itemize}
+	\item \textbf{sudo apt-get install python3-pyqt5}
+	\item \textbf{pip3 install mycroft-messagebus-client}
+\end{itemize}
 
 \subsection{Mycroft}
+Antes de nada, necesitamos tener git instalado, se instala mediante el comando \textbf{sudo apt install git}, y necesitamos una cuenta de Mycroft, para ello ir a \href{https://home.mycroft.ai/}{su página} y crearla.
 
-Una vez instalado, ir a la sección \textbf{Running Mycroft} para ejecutarlo, mediante el los comandos \textbf{cd \detokenize{~}/mycroft-core} para ir a la carpeta y \textbf{./start-mycroft.sh debug} para ejecutarlo. Tras iniciar Mycroft tenemos que decir por voz cualquier cosa para que se inicie el proceso de enlazamiento. La aplicación nos dirá un código (si se ha iniciado con la opción de \textbf{debug} también aparecerá en pantalla). Este código hay que ponerlo al añadir un nuevo dispositivo. En \href{https://home.mycroft.ai}{la página de Mycroft} en la esquina superior derecha, en la sección de \textbf{Devices}, \textbf{Add Device} en el apartado de \textbf{Pairing code}. Al añadir el nuevo dispositivo es importante que en el apartado \textbf{Voice} se seleccione \textbf{Google Voice}.
+Para instalar Mycroft hay que seguir los pasos en la sección \textbf{Getting Started} de la guía que hay en \href{https://github.com/MycroftAI/mycroft-core}{su repositorio}, que son:
+\begin{enumerate}
+	\item \textbf{cd \detokenize{~}}
+	\item \textbf{git clone https://github.com/MycroftAI/mycroft-core.git}
+	\item \textbf{cd mycroft-core}
+	\item \textbf{bash dev\_setup.sh}
+\end{enumerate}
 
-Para para Mycroft si se ha iniciado con la opción de \textit{debug} se puede presionar la combinación de teclas \textbf{ctrl + c} o escribir en la interfaz \textbf{:exit}
+Tras introducir el comando \textbf{bash dev\_setup.sh} se nos abrirá el proceso de instalación interactiva. Le vamos a dar a todo a \textit{Yes} (escribir la letra Y en la consola) 
 
-Una vez instalado, ir a la sección \textbf{Running Mycroft} para ejecutarlo. Tras iniciar Mycroft tenemos que decir por voz cualquier cosa para que se inicie el proceso de enlazamiento. La aplicación nos dirá un código (si se ha iniciado con la opción de \textbf{debug} también aparecerá en pantalla). Este código hay que ponerlo al añadir un nuevo dispositivo. En \href{https://home.mycroft.ai}{la página de Mycroft} en la esquina superior derecha, en la sección de \textbf{Devices}, \textbf{Add Device} en el apartado de \textbf{Pairing code}. Al añadir el nuevo dispositivo es importante que en el apartado \textbf{Voice} se seleccione \textbf{Google Voice}.
+Una vez instalado, continuar a la sección \textbf{Running Mycroft} de \href{https://github.com/MycroftAI/mycroft-core}{su repositorio} para ejecutarlo, que se hace mediante el los comandos:
+\begin{enumerate}
+	\item \textbf{cd \detokenize{~}/mycroft-core}
+	\item \textbf{./start-mycroft.sh debug}
+\end{enumerate}
+
+Tras iniciar Mycroft tenemos que decir por voz cualquier cosa para que se inicie el proceso de enlazamiento. La aplicación nos dirá un código (si se ha iniciado con la opción de \textit{debug} también aparecerá en pantalla). Este código hay que ponerlo al añadir un nuevo dispositivo. En \href{https://home.mycroft.ai}{la página de Mycroft} en la esquina superior derecha, en la sección de \textbf{Devices}, \textbf{Add Device} en el apartado de \textbf{Pairing code}. Al añadir el nuevo dispositivo es importante que en el apartado \textbf{Voice} se seleccione \textbf{Google Voice}.
+
+Para parar Mycroft si se ha iniciado con la opción de \textit{debug} se puede presionar la combinación de teclas \textbf{ctrl + c} o escribir en la interfaz \textbf{:exit}
 
 \subsection{Editor}
 
@@ -47,16 +66,31 @@ En esta nueva ventana que se nos ha abierto hacemos click en \textbf{Install} y 
 
 \imagen{install_atom_ide}{Instalar atom-ide} \imagen{install_ide_python}{Instalar ide-python}
 
-Para que funcione el paquete \textbf{ide-python} tenemos que instalar \textbf{python-language-server} con el comando \textbf{python3 -m pip install python-language-server[all]} en la consola. Ahora vamos a configurar el paquete, para ello hacemos click en la pestaña \textbf{Packages}, después en \textbf{Settings} de \textbf{ide-python}. En la nueva ventana que se nos ha abierto se puede configurar el comportamiento de todos los componentes de \textbf{python-language-server}, pero para que funcione de momento solo nos interesa cambiar la primera línea en la que pone python y poner \textbf{python3}
+Para que funcione el paquete \textbf{ide-python} tenemos que instalar \textbf{python-language-server} escribiendo en la consola el comando:
+\begin{itemize}
+	\item \textbf{python3 -m pip install python-language-server[all]}
+\end{itemize}
+
+\imagen{pyls}{Instalar Python Language Server}
+
+Ahora vamos a configurar el paquete, para ello hacemos click en la pestaña \textbf{Packages}, después en \textbf{Settings} de \textbf{ide-python}. En la nueva ventana que se nos ha abierto se puede configurar el comportamiento de todos los componentes de \textbf{python-language-server}, pero para que funcione de momento solo nos interesa cambiar la primera línea en la que pone python y poner \textbf{python3}
 
 \imagen{ide_python_settings}{Configuración del paquete ide-python} \imagen{ide_python_settings2}{Configuración del paquete ide-python}
 
 
 \section{Compilación, instalación y ejecución del proyecto}
 
-Clonamos el repositorio en nuestra carpeta personal. Si no estamos en la carpeta personal ejecutar el comando \textbf{cd \detokenize{~}}. Para clonar el repositorio ejecutar el comando \textbf{git clone https://github.com/adp1002/UBUAssistant}.
+Clonamos el repositorio en nuestra carpeta personal mediante los comandos:
+\begin{enumerate}
+	\item \textbf{cd \detokenize{~}}
+	\item \textbf{git clone https://github.com/adp1002/UBUAssistant}
+\end{enumerate}
 
-Para iniciar la aplicación vamos al directorio /src/ con el comando \textbf{cd \detokenize{~}/UBUAssistant/src/} y ejecutamos con \textbf{python3 -m ./GUI/main.py \detokenize{>}> logs.log}
+Para iniciar la aplicación vamos al directorio /src/ y ejecutamos mediante los comandos:
+\begin{enumerate}
+	\item \textbf{cd \detokenize{~}/UBUAssistant/src/}
+	\item \textbf{python3 -m ./GUI/main.py \detokenize{>}> logs.log}
+\end{enumerate}
 
 \section{Pruebas del sistema}
 
