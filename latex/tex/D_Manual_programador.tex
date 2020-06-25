@@ -32,7 +32,9 @@ Python 3 viene instalado por defecto en Ubuntu, pero necesitamos instalar las de
 \end{itemize}
 
 \subsection{Mycroft}
-Antes de nada, necesitamos tener git instalado, se instala mediante el comando \textbf{sudo apt install git}, y necesitamos una cuenta de Mycroft, para ello ir a \href{https://home.mycroft.ai/}{su página} y crearla.
+Antes de nada, necesitamos tener git instalado, se instala mediante el comando \textbf{sudo apt install git}, y necesitamos una cuenta de Mycroft, para ello ir a \href{https://mycroft.ai/}{su página} y crearla.
+
+\imagen{crear_mycroft1}{Creación de cuenta de Mycroft} \imagen{crear_mycroft2}{Creación de cuenta de Mycroft}
 
 Para instalar Mycroft hay que seguir los pasos en la sección \textbf{Getting Started} de la guía que hay en \href{https://github.com/MycroftAI/mycroft-core}{su repositorio}, que son:
 \begin{enumerate}
@@ -86,10 +88,12 @@ Clonamos el repositorio en nuestra carpeta personal mediante los comandos:
 	\item \textbf{git clone https://github.com/adp1002/UBUAssistant}
 \end{enumerate}
 
+Antes de nada hay que cambiar los ficheros \_\_init\_\_.py de las 3 skills (ubu-course, ubu-grades y ubu-course). En la línea 4, sys.path.append(expanduser('~') + '/UBUAssistant-1.X/src'), hay que cambiar /UBUAssistant-1.X/src a \textbf{/UBUAssistant/src}
+
 Para iniciar la aplicación vamos al directorio /src/ y ejecutamos mediante los comandos:
 \begin{enumerate}
 	\item \textbf{cd \detokenize{~}/UBUAssistant/src/}
-	\item \textbf{python3 -m ./GUI/main.py \detokenize{>}> logs.log}
+	\item \textbf{python3 -m GUI.main \detokenize{>}> logs.log}
 \end{enumerate}
 
 \section{Pruebas del sistema}

@@ -5,10 +5,11 @@
 En este apartado se explica como puede un usuario prepara el entorno para ejecutar la aplicación y cómo utilizar la aplicación.
 
 \section{Requisitos de usuarios}
-
-Sistema operativo GNU/Linux
-Python3
-Conexión a Internet
+\begin{enumerate}
+	\item Sistema operativo GNU/Linux
+	\item Python 3.6 o superior
+	\item Conexión a Internet
+\end{enumerate}
 
 \section{Instalación}
 
@@ -38,7 +39,9 @@ Después seleccionamos el idioma del teclado y la instalación de Ubuntu, en nue
 Python3 viene instalado por defecto en Ubuntu 18.04. Para instalar las dependencias necesitamos pip3, que se instala con el comando \textbf{sudo apt install python3-pip}. Ahora las dependencias que necesitamos se instalan mediante los comandos \textbf{sudo apt-get install python3-pyqt5} y \textbf{pip3 install mycroft-messagebus-client}
 
 \subsection{Mycroft}
-Antes de nada, necesitamos tener git instalado, se instala mediante el comando \textbf{sudo apt install git}, y necesitamos una cuenta de Mycroft, para ello ir a \href{https://home.mycroft.ai/}{su página} y crearla.
+Antes de nada, necesitamos tener git instalado, se instala mediante el comando \textbf{sudo apt install git}, y necesitamos una cuenta de Mycroft, para ello ir a \href{https://mycroft.ai/}{su página} y crearla.
+
+\imagen{crear_mycroft1}{Creación de cuenta de Mycroft} \imagen{crear_mycroft2}{Creación de cuenta de Mycroft}
 
 Para instalar Mycroft hay que seguir los pasos en la sección \textbf{Getting Started} de la guía que hay en \href{https://github.com/MycroftAI/mycroft-core}{su repositorio}, que son:
 \begin{enumerate}
@@ -64,23 +67,19 @@ Para parar Mycroft si se ha iniciado con la opción de \textit{debug} se puede p
 
 \section{Manual del usuario}
 
-%En Ubuntu, para ejecutar la aplicación hay que descargar el \href{https://github.com/adp1002/UBUAssistant/releases}{proyecto de GitHub} (el archivo \textbf{Source code (tar.gz)}) y  descomprimirlo en la carpeta personal.
+\textbf{IMPORTANTE: En varios comandos van a aparecer expresiones como 1.X La X indica la versión de la aplicación y hay que cambiarla por el número correspondiente.}
 
-%\imagen{release}{Descarga de la release del proyecto}
+En Ubuntu, para ejecutar la aplicación hay que descargar el \href{https://github.com/adp1002/UBUAssistant/releases}{proyecto de GitHub} (el archivo \textbf{Source code (tar.gz)}) y  descomprimirlo en la carpeta personal.
 
-Clonamos el repositorio en nuestra carpeta personal mediante los comandos:
-\begin{enumerate}
-	\item \textbf{cd \detokenize{~}}
-	\item \textbf{git clone https://github.com/adp1002/UBUAssistant}
-\end{enumerate}
+\imagen{release}{Descarga de la release del proyecto}
 
 Cuando tengamos el proyecto descargado, mover el contenido de la carpeta \textbf{\detokenize{~}/src/skills/} a \textbf{/opt/mycroft/skills/}, ejecutando el comando:
-\textbf{sudo mv \detokenize{~}/UBUAssistant/src/skills/* /opt/mycroft/skills/})
+\textbf{sudo mv \detokenize{~}/UBUAssistant-1.X/src/skills/* /opt/mycroft/skills/})
 
 Nos vamos a la carpeta \textbf{/src/} del proyecto y ejecutamos la aplicación mediante los comandos:
 \begin{enumerate}
-	\item \textbf{cd \detokenize{~}/UBUAssistant/src}
-	\item \textbf{python3 -m ./GUI/main.py \detokenize{>}> logs.log \&}
+	\item \textbf{cd \detokenize{~}/UBUAssistant-1.X/src}
+	\item \textbf{python3 -m GUI.main \detokenize{>}> logs.log \&}
 \end{enumerate}
 Se nos abrirá la ventana de inicio de sesión. En esta ventana se introducirán los credenciales del usuario para la plataforma de Moodle a la que se quiera conectar, así como la URL de esta plataforma.
 Es importante que en el campo \textbf{host} se introduzca la URL exactamente con el formato que viene indicado. Por ejemplo, para conectarse a UBUVirtual la URL que habrá que introducir es, literalmente, \textbf{https://ubuvirtual.ubu.es}.
@@ -93,7 +92,7 @@ Para usar la aplicación mediante voz, hay que decir la \textit{wake word} (por 
 
 \imagen{main_window}{Ventana principal} \imagen{ejemplo_skill}{Ejemplo de salida de la aplicación}
 
-Se pueden tener activas las \textit{skills} que queramos, haciendo click en el botón de \textbf{Administrar Skills}. Las \textit{skills} que están marcadas son las activas y las no marcadas no están activas. Para activar o desactivar una \textit{skill}, marcar o desmarcar las \textit{skills} que queramos y pulsar el botón \textbf{Guardar}
+Se pueden tener activas las \textit{skills} que queramos, haciendo click en el botón de \textbf{Administrar Skills}. Las \textit{skills} que están marcadas son las activas. Para activar o desactivar una \textit{skill}, marcar o desmarcar las \textit{skills} que queramos y pulsar el botón \textbf{Guardar}
 
 \imagen{skills_window}{Ventana de administración de las \textit{Skills}}
 

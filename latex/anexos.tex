@@ -8,9 +8,10 @@
 \usepackage{lmodern} % scalable font
 \usepackage{microtype}
 \usepackage{placeins}
+\usepackage{lscape}
 
 \usepackage[backend=bibtex,dateabbrev=false]{biblatex}
-\addbibresource{bibliografiaAnexos.bib}
+\addbibresource{bibliografia.bib}
 
 \RequirePackage{booktabs}
 \RequirePackage[table]{xcolor}
@@ -18,7 +19,7 @@
 \RequirePackage{multirow}
 
 % Links
-\usepackage[colorlinks]{hyperref}
+\PassOptionsToPackage{hyphens}{url}\usepackage[colorlinks]{hyperref}
 \hypersetup{
 	allcolors = {red}
 }
@@ -32,6 +33,12 @@
 % Párrafos
 \nonzeroparskip
 
+% Huérfanas y viudas
+\widowpenalty100000
+\clubpenalty100000
+
+% Evitar solapes en el header
+\nouppercaseheads
 
 % Imagenes
 \usepackage{graphicx}
@@ -225,12 +232,12 @@
       \toprule
     }
     \tablehead{
-      \multicolumn{#3}{l}{\small\sl continúa desde la página anterior}\\
+      \multicolumn{#3}{l}{\small continúa desde la página anterior}\\
       \hline
     }
     \tabletail{
       \hline
-      \multicolumn{#3}{r}{\small\sl continúa en la página siguiente}\\
+      \multicolumn{#3}{r}{\small continúa en la página siguiente}\\
     }
     \tablelasttail{
       \hline
@@ -245,6 +252,7 @@
 }
 
 
+\newcommand{\hubu}{\hline \rule{0pt}{2.7ex}}
 
 \definecolor{cgoLight}{HTML}{EEEEEE}
 \definecolor{cgoExtralight}{HTML}{FFFFFF}
@@ -348,7 +356,7 @@
 
 
 % Datos de portada
-\title{UBUAssistant \\Documentación Técnica}
+\title{UBUAssistant\\Interacción por voz con la plataforma Moodle \\Documentación Técnica}
 \author{Álvaro Delgado Pascual}
 \tutor{D. Raúl Marticorena Sánchez}
 \date{\today}
@@ -379,6 +387,9 @@
 
 \listoffigures
 
+\clearpage
+
+\listoftables
 
 \clearpage
 

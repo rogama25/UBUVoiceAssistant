@@ -37,5 +37,93 @@ Los objetivos del proyecto son la recogida de datos de una plataforma de Moodle 
 \end{itemize}
 
 \section{Especificación de requisitos}
+	
+	% FORMATO DE LAS TABLAS SACADO DE https://github.com/aog0036/TFG-SmartBeds/blob/master/doc/tex/B_Requisitos.tex
+	
+	\tablaSmallSinColores{Caso de uso 1:  Comando de voz }{p{3cm} p{.75cm} p{9cm}}{comando_voz}{
+		\multicolumn{3}{p{10.25cm}}{CU-1: Comando de voz} \\
+	}
+	{
+		Descripción                            & \multicolumn{2}{p{10.25cm}}{La aplicación deberá responder al usuario tras el comando de voz.} \\\hubu
+		Precondiciones                         & \multicolumn{2}{p{10.25cm}}{El usuario se ha logueado en Moodle y el micrófono está activo.} \\\hubu
+		\multirow{3}{3.5cm}{Secuencia}  & Paso & Acción \\\cline{2-3}
+		& 1    & El usuario hace la pregunta por voz. \\\cline{2-3}
+		& 2    & Mycroft convierte la pregunta a texto (STT). \\\cline{2-3}
+		& 3    & Mycroft ejecuta el código correspondiente a la pregunta. \\\cline{2-3}
+		& 4    & Mycroft convierte la respuesta a voz (TTS). \\\cline{2-3}
+		& 5	   & El usuario obtiene la respuesta. \\\hubu
+		Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{} \\
+	}
+
+	\tablaSmallSinColores{Caso de uso 2:  Pregunta por texto }{p{3cm} p{.75cm} p{9cm}}{pregunta_texto}{
+		\multicolumn{3}{p{10.25cm}}{CU-2: Pregunta por texto} \\
+	}
+	{
+		Descripción                            & \multicolumn{2}{p{10.25cm}}{La aplicación deberá responder al usuario tras la pregunta por texto.} \\\hubu
+		Precondiciones                         & \multicolumn{2}{p{10.25cm}}{El usuario se ha logueado en Moodle.} \\\hubu
+		\multirow{3}{3.5cm}{Secuencia}  & Paso & Acción \\\cline{2-3}
+		& 1    & El usuario introduce la pregunta. \\\cline{2-3}
+		& 2    & La aplicación envía la pregunta a Mycroft. \\\cline{2-3}
+		& 3    & Mycroft ejecuta el código correspondiente a la pregunta. \\\cline{2-3}
+		& 4    & Mycroft convierte la respuesta a voz (TTS). \\\cline{2-3}
+		& 5	   & El usuario obtiene la respuesta. \\\hubu
+		Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{} \\
+	}
+
+	\tablaSmallSinColores{Caso de uso 3:  Recordar credenciales }{p{3cm} p{.75cm} p{9cm}}{recordar_credenciales}{
+		\multicolumn{3}{p{10.25cm}}{CU-3: Recordar credenciales} \\
+	}
+	{
+		Descripción                            & \multicolumn{2}{p{10.25cm}}{La aplicación deberá recordar los credenciales de inicio de sesión.} \\\hubu
+		Precondiciones                         & \multicolumn{2}{p{10.25cm}}{} \\\hubu
+		\multirow{3}{3.5cm}{Secuencia}  & Paso & Acción \\\cline{2-3}
+		& 1    & El usuario introduce sus credenciales. \\\cline{2-3}
+		& 2    & El usuario marca las casillas de recordar. \\\cline{2-3}
+		& 3    & El usuario hace click en el botón acceder. \\\cline{2-3}
+		& 4    & La aplicación intenta loguear al usuario. \\\cline{2-3}
+		& 5	   & Si los credenciales son correctos la aplicación guarda los credenciales. \\\hubu
+		Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{} \\
+	}
+
+	\tablaSmallSinColores{Caso de uso 4:  Activar o desactivar micrófono }{p{3cm} p{.75cm} p{9cm}}{cambiar_microfono}{
+		\multicolumn{3}{p{10.25cm}}{CU-4: Activar o desactivar micrófono} \\
+	}
+	{
+		Descripción                            & \multicolumn{2}{p{10.25cm}}{La aplicación deberá cambiar el estado del micrófono.} \\\hubu
+		Precondiciones                         & \multicolumn{2}{p{10.25cm}}{} \\\hubu
+		\multirow{3}{3.5cm}{Secuencia}  & Paso & Acción \\\cline{2-3}
+		& 1    & El usuario hace click en el botón del micrófono. \\\cline{2-3}
+		& 2    & La aplicación cambia el estado del micrófono. \\\hubu
+		Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{} \\
+	}
+
+	\tablaSmallSinColores{Caso de uso 5:  Activar o desactivar \textit{skill} }{p{3cm} p{.75cm} p{9cm}}{cambiar_skill}{
+		\multicolumn{3}{p{10.25cm}}{CU-5: Activar o desactivar \textit{skill}} \\
+	}
+	{
+		Descripción                            & \multicolumn{2}{p{10.25cm}}{La aplicación deberá cambiar el estado de las \textit{skills}.} \\\hubu
+		Precondiciones                         & \multicolumn{2}{p{10.25cm}}{} \\\hubu
+		\multirow{3}{3.5cm}{Secuencia}  & Paso & Acción \\\cline{2-3}
+		& 1    & El usuario hace click en el botón de administrar \textit{skills}. \\\cline{2-3}
+		& 2    & El usuario marca las casillas de las \textit{skills} que quiere que estén activas. \\\cline{2-3}
+		& 3    & El usuario hace click en el botón guardar. \\\cline{2-3}
+		& 4    & La aplicación guarda el estado de las \textit{skills}. \\\hubu
+		Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{} \\
+	}
+
+	\tablaSmallSinColores{Caso de uso 6:  Ver logs \textit{skill} }{p{3cm} p{.75cm} p{9cm}}{ver_logs}{
+		\multicolumn{3}{p{10.25cm}}{CU-6: Ver logs \textit{skill}} \\
+	}
+	{
+		Descripción                            & \multicolumn{2}{p{10.25cm}}{La aplicación deberá mostrar los logs.} \\\hubu
+		Precondiciones                         & \multicolumn{2}{p{10.25cm}}{El usuario se ha logueado en Moodle.} \\\hubu
+		\multirow{3}{3.5cm}{Secuencia}  & Paso & Acción \\\cline{2-3}
+		& 1    & El usuario hace click en el botón de logs. \\\cline{2-3}
+		& 2    & La aplicación limpia los logs si es necesario. \\\cline{2-3}
+		& 3    & La aplicación muestra los logs. \\\cline{2-3}
+		& 4    & El usuario lee los logs. \\\hubu
+		Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{} \\
+	}
+
 \imagen{diagrama_casos_uso}{Diagrama de casos de uso}
 
