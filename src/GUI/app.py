@@ -398,7 +398,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
     def closeEvent(self, event):
         self.close = QtWidgets.QMessageBox()
         self.close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
-        self.close.setWindowTitle('UBUAssistant 1.2')
+        self.close.setWindowTitle(self.title)
         if environ['lang'] == 'es-es':
             self.close.setText("¿Estas seguro?")
         elif environ['lang'] == 'en-us':

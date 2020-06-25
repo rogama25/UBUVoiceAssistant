@@ -8,6 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
+import requests
 from GUI.app import AppMainWindow
 from webservice.web_service import WebService
 
@@ -25,6 +26,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.left = 100
         self.width = 750
         self.height = 600
+        self.true_text = 'True\n'
         environ['lang'] = 'es-es'
         self.setup_ui()
 
@@ -33,11 +35,11 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.setGeometry(self.top, self.left, self.width, self.height)
 
         self.invalid_credentials = QtWidgets.QMessageBox()
-        self.invalid_credentials.setWindowTitle('UBUAssistant 1.2')
+        self.invalid_credentials.setWindowTitle(self.title)
         self.missing_schema = QtWidgets.QMessageBox()
-        self.missing_schema.setWindowTitle('UBUAssistant 1.2')
+        self.missing_schema.setWindowTitle(self.title)
         self.different_lang = QtWidgets.QMessageBox()
-        self.different_lang.setWindowTitle('UBUAssistant 1.2')
+        self.different_lang.setWindowTitle(self.title)
 
         self.center_on_screen()
 
@@ -171,8 +173,9 @@ class LoginWindow(QtWidgets.QMainWindow):
         except KeyError:
             self.invalid_credentials.exec()
             return
-        except MissingSchema:
+        except requests.exceptions.MissingSchema:
             self.missing_schema.exec()
+            return
         ws.initialize_useful_data()
 
         # If Moodle lang is different from the selected
@@ -185,14 +188,14 @@ class LoginWindow(QtWidgets.QMainWindow):
             data_lines = data.readlines()
             if self.checkBox_remember_user.isChecked():
                 data_lines[0] = user+'\n'
-                data_lines[3] = 'True\n'
+                data_lines[3] = self.true_text
             else:
                 data_lines[0] = '\n'
                 data_lines[3] = '\n'
 
             if self.checkBox_remember_host.isChecked():
                 data_lines[1] = host+'\n'
-                data_lines[4] = 'True\n'
+                data_lines[4] = self.true_text
             else:
                 data_lines[1] = '\n'
                 data_lines[4] = '\n'
@@ -222,11 +225,11 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.host = ''
             data_lines = data.readlines()
 
-            if data_lines[3] == 'True\n':
+            if data_lines[3] == self.true_text:
                 self.user = data_lines[0].strip()
                 self.checkBox_remember_user.setChecked(True)
 
-            if data_lines[4] == 'True\n':
+            if data_lines[4] == self.true_text:
                 self.host = data_lines[1].strip()
                 self.checkBox_remember_host.setChecked(True)
 
@@ -243,7 +246,7 @@ class LoginWindow(QtWidgets.QMainWindow):
 
     def closeEvent(self, event):
         self.close = QtWidgets.QMessageBox()
-        self.close.setWindowTitle('UBUAssistant 1.2')
+        self.close.setWindowTitle(self.title)
         if environ['lang'] == 'es-es':
             self.close.setText("¿Estas seguro?")
         elif environ['lang'] == 'en-us':
