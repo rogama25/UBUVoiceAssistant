@@ -1,7 +1,7 @@
 import sys
 from os.path import expanduser
 from mycroft import MycroftSkill, intent_handler
-sys.path.append(expanduser('~') + '/UBUAssistant/src')
+sys.path.append(expanduser('~') + '/UBUAssistant-1.2/src')
 from model.discussion import Discussion
 from model.forum import Forum
 from util import util

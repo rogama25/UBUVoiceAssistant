@@ -20,7 +20,7 @@ class LoginWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.user_data_file = 'user_data.txt'
-        self.title = 'UBUAssistant'
+        self.title = 'UBUAssistant 1.2'
         self.top = 100
         self.left = 100
         self.width = 750
@@ -33,7 +33,11 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.setGeometry(self.top, self.left, self.width, self.height)
 
         self.invalid_credentials = QtWidgets.QMessageBox()
+        self.invalid_credentials.setWindowTitle('UBUAssistant 1.2')
+        self.missing_schema = QtWidgets.QMessageBox()
+        self.missing_schema.setWindowTitle('UBUAssistant 1.2')
         self.different_lang = QtWidgets.QMessageBox()
+        self.different_lang.setWindowTitle('UBUAssistant 1.2')
 
         self.center_on_screen()
 
@@ -45,24 +49,6 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.label_logo.setPixmap(QtGui.QPixmap('imgs/UBUAssistant_logo.png').scaled(443,300))
         self.label_logo.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.gridLayout.addWidget(self.label_logo, 1, 1, 1, 6)
-
-        self.checkBox_remember_user = QtWidgets.QCheckBox(self.centralwidget)
-        self.gridLayout.addWidget(self.checkBox_remember_user, 6, 4, 1, 1)
-
-        self.checkBox_remember_host = QtWidgets.QCheckBox(self.centralwidget)
-        self.gridLayout.addWidget(self.checkBox_remember_host, 6, 5, 1, 1)
-
-        self.pushButton_login = QtWidgets.QPushButton(self.centralwidget)
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(115, 210, 22))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        self.pushButton_login.setPalette(palette)
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        self.pushButton_login.setFont(font)
-        self.pushButton_login.clicked.connect(self.on_login_pressed)
-        self.gridLayout.addWidget(self.pushButton_login, 7, 4, 2, 2)
 
         self.label_user = QtWidgets.QLabel(self.centralwidget)
         self.label_user.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
@@ -82,12 +68,33 @@ class LoginWindow(QtWidgets.QMainWindow):
         spacer_item1 = QtWidgets.QSpacerItem(0, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
         self.gridLayout.addItem(spacer_item1, 6, 1, 1, 1)
 
-        self.lineEdit_host = QtWidgets.QLineEdit(self.centralwidget)
-        self.gridLayout.addWidget(self.lineEdit_host, 4, 5, 1, 1)
+        self.lineEdit_user = QtWidgets.QLineEdit(self.centralwidget)
+        self.gridLayout.addWidget(self.lineEdit_user, 2, 5, 1, 1)
 
         self.lineEdit_password = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_password.setEchoMode(QtWidgets.QLineEdit.Password)
         self.gridLayout.addWidget(self.lineEdit_password, 3, 5, 1, 1)
+
+        self.lineEdit_host = QtWidgets.QLineEdit(self.centralwidget)
+        self.gridLayout.addWidget(self.lineEdit_host, 4, 5, 1, 1)
+
+        self.checkBox_remember_user = QtWidgets.QCheckBox(self.centralwidget)
+        self.gridLayout.addWidget(self.checkBox_remember_user, 6, 4, 1, 1)
+
+        self.checkBox_remember_host = QtWidgets.QCheckBox(self.centralwidget)
+        self.gridLayout.addWidget(self.checkBox_remember_host, 6, 5, 1, 1)
+
+        self.pushButton_login = QtWidgets.QPushButton(self.centralwidget)
+        palette = QtGui.QPalette()
+        brush = QtGui.QBrush(QtGui.QColor(115, 210, 22))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
+        self.pushButton_login.setPalette(palette)
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        self.pushButton_login.setFont(font)
+        self.pushButton_login.clicked.connect(self.on_login_pressed)
+        self.gridLayout.addWidget(self.pushButton_login, 7, 4, 2, 2)
 
         self.comboBox_language = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_language.setGeometry(QtCore.QRect(350, 10, 140, 25))
@@ -98,9 +105,6 @@ class LoginWindow(QtWidgets.QMainWindow):
 
         spacer_item2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacer_item2, 2, 6, 1, 1)
-
-        self.lineEdit_user = QtWidgets.QLineEdit(self.centralwidget)
-        self.gridLayout.addWidget(self.lineEdit_user, 2, 5, 1, 1)
 
         spacer_item3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
         self.gridLayout.addItem(spacer_item3, 9, 1, 1, 1)
@@ -127,6 +131,7 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.lineEdit_host.setPlaceholderText("https://www.ejemplo.com")
             self.invalid_credentials.setText('Los credenciales introducidos no son válidos')
             self.different_lang.setText('AVISO: El idioma seleccionado y el idioma de Moodle son diferentes')
+            self.missing_schema.setText('URL inválida. Quizá te falte "https://" al inicio.')
             self.comboBox_language.setCurrentIndex(0)
         elif environ['lang'] == 'en-us':
             self.checkBox_remember_user.setText('Remember user')
@@ -140,10 +145,11 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.lineEdit_host.setPlaceholderText("https://www.example.com")
             self.invalid_credentials.setText('The given credentials are invalid')
             self.different_lang.setText('WARNING: The selected language and the Moodle language are different')
+            self.missing_schema.setText('Invalid URL. Perhaps you are missing "https://" at the beggining')
             self.comboBox_language.setCurrentIndex(1)
 
     def on_lang_selected(self, value):
-        """ Set the enviroment variable to the corresponding langugage """
+        """ Set the enviroment variable to the corresponding language """
         if value == 'Español':
             environ['lang'] = 'es-es'
         elif value == 'English':
@@ -165,6 +171,8 @@ class LoginWindow(QtWidgets.QMainWindow):
         except KeyError:
             self.invalid_credentials.exec()
             return
+        except MissingSchema:
+            self.missing_schema.exec()
         ws.initialize_useful_data()
 
         # If Moodle lang is different from the selected
@@ -177,9 +185,19 @@ class LoginWindow(QtWidgets.QMainWindow):
             data_lines = data.readlines()
             if self.checkBox_remember_user.isChecked():
                 data_lines[0] = user+'\n'
+                data_lines[3] = 'True\n'
+            else:
+                data_lines[0] = '\n'
+                data_lines[3] = '\n'
+
             if self.checkBox_remember_host.isChecked():
                 data_lines[1] = host+'\n'
-            data_lines[2] = environ['lang']
+                data_lines[4] = 'True\n'
+            else:
+                data_lines[1] = '\n'
+                data_lines[4] = '\n'
+
+            data_lines[2] = environ['lang']+'\n'
 
         with open(self.user_data_file, 'w') as data:
             data.writelines(data_lines)
@@ -200,10 +218,23 @@ class LoginWindow(QtWidgets.QMainWindow):
     def load_settings(self):
         """ Read the user_data.txt file and load the values in it """
         with open(self.user_data_file, 'r') as data:
+            self.user = ''
+            self.host = ''
             data_lines = data.readlines()
-            self.user = data_lines[0].strip()
-            self.host = data_lines[1].strip()
+
+            if data_lines[3] == 'True\n':
+                self.user = data_lines[0].strip()
+                self.checkBox_remember_user.setChecked(True)
+
+            if data_lines[4] == 'True\n':
+                self.host = data_lines[1].strip()
+                self.checkBox_remember_host.setChecked(True)
+
             environ['lang'] = data_lines[2].strip()
+
+    def keyPressEvent(self, event):
+        if event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return):
+            self.on_login_pressed()
 
     def center_on_screen(self):
         resolution = QtWidgets.QDesktopWidget().screenGeometry()
@@ -212,6 +243,7 @@ class LoginWindow(QtWidgets.QMainWindow):
 
     def closeEvent(self, event):
         self.close = QtWidgets.QMessageBox()
+        self.close.setWindowTitle('UBUAssistant 1.2')
         if environ['lang'] == 'es-es':
             self.close.setText("¿Estas seguro?")
         elif environ['lang'] == 'en-us':

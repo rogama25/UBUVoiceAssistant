@@ -1,7 +1,7 @@
 import sys
 from os.path import expanduser
 from mycroft import MycroftSkill, intent_handler
-sys.path.append(expanduser('~') + '/UBUAssistant/src')
+sys.path.append(expanduser('~') + '/UBUAssistant-1.2/src')
 from util import util
 from model.grade_item import GradeItem
 

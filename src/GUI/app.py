@@ -26,7 +26,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.mic_muted = False
         self.active_skills = []
         self.unactive_skills = []
-        self.title = 'UBUAssistant'
+        self.title = 'UBUAssistant 1.2'
         self.top = 0
         self.left = 0
         self.width = 500
@@ -386,6 +386,10 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.skills_dialog.hide()
         self.on_skills_pressed()
 
+    def keyPressEvent(self, event):
+        if event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return):
+            self.on_send_pressed()
+
     def center_on_screen(self):
         resolution = QtWidgets.QDesktopWidget().screenGeometry()
         self.move((resolution.width() / 2) - (self.frameSize().width() / 2),
@@ -394,6 +398,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
     def closeEvent(self, event):
         self.close = QtWidgets.QMessageBox()
         self.close.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
+        self.close.setWindowTitle('UBUAssistant 1.2')
         if environ['lang'] == 'es-es':
             self.close.setText("¿Estas seguro?")
         elif environ['lang'] == 'en-us':

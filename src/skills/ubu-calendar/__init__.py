@@ -1,7 +1,7 @@
 import sys
 from os.path import expanduser
 from datetime import datetime, timedelta
-sys.path.append(expanduser('~') + '/UBUAssistant/src')
+sys.path.append(expanduser('~') + '/UBUAssistant-1.2/src')
 from mycroft import MycroftSkill, intent_handler
 from util import util
 from model.event import Event
