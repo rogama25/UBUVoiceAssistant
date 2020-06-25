@@ -88,12 +88,15 @@ Clonamos el repositorio en nuestra carpeta personal mediante los comandos:
 	\item \textbf{git clone https://github.com/adp1002/UBUAssistant}
 \end{enumerate}
 
-Antes de nada hay que cambiar los ficheros \_\_init\_\_.py de las 3 skills (ubu-course, ubu-grades y ubu-course). En la línea 4, sys.path.append(expanduser('~') + '/UBUAssistant-1.X/src'), hay que cambiar /UBUAssistant-1.X/src a \textbf{/UBUAssistant/src}
+Antes de nada hay que cambiar los ficheros \_\_init\_\_.py de las 3 skills (ubu-course, ubu-grades y ubu-course en la carpeta /src/skills/). En la línea 4, sys.path.append(expanduser('~') + '/UBUAssistant-1.X/src'), hay que cambiar /UBUAssistant-1.X/src a \textbf{/UBUAssistant/src}
+
+Cuando Lo hayamos cambiado, mover el contenido de la carpeta \textbf{\detokenize{~}/src/skills/} a \textbf{/opt/mycroft/skills/}, ejecutando el comando:
+\textbf{sudo mv \detokenize{~}/UBUAssistant-1.X/src/skills/* /opt/mycroft/skills/})
 
 Para iniciar la aplicación vamos al directorio /src/ y ejecutamos mediante los comandos:
 \begin{enumerate}
 	\item \textbf{cd \detokenize{~}/UBUAssistant/src/}
-	\item \textbf{python3 -m GUI.main \detokenize{>}> logs.log}
+	\item \textbf{python3 -m GUI.main >\null> logs.log}
 \end{enumerate}
 
 \section{Pruebas del sistema}
