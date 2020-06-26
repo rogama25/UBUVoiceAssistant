@@ -6,7 +6,7 @@ class LogDialog(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
         self.resize(600, 600)
-        self.setWindowTitle('UBUAssistant Logs')
+        self.setWindowTitle('UBUVoiceAssistant Logs')
 
         self.tabs = QtWidgets.QTabWidget()
         self.tabs.addTab(LogTab('/var/log/mycroft/voice.log'), 'voice.log')

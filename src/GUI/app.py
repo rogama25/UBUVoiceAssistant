@@ -26,7 +26,7 @@ class AppMainWindow(QtWidgets.QMainWindow):
         self.mic_muted = False
         self.active_skills = []
         self.unactive_skills = []
-        self.title = 'UBUAssistant 1.2'
+        self.title = 'UBUVoiceAssistant 1.2'
         self.top = 0
         self.left = 0
         self.width = 500

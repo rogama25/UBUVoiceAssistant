@@ -21,7 +21,7 @@ class LoginWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.user_data_file = 'user_data.txt'
-        self.title = 'UBUAssistant 1.2'
+        self.title = 'UBUVoiceAssistant 1.2'
         self.top = 100
         self.left = 100
         self.width = 750
@@ -48,7 +48,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
 
         self.label_logo = QtWidgets.QLabel(self.centralwidget)
-        self.label_logo.setPixmap(QtGui.QPixmap('imgs/UBUAssistant_logo.png').scaled(443,300))
+        self.label_logo.setPixmap(QtGui.QPixmap('imgs/UBUVoiceAssistant_logo.png').scaled(443,300))
         self.label_logo.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.gridLayout.addWidget(self.label_logo, 1, 1, 1, 6)
 
