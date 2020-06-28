@@ -212,7 +212,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         with open(settings_path, 'w') as file:
             file.writelines(settings)
 
-        self.app_window = AppMainWindow()
+        self.app_window = AppMainWindow(ws)
         self.app_window.show()
         self.hide()
 

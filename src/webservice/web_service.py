@@ -4,17 +4,6 @@ from model.user import User
 
 
 class WebService:
-    __instance = None
-
-    # Singleton
-    def __init__(self):
-        WebService.__instance = self
-
-    @staticmethod
-    def get_instance():
-        if WebService.__instance is None:
-            return WebService()
-        return WebService.__instance
 
     def set_host(self, host):
         self.__host = host

@@ -18,9 +18,9 @@ from util import util
 
 class AppMainWindow(QtWidgets.QMainWindow):
 
-    def __init__(self):
+    def __init__(self, ws):
         super().__init__()
-        self.ws = WebService.get_instance()
+        self.ws = ws
         self.user_utterance = ''
         self.mycroft_response = ''
         self.mic_muted = False
