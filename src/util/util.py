@@ -5,7 +5,9 @@ from os import environ
 
 SOCKET_HOST = 'localhost'
 SOCKET_PORT = 5555
-moodle_words = {'opens': 'se abre', 'closes': 'se cierra'}
+moodle_words = {'opens': 'se abre', 'closes': 'se cierra', '&aacute;': 'á',
+                '&eacute;': 'é', '&iacute;': 'í', '&oacute;': 'ó',
+                '&uacute;': 'ú', '\xa0': ' '}
 
 
 def create_server_socket(unserialized_data, host=SOCKET_HOST, port=SOCKET_PORT):

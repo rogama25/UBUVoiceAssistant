@@ -142,8 +142,6 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.label_user.setText('User')
             self.label_password.setText('Password')
             self.label_host.setText('Host')
-            self.lineEdit_user.setText('adp1002@alu.ubu.es')
-            self.lineEdit_host.setText('https://ubuvirtual.ubu.es')
             self.lineEdit_host.setPlaceholderText("https://www.example.com")
             self.invalid_credentials.setText('The given credentials are invalid')
             self.different_lang.setText('WARNING: The selected language and the Moodle language are different')
