@@ -190,7 +190,16 @@ class AppMainWindow(QtWidgets.QMainWindow):
         server_socket.start()
 
         # Start Mycroft services
-        subprocess.run(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'all', 'restart'])
+        subprocess.run("docker start mycroft", shell=True)
+        print("Started")
+        try:
+            time.sleep(5)
+            result = subprocess.run("docker exec mycroft ./startup.sh", text=True, shell=True, capture_output=True, timeout=5)
+            print(result.stdout + "out")
+            print(result.stderr + "err")
+        except subprocess.TimeoutExpired:
+            pass
+        #subprocess.run(['bash', path.expanduser('~') + '/mycroft-core/start-mycroft.sh', 'all', 'restart'])
 
         # Wait until Mycroft services are started, there might be a better solution
         time.sleep(15)
@@ -407,7 +416,9 @@ class AppMainWindow(QtWidgets.QMainWindow):
 
         if self.close == QtWidgets.QMessageBox.Yes:
             self.timer.stop()
-            subprocess.run(['bash', path.expanduser('~') + '/mycroft-core/stop-mycroft.sh'])
+            #subprocess.run(['bash', path.expanduser('~') + '/mycroft-core/stop-mycroft.sh'])
+            subprocess.run("docker exec -it mycroft ./stop-mycroft.sh", shell=True)
+            subprocess.run("docker stop mycroft", shell=True)
             event.accept()
         else:
             event.ignore()
