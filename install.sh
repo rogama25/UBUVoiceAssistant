@@ -32,6 +32,9 @@ apt-get install docker-ce docker-ce-cli containerd.io
 # Get Mycroft Docker image
 docker pull mycroftai/docker-mycroft
 
+# Prepare user folder
+sudo -u $USERNAME mkdir -p ~/.config/mycroft-docker
+
 # Create docker container
 sudo -u $USERNAME docker create -v ~/.config/mycroft-docker:/root/.mycroft \
     --device /dev/snd -e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native \
