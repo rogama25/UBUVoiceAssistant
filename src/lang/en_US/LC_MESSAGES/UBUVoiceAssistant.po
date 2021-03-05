@@ -1,0 +1,43 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-03-05 17:34+0100\n"
+"PO-Revision-Date: 2021-03-05 17:39+0100\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.1\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en_US\n"
+
+#: src/GUI/main.py:23
+msgid "login"
+msgstr "Login"
+
+#: src/GUI/main.py:24
+msgid "remember host"
+msgstr "Remember host"
+
+#: src/GUI/main.py:25
+msgid "remember username"
+msgstr ""
+
+#: src/GUI/main.py:26
+msgid "moodle url"
+msgstr ""
+
+#: src/GUI/main.py:27
+msgid "password"
+msgstr ""
+
+#: src/GUI/main.py:28
+msgid "username"
+msgstr ""
