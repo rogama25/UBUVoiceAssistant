@@ -52,6 +52,7 @@ install() {
 
   # Prepare user folder
   sudo -u $USERNAME mkdir -p /home/${USERNAME}/.config/mycroft-docker
+  sudo -u $USERNAME mkdir -p /home/${USERNAME}/.config/UBUVoiceAssistant
 
   # Create docker container
   printf "${GREEN}Creating docker container...${NC}\n"
