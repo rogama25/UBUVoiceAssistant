@@ -1,3 +1,3 @@
 #!/bin/bash
-pylint src
-pylint --disable=E0401 src/skills
+pylint src -ry
+pylint --disable=E0401 src/skills -ry

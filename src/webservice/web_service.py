@@ -1,9 +1,14 @@
+"""WebService file
+"""
+from typing import List
 import requests
 from ..model.course import Course
 from ..model.user import User
 
 
 class WebService:
+    """WebService class
+    """
     def __init__(self) -> None:
         self.__host = None
         self.__url_with_token = None
@@ -11,26 +16,31 @@ class WebService:
         self.__lang = None
         self.__user_courses = None
 
-    def set_host(self, host):
+    def set_host(self, host: str):
+        """Sets the WebService host
+
+        Args:
+            host (str): A string with the host name
+        """
         self.__host = host
 
     # Code to obtain the user's cookies/session for web scraping
-    '''def set_session_cookies(self, username, password):
-        self.__session = requests.Session()
-        host_login = "https://ubuvirtual.ubu.es/login/index.php"
+    # def set_session_cookies(self, username, password):
+    #     self.__session = requests.Session()
+    #     host_login = "https://ubuvirtual.ubu.es/login/index.php"
 
-        page = self.__session.get(host_login)
-        soup = BeautifulSoup(page.content, 'html.parser')
-        login_token = soup.find('input', {'name': 'logintoken'})
-        login_token = login_token.get('value')
-        form_params = {'username': username, 'password': password, 'logintoken':login_token}
+    #     page = self.__session.get(host_login)
+    #     soup = BeautifulSoup(page.content, 'html.parser')
+    #     login_token = soup.find('input', {'name': 'logintoken'})
+    #     login_token = login_token.get('value')
+    #     form_params = {'username': username, 'password': password, 'logintoken':login_token}
 
-        self.__session.post(host_login, data=form_params)
-        #soup = BeautifulSoup(page.content, 'html.parser')
-        #session_key = soup.find('script', {'type':'text/javascript'})
-        #session_key = str(session_key).split('"sesskey":"')[1].split('"')[0]
-        #print(session_key)
-        self.cookies = self.__session.cookies.get_dict()'''
+    #     self.__session.post(host_login, data=form_params)
+    #     #soup = BeautifulSoup(page.content, 'html.parser')
+    #     #session_key = soup.find('script', {'type':'text/javascript'})
+    #     #session_key = str(session_key).split('"sesskey":"')[1].split('"')[0]
+    #     #print(session_key)
+    #     self.cookies = self.__session.cookies.get_dict()
 
     def set_url_with_token(self, username, password):
         """ Gets Moodle's token and initializes the url
@@ -62,10 +72,20 @@ class WebService:
         self.__user = User(str(req['userid']))
         self.__lang = req['lang']
 
-    def get_lang(self):
+    def get_lang(self) -> str:
+        """Gets Moodle language
+
+        Returns:
+            str: A string containing the Moodle language
+        """
         return self.__lang
 
-    def get_user(self):
+    def get_user(self) -> User:
+        """Gets the current user
+
+        Returns:
+            User: the current User object
+        """
         return self.__user
 
     def set_user_courses(self):
@@ -83,7 +103,12 @@ class WebService:
             self.__user_courses.append(course)
             self.get_user().set_course(course)
 
-    def get_user_courses(self):
+    def get_user_courses(self) -> List[Course]:
+        """Gets the list of courses for the current user
+
+        Returns:
+            List[Course]: List of Courses
+        """
         return self.__user_courses
 
     def get_calendar_day_view(self, year, month_number, day):

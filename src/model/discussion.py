@@ -1,3 +1,6 @@
+"""Module of the Discussion class
+"""
+
 class Discussion():
     """ Represents a Moodle's discussion.
     ---
@@ -12,8 +15,18 @@ class Discussion():
         self.__discussion_id = discussion['discussion']
         self.__name = discussion['name']
 
-    def get_id(self):
+    def get_id(self) -> int: # TODO Check type
+        """Gets the id of the discussion
+
+        Returns:
+            int: id of the discussion
+        """
         return self.__discussion_id
 
-    def get_name(self):
+    def get_name(self) -> str:
+        """Gets the name of the discussion
+
+        Returns:
+            str: name of the discussion
+        """
         return self.__name

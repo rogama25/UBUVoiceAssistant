@@ -60,7 +60,7 @@ install() {
       --device /dev/snd -e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native \
       -v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
       -v ~/.config/pulse/cookie:/root/.config/pulse/cookie \
-      -p 8181:8181 --name mycroft mycroftai/docker-mycroft
+      -p 8181:8181 -p 5555:5555 --name mycroft mycroftai/docker-mycroft
   printf "${GREEN}Created docker container${NC}\n"
 
   # Copy UBU skills inside

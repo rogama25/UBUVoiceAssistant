@@ -1,9 +1,8 @@
 import sys
-from os.path import expanduser
-from mycroft import MycroftSkill, intent_handler
-sys.path.append("/usr/lib/UBUVoiceAssistant")
-from util import util
-from model.grade_item import GradeItem
+from mycroft import MycroftSkill, intent_handler # type: ignore
+sys.path.append("/usr/lib/UBUVoiceAssistant") # type: ignore
+from util import util # type: ignore
+from model.grade_item import GradeItem # type: ignore
 
 
 class UbuGradesSkill(MycroftSkill):

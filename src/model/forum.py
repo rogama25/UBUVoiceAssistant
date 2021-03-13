@@ -1,3 +1,9 @@
+"""Module for the Forum class
+"""
+
+from typing import List
+from ..model.discussion import Discussion
+
 class Forum():
     """ Represents a Moodle's forum.
     ---
@@ -14,11 +20,26 @@ class Forum():
         self.__name = forum['name']
         self.__discussions = discussions
 
-    def get_id(self):
+    def get_id(self) -> int: # TODO Revisar si es correcto
+        """Gets the id of the Forum
+
+        Returns:
+            int: Forum id
+        """
         return self.__id
 
-    def get_name(self):
+    def get_name(self) -> str:
+        """Gets the forum name
+
+        Returns:
+            str: Forum name
+        """
         return self.__name
 
-    def get_discussions(self):
+    def get_discussions(self) -> List[Discussion]:
+        """Gets the Discussions of the Forum
+
+        Returns:
+            List[Discussion]: List of Discussions
+        """
         return self.__discussions

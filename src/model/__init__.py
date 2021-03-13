@@ -1,3 +1,5 @@
+"""Package for the model classes
+"""
 from .course import *
 from .discussion import *
 from .event import *

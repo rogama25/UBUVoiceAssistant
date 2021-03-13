@@ -1,3 +1,5 @@
+"""Module for the Event class
+"""
 import re
 
 
@@ -16,10 +18,20 @@ class Event():
         self.__name = event['name']
         self.__date = re.sub('<.*?>', '', event['formattedtime'])
 
-    def get_name(self):
+    def get_name(self) -> str:
+        """Gets the Event name
+
+        Returns:
+            str: event name
+        """
         return self.__name
 
-    def get_date(self):
+    def get_date(self) -> str:
+        """Gets the event date
+
+        Returns:
+            str: the event date
+        """
         return self.__date
 
     def __str__(self):
