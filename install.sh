@@ -66,6 +66,10 @@ install() {
   # Copy UBU skills inside
   printf "${GREEN}Installing UBU skills...${NC}\n"
   sudo -u $USERNAME docker cp ./src/skills/. mycroft:/opt/mycroft/skills
+  sudo -u $USERNAME mkdir -p /tmp/UBUVoiceAssistant
+  sudo -u $USERNAME cp -r ./src/model /tmp/UBUVoiceAssistant/
+  sudo -u $USERNAME cp -r ./src/util /tmp/UBUVoiceAssistant/
+  sudo -u $USERNAME docker cp /tmp/UBUVoiceAssistant mycroft:/usr/lib/
   printf "${GREEN}Installed UBU skills${NC}\n"
 
   # Installing to a permanent location
