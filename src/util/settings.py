@@ -1,13 +1,6 @@
 import json
 from typing import Any
-
-
-class Singleton(type): # https://stackoverflow.com/questions/6760685/creating-a-singleton-in-python
-    _instances = {}
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
+from util import Singleton
 
 
 class Settings(metaclass = Singleton):
@@ -25,18 +18,18 @@ class Settings(metaclass = Singleton):
         try:
             with open("~/.config/UBUVoiceAssistant/config.cfg") as config_file:
                 self._config = json.load(config_file)
-        except OSError as e:
-            print("Error loading config file", e)
-        if not "user" in self:
+        except OSError as ex:
+            print("Error loading config file", ex)
+        if "user" not in self:
             self["user"] = None
-        if not "host" in self:
+        if "host" not in self:
             self["host"] = None
-        if not "lang" in self:
+        if "lang" not in self:
             self["lang"] = "es_ES"
 
     def save_settings(self) -> None:
         try:
             with open("~/.config/UBUVoiceAssistant/config.cfg", "w") as config_file:
                 json.dump(self._config, config_file)
-        except OSError as e:
-            print("Error saving config file", e)
+        except OSError as ex:
+            print("Error saving config file", ex)

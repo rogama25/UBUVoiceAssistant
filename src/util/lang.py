@@ -1,13 +1,14 @@
 import gettext
-from babel import Locale
 from typing import Union, List, Tuple
 import os
 import json
+from babel import Locale
+from util import Singleton
 
 
-class Translator:
+class Translator(metaclass = Singleton):
     def __init__(self, lang: str) -> None:
-        self._lang = None # String like en_US
+        self._lang = None  # String like en_US
         self._available_langs = []
         self._language_names = []
         self._domain = "UBUVoiceAssistant"
@@ -31,14 +32,16 @@ class Translator:
         self._available_langs = []
         self._language_names = []
         for locale in os.listdir(self._lang_dir):
-            if os.path.isfile(self._lang_dir + "/" + locale + "/LC_MESSAGES/" + self._domain + ".mo"):
+            if os.path.isfile(self._lang_dir + "/" + locale + "/LC_MESSAGES/" +
+                              self._domain + ".mo"):
                 self._available_langs.append(locale)
                 self._language_names.append(
                     Locale(*locale.split("_")).language_name)
         return self._language_names
 
     def get_current_language(self) -> Tuple[str]:
-        current_name = self._language_names[self._available_langs.index(self._lang)]
+        current_name = self._language_names[self._available_langs.index(
+            self._lang)]
         return self._lang, current_name
 
     def update_mycroft_config(self) -> None:

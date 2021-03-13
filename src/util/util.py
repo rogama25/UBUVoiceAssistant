@@ -44,8 +44,8 @@ def text_to_speech(string_array):
 
 def translate_moodle_words(string):
     if environ['lang'] == 'es-es':
-        for k, v in moodle_words.items():
-            string = re.sub(k, v, string)
+        for k, val in moodle_words.items():
+            string = re.sub(k, val, string)
     return string
 
 
@@ -54,3 +54,10 @@ def get_course_id_by_name(course_to_find, user_courses):
         if course_to_find.upper() in course.get_name().upper():
             return str(course.get_id())
     return None
+
+class Singleton(type): # https://stackoverflow.com/questions/6760685/creating-a-singleton-in-python
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]

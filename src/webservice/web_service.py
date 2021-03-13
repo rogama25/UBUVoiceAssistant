@@ -1,9 +1,15 @@
 import requests
-from model.course import Course
-from model.user import User
+from ..model.course import Course
+from ..model.user import User
 
 
 class WebService:
+    def __init__(self) -> None:
+        self.__host = None
+        self.__url_with_token = None
+        self.__user = None
+        self.__lang = None
+        self.__user_courses = None
 
     def set_host(self, host):
         self.__host = host
@@ -40,8 +46,8 @@ class WebService:
         """
         url = self.__host + '/login/token.php'
         url_params = {'username': username, 'password': password, 'service': 'moodle_mobile_app'}
-        r = requests.post(url, params=url_params).json()
-        token = r['token']
+        req = requests.post(url, params=url_params).json()
+        token = req['token']
         self.__url_with_token = self.__host + '/webservice/rest/server.php?wstoken=' \
             + token + '&moodlewsrestformat=json&wsfunction='
 
@@ -52,9 +58,9 @@ class WebService:
             data such as the user's id and the Moodle's language.
         """
         url = self.__url_with_token + 'core_webservice_get_site_info'
-        r = requests.get(url).json()
-        self.__user = User(str(r['userid']))
-        self.__lang = r['lang']
+        req = requests.get(url).json()
+        self.__user = User(str(req['userid']))
+        self.__lang = req['lang']
 
     def get_lang(self):
         return self.__lang
@@ -68,10 +74,11 @@ class WebService:
             Sends a GET request using core_enrol_get_users_courses to retrieve
             the courses that the user is enrolled in.
         """
-        url = self.__url_with_token + 'core_enrol_get_users_courses&userid=' + self.get_user().get_id()
-        r = requests.get(url).json()
+        url = (self.__url_with_token + 'core_enrol_get_users_courses&userid='
+            + self.get_user().get_id())
+        req = requests.get(url).json()
         self.__user_courses = []
-        for course in r:
+        for course in req:
             course = Course(course)
             self.__user_courses.append(course)
             self.get_user().set_course(course)
@@ -91,8 +98,8 @@ class WebService:
         """
         url = self.__url_with_token + 'core_calendar_get_calendar_day_view&year=' \
             + year + '&month=' + month_number + '&day=' + day
-        r = requests.get(url).json()
-        return r
+        req = requests.get(url).json()
+        return req
 
     def get_calendar_events_by_courseid(self, courseid):
         """ GET request using core_calendar_get_action_events_by_course
@@ -101,9 +108,10 @@ class WebService:
                 - String courseid: id of the course to get the events from
             Returns: JSONObject with the request response.
         """
-        url = self.__url_with_token + 'core_calendar_get_action_events_by_course&courseid=' + courseid
-        r = requests.get(url).json()
-        return r
+        url = (self.__url_with_token + 'core_calendar_get_action_events_by_course&courseid='
+            + courseid)
+        req = requests.get(url).json()
+        return req
 
     def get_calendar_upcoming_view(self):
         """ GET request using core_calendar_get_action_events_by_course
@@ -111,18 +119,19 @@ class WebService:
             Returns: JSONObject with the request response.
         """
         url = self.__url_with_token + 'core_calendar_get_calendar_upcoming_view'
-        r = requests.get(url).json()
-        return r
+        req = requests.get(url).json()
+        return req
 
     def get_final_grades(self):
         """ GET request using gradereport_overview_get_course_grades
         ---
             Returns: JSONObject with the request response.
         """
-        url = self.__url_with_token + 'gradereport_overview_get_course_grades&userid=' + self.get_user().get_id()
-        r = requests.get(url).json()
+        url = (self.__url_with_token + 'gradereport_overview_get_course_grades&userid='
+            + self.get_user().get_id())
+        req = requests.get(url).json()
         grades = []
-        for course_grade in r['grades']:
+        for course_grade in req['grades']:
             course_id = course_grade['courseid']
             course = self.get_user().get_courses().get(str(course_id))
             grade = course_grade['grade']
@@ -140,9 +149,9 @@ class WebService:
         """
         url = self.__url_with_token + 'core_course_get_updates_since&courseid=' \
             + courseid + '&since=' + str(timestamp)
-        r = requests.get(url).json()
+        req = requests.get(url).json()
         updated_modules_ids = []
-        for updates in r['instances']:
+        for updates in req['instances']:
             updated_modules_ids.append(updates['id'])
         return updated_modules_ids
 
@@ -157,8 +166,8 @@ class WebService:
         updated_modules = []
         for cmid in cmid_array:
             url = self.__url_with_token + 'core_course_get_course_module&cmid=' + str(cmid)
-            r = requests.get(url).json()
-            updated_modules.append(r['cm']['name'])
+            req = requests.get(url).json()
+            updated_modules.append(req['cm']['name'])
         return updated_modules
 
     def get_course_grades(self, courseid):
@@ -171,8 +180,8 @@ class WebService:
         """
         url = self.__url_with_token + 'gradereport_user_get_grade_items&courseid=' \
             + courseid + '&userid=' + self.get_user().get_id()
-        r = requests.get(url).json()
-        return r['usergrades'][0]
+        req = requests.get(url).json()
+        return req['usergrades'][0]
 
     def get_course_forums(self, courseid):
         """ GET request using mod_forum_get_forums_by_courses
@@ -183,8 +192,8 @@ class WebService:
             Returns: JSONObject with the request response.
         """
         url = self.__url_with_token + 'mod_forum_get_forums_by_courses&courseids[0]=' + courseid
-        r = requests.get(url).json()
-        return r
+        req = requests.get(url).json()
+        return req
 
     def get_forum_discussions(self, forumid):
         """ GET request using mod_forum_get_forum_discussions
@@ -195,8 +204,8 @@ class WebService:
             Returns: JSONObject with the request response.
         """
         url = self.__url_with_token + 'mod_forum_get_forum_discussions&forumid=' + forumid
-        r = requests.get(url).json()
-        return r
+        req = requests.get(url).json()
+        return req
 
     def get_forum_discussion_posts(self, discussionid):
         """ GET request using mod_forum_get_forum_discussion_posts
@@ -206,6 +215,7 @@ class WebService:
 
             Returns: JSONObject with the request response.
         """
-        url = self.__url_with_token + 'mod_forum_get_forum_discussion_posts&discussionid=' + discussionid
-        r = requests.get(url).json()
-        return r
+        url = (self.__url_with_token + 'mod_forum_get_forum_discussion_posts&discussionid='
+            + discussionid)
+        req = requests.get(url).json()
+        return req

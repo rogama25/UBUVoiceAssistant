@@ -1,11 +1,10 @@
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import sys
 import requests
-from GUI.app import AppMainWindow
-from webservice.web_service import WebService
-from util import lang
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
+from ..webservice.web_service import WebService
+from ..util.lang import Translator
 
-translator = lang.Translator("en_US")
+translator = Translator("en_US")
 _ = translator.translate
 
 class LoginWindow(QtWidgets.QMainWindow):
