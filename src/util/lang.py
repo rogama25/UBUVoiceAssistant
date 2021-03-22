@@ -11,19 +11,20 @@ from ..util.util import Singleton
 class Translator(metaclass = Singleton):
     """A class with some translation-related utilities. It's a Singleton.
     """
-    def __init__(self, lang: str) -> None:
+    def __init__(self, lang: str = "en_US") -> None:
         """Constructor of the Translator class
 
         Args:
             lang (str): Language to use. A string like "en_US" for American English
                 or "es_ES" for Spanish
         """
-        self._lang = None  # String like en_US
-        self._available_langs = []
-        self._language_names = []
+        self._lang: str = None  # type: ignore
+        #String like "en_US"
+        self._available_langs: List[str] = []
+        self._language_names: List[str] = []
         self._domain = "UBUVoiceAssistant"
         self._lang_dir = "./lang"
-        self._translator: gettext.GNUTranslations = None
+        self._translator: gettext.NullTranslations = None # type: ignore
         self.find_available_languages()
         self.change_language(lang)
 
@@ -35,10 +36,11 @@ class Translator(metaclass = Singleton):
         """
         if isinstance(lang, int):
             self.change_language(self._available_langs[lang])
-        self._lang = lang
-        self._translator = gettext.translation(
-            self._domain, self._lang_dir, [self._lang])
-        self.update_mycroft_config()
+        else:
+            self._lang = lang
+            self._translator = gettext.translation(
+                self._domain, self._lang_dir, [self._lang])
+            self.update_mycroft_config()
 
     def translate(self, string: str) -> str:
         """Gets the translated string
@@ -68,7 +70,7 @@ class Translator(metaclass = Singleton):
                     Locale(*locale.split("_")).language_name)
         return self._language_names
 
-    def get_current_language(self) -> Tuple[str]:
+    def get_current_language(self) -> Tuple[str, str]:
         """Gets the current selected language
 
         Returns:

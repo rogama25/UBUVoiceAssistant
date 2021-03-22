@@ -1,5 +1,6 @@
 """Module for the main UI
 """
+from src.GUI.link_mycroft import LinkMycroft
 import sys, requests, time, subprocess
 from threading import Thread
 from os import path
@@ -11,7 +12,7 @@ from .progress_box import ProgressBox
 from ..util.lang import Translator
 from ..util.util import create_server_socket
 
-translator = Translator("en_US")
+translator = Translator()
 _ = translator.translate
 
 class LoginWindow(QtWidgets.QMainWindow):
@@ -104,6 +105,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         """Checks if Mycroft was started and launches next window
         """
         if not path.isfile("~/.config/mycroft-docker/identity/identity2.json"):
+            new_window = LinkMycroft(self.bus)
             
 
 if __name__ == "__main__":

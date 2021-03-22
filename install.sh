@@ -19,7 +19,7 @@ install() {
 
   # Get python packages
   printf "${GREEN}Installing system dependencies...${NC}\n"
-  apt-get install python3-pip python3-pyqt5 -y
+  apt-get install python3-pip python3-pyqt5 python3-pyqt5.qtwebengine -y
   pip3 install mycroft-messagebus-client
   printf "${GREEN}Finished installing system dependencies${NC}\n"
 
@@ -59,7 +59,8 @@ install() {
   sudo -u $USERNAME docker create -v /home/${USERNAME}/.config/mycroft-docker:/root/.mycroft \
       --device /dev/snd -e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native \
       -v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
-      -v ~/.config/pulse/cookie:/root/.config/pulse/cookie \
+      -v /home/${USERNAME}/.config/pulse/cookie:/root/.config/pulse/cookie \
+      -v /var/log/mycroft-docker:/var/log/mycroft \
       -p 8181:8181 -p 5555:5555 --name mycroft mycroftai/docker-mycroft
   printf "${GREEN}Created docker container${NC}\n"
 
