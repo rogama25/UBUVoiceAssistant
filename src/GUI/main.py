@@ -1,10 +1,11 @@
 """Module for the main UI
 """
+from PyQt5.QtCore import QTimer
 from src.GUI.link_mycroft import LinkMycroft
 import sys, requests, time, subprocess
 from threading import Thread
 from os import path
-from PyQt5 import QtCore, QtWidgets, uic
+from PyQt5 import QtWidgets, uic
 from mycroft_bus_client import MessageBusClient
 from ..webservice.web_service import WebService
 from .message_box import MessageBox
@@ -28,6 +29,8 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.btnLogin.clicked.connect(self.on_login)
         self.update_texts()
         self.mycroft_started = False
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.check_mycroft_started)
         self.show()
 
     # pylint: disable=R0201
@@ -76,6 +79,8 @@ class LoginWindow(QtWidgets.QMainWindow):
         mycroft_starter = Thread(self.start_mycroft)
         mycroft_starter.start()
 
+        self.timer.start(1000)
+
     def update_texts(self) -> None:
         """Retranslates the UI texts
         """
@@ -96,17 +101,21 @@ class LoginWindow(QtWidgets.QMainWindow):
         time.sleep(2)
         try:
             result = subprocess.run("docker exec mycroft ./startup.sh", text=True, shell=True, capture_output=True, timeout=5)
-            print(result.stdout + "out")
-            print(result.stderr + "err")
         except subprocess.TimeoutExpired:
             pass
 
     def check_mycroft_started(self):
         """Checks if Mycroft was started and launches next window
         """
+        if not self.mycroft_started:
+            return
+        self.timer.stop()
+        self.starting_window.close()
         if not path.isfile("~/.config/mycroft-docker/identity/identity2.json"):
-            new_window = LinkMycroft(self.bus)
-            
+            self.new_window = LinkMycroft(self.bus)
+            self.hide()
+            self.new_window.show()
+            self.new_window.closed_signal.connect(self.check_mycroft_started)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
