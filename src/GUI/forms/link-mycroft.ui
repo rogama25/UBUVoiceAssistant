@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>link_mycroft</string>
+   <string>UBUVoiceAssistant</string>
   </property>
   <widget class="QLabel" name="lblWelcome">
    <property name="geometry">

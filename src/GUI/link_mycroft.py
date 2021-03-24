@@ -5,7 +5,7 @@ import time
 import sys
 from threading import Thread
 import subprocess
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets, QtGui, uic
 from PyQt5.QtCore import QThread, QTimer, pyqtSignal
 from mycroft_bus_client import MessageBusClient, Message  # type: ignore
 from ..util.lang import Translator
@@ -22,6 +22,7 @@ class LinkMycroft(QtWidgets.QMainWindow):
     def __init__(self, bus: MessageBusClient) -> None:
         self.closed_signal = pyqtSignal()
         super().__init__()
+        uic.loadUi("./GUI/forms/link-mycroft.ui", self)
         self.page = 0
         self.done = False
         self.code = _("wait a second")
