@@ -31,6 +31,8 @@ class ChatWindow(QtWidgets.QMainWindow):
         self.mic_muted_icon = QtGui.QIcon(QtGui.QPixmap("imgs/mic_muted.svg"))
 
         self.color = self.palette().color(QtGui.QPalette.ColorRole.Background).getRgb()
+        # We need to divide this to get a floating value for HTML
+        self.color[3] /= 255.0
         self.btnMute.clicked.connect(self.on_send_pressed)
 
         self.dangerous_skills = ['mycroft-volume.mycroftai',
@@ -49,16 +51,26 @@ class ChatWindow(QtWidgets.QMainWindow):
         self.bus.on("speak", self.handle_speak)
         self.bus.on("recognizer_loop:utterance", self.handle_utterance)
 
-        self.bus.emit(Message("skillmanager.deactivate", {"skill": "mycroft-volume.mycroftai"}))
+        self.bus.emit(Message("skillmanager.deactivate", {
+                      "skill": "mycroft-volume.mycroftai"}))
 
         self.web: QWebEngineView
-        self.web.page().runJavaScript
+        with open("./GUI/forms/chat_window_html/message-bubbles.html") as file:
+            self.web.setHtml(file.read())
+        self.web.page().runJavaScript("document.body.style.backgroundColor = rgba(" +
+                                      ','.join(map(str, self.color)) + ");")
 
     def update_texts(self):
         pass
 
-    def update_chat(self, source: str):
-        pass
+    def update_chat(self, source: str, message: str):
+        js_string = "var chat = document.getElementById('chat-window');\n"
+        js_string += "var msg = document.createElement('li');\n"
+        if source == "u":
+            js_string += "msg.classList.add('right-msg');\n"
+        js_string += "msg.appendChild(document.createTextNode('" + message + "'));\n"
+        js_string += "chat.appendChild(msg);"
+        self.web.page().runJavaScript(js_string)
 
     def handle_speak(self, message: Message):
         self.mycroft_response = message.data.get("utterance")
@@ -68,6 +80,6 @@ class ChatWindow(QtWidgets.QMainWindow):
 
     def check_for_chat_update(self):
         if self.user_utterance:
-            self.update_chat("u")
+            self.update_chat("u", self.user_utterance)
         if self.mycroft_response:
-            self.update_chat("r")
+            self.update_chat("r", self.mycroft_response)
