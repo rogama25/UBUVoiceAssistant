@@ -2,7 +2,10 @@
 """
 from PyQt5.QtCore import QTimer
 from src.GUI.link_mycroft import LinkMycroft
-import sys, requests, time, subprocess
+import sys
+import requests
+import time
+import subprocess
 from threading import Thread
 from os import path
 from PyQt5 import QtWidgets, uic
@@ -16,9 +19,11 @@ from ..util.util import create_server_socket
 translator = Translator()
 _ = translator.translate
 
+
 class LoginWindow(QtWidgets.QMainWindow):
     """Class for the login window
     """
+
     def __init__(self):
         super().__init__()
         uic.loadUi("./GUI/forms/login.ui", self)
@@ -94,13 +99,14 @@ class LoginWindow(QtWidgets.QMainWindow):
     def start_mycroft(self):
         def f_mycroft_started():
             self.mycroft_started = True
-        
+
         self.bus = MessageBusClient()
         self.bus.on("mycroft.ready", f_mycroft_started)
         subprocess.run("docker start mycroft", shell=True)
         time.sleep(2)
         try:
-            result = subprocess.run("docker exec mycroft ./startup.sh", text=True, shell=True, capture_output=True, timeout=5)
+            result = subprocess.run("docker exec mycroft ./startup.sh",
+                                    text=True, shell=True, capture_output=True, timeout=5)
         except subprocess.TimeoutExpired:
             pass
 
@@ -116,6 +122,7 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.hide()
             self.new_window.show()
             self.new_window.closed_signal.connect(self.check_mycroft_started)
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

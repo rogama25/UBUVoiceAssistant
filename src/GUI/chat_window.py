@@ -1,6 +1,6 @@
 from threading import Thread
 import subprocess
-from typing import List
+from typing import List, Union
 from os import path, listdir
 from PyQt5 import QtGui, QtWidgets, uic, QtCore
 from PyQt5.QtWebEngineWidgets import QWebEngineView
@@ -30,7 +30,8 @@ class ChatWindow(QtWidgets.QMainWindow):
         self.mic_icon = QtGui.QIcon(QtGui.QPixmap("imgs/ic.svg"))
         self.mic_muted_icon = QtGui.QIcon(QtGui.QPixmap("imgs/mic_muted.svg"))
 
-        self.color = self.palette().color(QtGui.QPalette.ColorRole.Background).getRgb()
+        self.color: List[Union[int, float]] = list(
+            self.palette().color(QtGui.QPalette.ColorRole.Background).getRgb())
         # We need to divide this to get a floating value for HTML
         self.color[3] /= 255.0
         self.btnMute.clicked.connect(self.on_send_pressed)
@@ -41,8 +42,8 @@ class ChatWindow(QtWidgets.QMainWindow):
                                  'fallback-query.mycroftai',
                                  'mycroft-configuration.mycroftai']
 
-        [self.active_skills.append(name) for name in listdir('/opt/mycroft/skills/')
-            if path.isdir('/opt/mycroft/skills/' + name) and name not in self.dangerous_skills]  # type: ignore
+        [self.active_skills.append(name) for name in listdir('/opt/mycroft/skills/')  # type: ignore
+            if path.isdir('/opt/mycroft/skills/' + name) and name not in self.dangerous_skills]
 
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.check_for_chat_update)  # type: ignore
@@ -68,7 +69,8 @@ class ChatWindow(QtWidgets.QMainWindow):
         js_string += "var msg = document.createElement('li');\n"
         if source == "u":
             js_string += "msg.classList.add('right-msg');\n"
-        js_string += "msg.appendChild(document.createTextNode('" + message + "'));\n"
+        js_string += "msg.appendChild(document.createTextNode('" + \
+            message + "'));\n"
         js_string += "chat.appendChild(msg);"
         self.web.page().runJavaScript(js_string)
 
