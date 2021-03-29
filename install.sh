@@ -3,6 +3,7 @@
 USERNAME=$SUDO_USER
 GREEN='\033[0;32m'
 NC='\033[0m'
+DIR=`pwd`
 
 help() {
   echo "UBUVoiceAssistant installer"
@@ -23,63 +24,91 @@ install() {
   pip3 install mycroft-messagebus-client
   printf "${GREEN}Finished installing system dependencies${NC}\n"
 
-  # Add docker dependencies
-  printf "${GREEN}Downloading docker dependencies...${NC}\n"
-  apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
-  printf "${GREEN}Finished downloading docker dependencies${NC}\n"
+  # # Add docker dependencies
+  # printf "${GREEN}Downloading docker dependencies...${NC}\n"
+  # apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
+  # printf "${GREEN}Finished downloading docker dependencies${NC}\n"
 
-  # Add Docker repo
-  printf "${GREEN}Adding docker repository for Ubuntu...${NC}\n"
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-    $(lsb_release -cs) stable"
-  printf "${GREEN}Finished adding docker repository${NC}\n"
+  # # Add Docker repo
+  # printf "${GREEN}Adding docker repository for Ubuntu...${NC}\n"
+  # curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  # add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+  #   $(lsb_release -cs) stable" -y
+  # printf "${GREEN}Finished adding docker repository${NC}\n"
 
-  # Force-refresh packages
-  printf "${GREEN}Refreshing packages...${NC}\n"
-  apt-get update
-  printf "${GREEN}Finished refreshing packages${NC}\n"
+  # # Force-refresh packages
+  # printf "${GREEN}Refreshing packages...${NC}\n"
+  # apt-get update
+  # printf "${GREEN}Finished refreshing packages${NC}\n"
 
-  # Install Docker
-  printf "${GREEN}Installing docker...${NC}\n"
-  apt-get install docker-ce docker-ce-cli containerd.io
-  printf "${GREEN}Finished installing docker${NC}\n"
+  # # Install Docker
+  # printf "${GREEN}Installing docker...${NC}\n"
+  # apt-get install docker-ce docker-ce-cli containerd.io
+  # printf "${GREEN}Finished installing docker${NC}\n"
 
-  # Get Mycroft Docker image
-  printf "${GREEN}Getting Mycroft image from docker...${NC}\n"
-  docker pull mycroftai/docker-mycroft
-  printf "${GREEN}Mycroft image downloaded${NC}\n"
+  # # Get Mycroft Docker image
+  # printf "${GREEN}Getting Mycroft image from docker...${NC}\n"
+  # docker pull mycroftai/docker-mycroft
+  # printf "${GREEN}Mycroft image downloaded${NC}\n"
 
   # Prepare user folder
-  sudo -u $USERNAME mkdir -p /home/${USERNAME}/.config/mycroft-docker
+  # sudo -u $USERNAME mkdir -p /home/${USERNAME}/.config/mycroft-docker
   sudo -u $USERNAME mkdir -p /home/${USERNAME}/.config/UBUVoiceAssistant
+  # mkdir -p /opt/mycroft-docker
 
-  # Create docker container
-  printf "${GREEN}Creating docker container...${NC}\n"
-  sudo -u $USERNAME docker create -v /home/${USERNAME}/.config/mycroft-docker:/root/.mycroft \
-      --device /dev/snd -e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native \
-      -v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
-      -v /home/${USERNAME}/.config/pulse/cookie:/root/.config/pulse/cookie \
-      -v /var/log/mycroft-docker:/var/log/mycroft \
-      -p 8181:8181 -p 5555:5555 --name mycroft mycroftai/docker-mycroft
-  printf "${GREEN}Created docker container${NC}\n"
+  # # Create docker container
+  # printf "${GREEN}Creating docker container...${NC}\n"
+  # sudo -u $USERNAME docker create --device /dev/snd -e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native \
+  # -v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
+  # -v ~/.config/pulse/cookie:/root/.config/pulse/cookie \
+  # -p 8181:8181 --name mycroft mycroftai/docker-mycroft
+
+  # docker cp -a mycroft:/root/.mycroft/. /home/${USERNAME}/.config/mycroft-docker
+  # docker cp -a mycroft:/var/log/mycroft/. /var/log/mycroft-docker
+  # docker cp -a mycroft:/opt/mycroft/. /opt/mycroft-docker
+
+  # sudo -u $USERNAME docker rm -v mycroft
+
+  # sudo -u $USERNAME docker create -v /home/${USERNAME}/.config/mycroft-docker:/root/.mycroft \
+  #     --device /dev/snd -e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native \
+  #     -v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
+  #     -v /home/${USERNAME}/.config/pulse/cookie:/root/.config/pulse/cookie \
+  #     -v /var/log/mycroft-docker:/var/log/mycroft -v /opt/mycroft-docker:/opt/mycroft \
+  #     -p 8181:8181 -p 5555:5555 --name mycroft mycroftai/docker-mycroft
+  # printf "${GREEN}Created docker container${NC}\n"
+  
+  printf "${GREEN}Downloading Mycroft...${NC}\n"
+  mkdir -p /usr/lib/mycroft-core
+  chown $USERNAME /usr/lib/mycroft-core
+  cd /usr/lib/mycroft-core
+  sudo -u $USERNAME git clone https://github.com/MycroftAI/mycroft-core.git .
+  printf "${GREEN}Finished downloading Mycroft${NC}\n"
+
+  printf "${GREEN}Configuring Mycroft...${NC}\n"
+  echo YYYY | bash dev_setup.sh -sm
+  printf "${GREEN}Finished configuring Mycroft${NC}\n"
 
   # Copy UBU skills inside
   printf "${GREEN}Installing UBU skills...${NC}\n"
-  sudo -u $USERNAME docker cp ./src/skills/. mycroft:/opt/mycroft/skills
-  sudo -u $USERNAME mkdir -p /tmp/UBUVoiceAssistant
-  sudo -u $USERNAME cp -r ./src/model /tmp/UBUVoiceAssistant/
-  sudo -u $USERNAME cp -r ./src/util /tmp/UBUVoiceAssistant/
-  sudo -u $USERNAME docker cp /tmp/UBUVoiceAssistant mycroft:/usr/lib/
+  # sudo -u $USERNAME docker cp ./src/UBUVoiceAssistant/skills/. mycroft:/opt/mycroft/skills
+  # sudo -u $USERNAME mkdir -p /tmp/UBUVoiceAssistant
+  # sudo -u $USERNAME cp -r ./src/UBUVoiceAssistant/model /tmp/UBUVoiceAssistant/
+  # sudo -u $USERNAME cp -r ./src/UBUVoiceAssistant/util /tmp/UBUVoiceAssistant/
+  # sudo -u $USERNAME cp -r ./src/UBUVoiceAssistant/webservice /tmp/UBUVoiceAssistant/
+  # sudo -u $USERNAME docker cp /tmp/UBUVoiceAssistant mycroft:/usr/lib/
+  cd $DIR
+  sudo -u $USERNAME cp ./src/UBUVoiceAssistant/skills/. /opt/mycroft/skills
   printf "${GREEN}Installed UBU skills${NC}\n"
 
   # Installing to a permanent location
   printf "${GREEN}Installing to a permanent location...${NC}\n"
   mkdir -p /usr/lib/UBUVoiceAssistant
   echo "#!/bin/bash" > /usr/bin/UBUVoiceAssistant
-  echo "cd /usr/lib/UBUVoiceAssistant" >> /usr/bin/UBUVoiceAssistant
-  echo "python3 -m GUI.main" >> /usr/bin/UBUVoiceAssistant
-  cp ./src/. /usr/lib/UBUVoiceAssistant
+  echo "cd /usr/lib" >> /usr/bin/UBUVoiceAssistant
+  echo "python3 -m UBUVoiceAssistant.GUI.main" >> /usr/bin/UBUVoiceAssistant
+  chmod a+x /usr/bin/UBUVoiceAssistant
+  xdg-desktop-menu forceupdate
+  cp -r ./src/UBUVoiceAssistant/. /usr/lib/UBUVoiceAssistant
   printf "${GREEN}Installed to a permanent location${NC}\n"
 
   # Create app launcher icon
@@ -97,8 +126,10 @@ install() {
 
 uninstall() {
   rm -rf /usr/lib/UBUVoiceAssistant
-  rm -f /usr/lib/UBUVoiceAssistant
+  rm -f /usr/bin/UBUVoiceAssistant
   rm -f /usr/share/applications/UBUVoiceAssistant.desktop
+  # rm -rf /home/${USERNAME}/.config/mycroft-docker
+  # rm -rf /opt/mycroft-docker
   printf "${GREEN}UBUVoiceAssistant was uninstalled. You may want to remove the docker containers to free space using the following commands:${NC}\n"
   echo "docker rm -v mycroft"
   echo "docker image rm mycroftai/docker-mycroft"
