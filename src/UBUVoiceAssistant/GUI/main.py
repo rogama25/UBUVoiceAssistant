@@ -1,8 +1,8 @@
 """Module for the main UI
 """
-from PyQt5.QtCore import QTimer
-from src.GUI.link_mycroft import LinkMycroft
 import sys
+from PyQt5.QtCore import QTimer
+from ..GUI.link_mycroft import LinkMycroft
 import requests
 import time
 import subprocess
@@ -26,7 +26,7 @@ class LoginWindow(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
-        uic.loadUi("./GUI/forms/login.ui", self)
+        uic.loadUi("./UBUVoiceAssistant/GUI/forms/login.ui", self)
         self.dropLang: QtWidgets.QComboBox
         self.dropLang.addItems(translator.find_available_languages())
         self.dropLang.currentIndexChanged.connect(self.on_lang_changed)
@@ -126,5 +126,6 @@ class LoginWindow(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+    app.setApplicationName("UBUVoiceAssistant")
     window = LoginWindow()
     app.exec_()

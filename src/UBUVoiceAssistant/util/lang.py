@@ -4,13 +4,14 @@ import gettext
 from typing import Union, List, Tuple
 import os
 import json
-from babel import Locale # type: ignore
+from babel import Locale  # type: ignore
 from ..util.util import Singleton
 
 
-class Translator(metaclass = Singleton):
+class Translator(metaclass=Singleton):
     """A class with some translation-related utilities. It's a Singleton.
     """
+
     def __init__(self, lang: str = "en_US") -> None:
         """Constructor of the Translator class
 
@@ -19,12 +20,12 @@ class Translator(metaclass = Singleton):
                 or "es_ES" for Spanish
         """
         self._lang: str = None  # type: ignore
-        #String like "en_US"
+        # String like "en_US"
         self._available_langs: List[str] = []
         self._language_names: List[str] = []
         self._domain = "UBUVoiceAssistant"
-        self._lang_dir = "./lang"
-        self._translator: gettext.NullTranslations = None # type: ignore
+        self._lang_dir = "./UBUVoiceAssistant/lang"
+        self._translator: gettext.NullTranslations = None  # type: ignore
         self.find_available_languages()
         self.change_language(lang)
 
@@ -84,8 +85,11 @@ class Translator(metaclass = Singleton):
         """Updates Mycroft config file.
         """
         lang_string = self.get_current_language()[0].lower().replace("_", "-")
-        with open("~/.config/mycroft-docker/mycroft.conf", "r") as mycroft_cfg_file:
-            mycroft_cfg = json.load(mycroft_cfg_file)
+        try:
+            with open(os.path.expanduser("~/.mycroft/mycroft.conf"), "r") as mycroft_cfg_file:  # type: ignore
+                mycroft_cfg = json.load(mycroft_cfg_file)
+        except FileNotFoundError:
+            mycroft_cfg = {}
         mycroft_cfg["lang"] = lang_string
         if "tts" not in mycroft_cfg:
             mycroft_cfg["tts"] = {}
@@ -94,5 +98,5 @@ class Translator(metaclass = Singleton):
             mycroft_cfg["tts"]["google"] = {}
         mycroft_cfg["tts"]["google"]["lang"] = lang_string
         mycroft_cfg["tts"]["google"]["slow"] = False
-        with open("~/.config/mycroft-docker/mycroft.conf", "w") as mycroft_cfg_file:
+        with open(os.path.expanduser("~/.mycroft/mycroft.conf"), "w") as mycroft_cfg_file:  # type: ignore
             json.dump(mycroft_cfg, mycroft_cfg_file)

@@ -22,7 +22,7 @@ class LinkMycroft(QtWidgets.QMainWindow):
     def __init__(self, bus: MessageBusClient) -> None:
         self.closed_signal = pyqtSignal()
         super().__init__()
-        uic.loadUi("./GUI/forms/link-mycroft.ui", self)
+        uic.loadUi("./UBUVoiceAssistant/GUI/forms/link-mycroft.ui", self)
         self.page = 0
         self.done = False
         self.code = _("wait a second")

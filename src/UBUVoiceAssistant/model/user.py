@@ -30,7 +30,7 @@ class User():
         """
         return self.__user_id
 
-    def get_courses(self) -> Dict[Course]:
+    def get_courses(self) -> Dict[int, Course]:
         """Gets the list of courses
 
         Returns:

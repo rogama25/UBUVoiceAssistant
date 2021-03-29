@@ -16,7 +16,7 @@ _ = Translator().translate
 class ChatWindow(QtWidgets.QMainWindow):
     def __init__(self, bus: MessageBusClient, ws: WebService) -> None:
         super().__init__()
-        uic.loadUi("./GUI/forms/chat-window.ui", self)
+        uic.loadUi("./UBUVoiceAssistant/GUI/forms/chat-window.ui", self)
         self.bus = bus
         self.ws = ws
         self.user_utterance = ""
@@ -42,8 +42,8 @@ class ChatWindow(QtWidgets.QMainWindow):
                                  'fallback-query.mycroftai',
                                  'mycroft-configuration.mycroftai']
 
-        [self.active_skills.append(name) for name in listdir('/opt/mycroft/skills/')  # type: ignore
-            if path.isdir('/opt/mycroft/skills/' + name) and name not in self.dangerous_skills]
+        [self.active_skills.append(name) for name in listdir('/opt/mycroft-docker/skills/')  # type: ignore
+            if path.isdir('/opt/mycroft-docker/skills/' + name) and name not in self.dangerous_skills]
 
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.check_for_chat_update)  # type: ignore
