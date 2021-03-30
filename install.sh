@@ -54,6 +54,7 @@ install() {
   # Prepare user folder
   # sudo -u $USERNAME mkdir -p /home/${USERNAME}/.config/mycroft-docker
   sudo -u $USERNAME mkdir -p /home/${USERNAME}/.config/UBUVoiceAssistant
+  sudo -u $USERNAME mkdir -p /home/${USERNAME}/.mycroft
   # mkdir -p /opt/mycroft-docker
 
   # # Create docker container
@@ -85,7 +86,7 @@ install() {
   printf "${GREEN}Finished downloading Mycroft${NC}\n"
 
   printf "${GREEN}Configuring Mycroft...${NC}\n"
-  echo YYYY | bash dev_setup.sh -sm
+  echo YYYY | sudo -u $USERNAME bash dev_setup.sh -sm
   printf "${GREEN}Finished configuring Mycroft${NC}\n"
 
   # Copy UBU skills inside
@@ -97,7 +98,7 @@ install() {
   # sudo -u $USERNAME cp -r ./src/UBUVoiceAssistant/webservice /tmp/UBUVoiceAssistant/
   # sudo -u $USERNAME docker cp /tmp/UBUVoiceAssistant mycroft:/usr/lib/
   cd $DIR
-  sudo -u $USERNAME cp ./src/UBUVoiceAssistant/skills/. /opt/mycroft/skills
+  sudo -u $USERNAME cp -r ./src/UBUVoiceAssistant/skills/. /opt/mycroft/skills
   printf "${GREEN}Installed UBU skills${NC}\n"
 
   # Installing to a permanent location
@@ -128,6 +129,8 @@ uninstall() {
   rm -rf /usr/lib/UBUVoiceAssistant
   rm -f /usr/bin/UBUVoiceAssistant
   rm -f /usr/share/applications/UBUVoiceAssistant.desktop
+  rm -rf /usr/lib/mycroft-core
+  rm -rf /home/${USERNAME}/.mycroft
   # rm -rf /home/${USERNAME}/.config/mycroft-docker
   # rm -rf /opt/mycroft-docker
   printf "${GREEN}UBUVoiceAssistant was uninstalled. You may want to remove the docker containers to free space using the following commands:${NC}\n"

@@ -1,5 +1,7 @@
 from threading import Thread
 import subprocess
+import sys
+import os
 from typing import List, Union
 from os import path, listdir
 from PyQt5 import QtGui, QtWidgets, uic, QtCore
@@ -15,7 +17,7 @@ _ = Translator().translate
 
 class ChatWindow(QtWidgets.QMainWindow):
     def __init__(self, bus: MessageBusClient, ws: WebService) -> None:
-        super().__init__()
+        super().__init__(parent=None)
         uic.loadUi("./UBUVoiceAssistant/GUI/forms/chat-window.ui", self)
         self.bus = bus
         self.ws = ws
@@ -42,8 +44,8 @@ class ChatWindow(QtWidgets.QMainWindow):
                                  'fallback-query.mycroftai',
                                  'mycroft-configuration.mycroftai']
 
-        [self.active_skills.append(name) for name in listdir('/opt/mycroft-docker/skills/')  # type: ignore
-            if path.isdir('/opt/mycroft-docker/skills/' + name) and name not in self.dangerous_skills]
+        [self.active_skills.append(name) for name in listdir('/opt/mycroft/skills/')  # type: ignore
+            if path.isdir('/opt/mycroft/skills/' + name) and name not in self.dangerous_skills]
 
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.check_for_chat_update)  # type: ignore
@@ -56,13 +58,19 @@ class ChatWindow(QtWidgets.QMainWindow):
                       "skill": "mycroft-volume.mycroftai"}))
 
         self.web: QWebEngineView
-        with open("./GUI/forms/chat_window_html/message-bubbles.html") as file:
-            self.web.setHtml(file.read())
-        self.web.page().runJavaScript("document.body.style.backgroundColor = rgba(" +
-                                      ','.join(map(str, self.color)) + ");")
+        self.web.loadFinished.connect(self.update_texts)
+        self.web.load(QtCore.QUrl.fromLocalFile(
+            os.path.abspath(os.getcwd())+"/UBUVoiceAssistant/GUI/forms/chat_window_html/message-bubbles.html"))
+        # with open("./UBUVoiceAssistant/GUI/forms/chat_window_html/message-bubbles.html") as file:
+        #     self.web.setHtml(file.read(), baseUrl=QtCore.QUrl().fromLocalFile(
+        #         os.path.abspath(os.getcwd())+"/UBUVoiceAssistant/GUI/forms/chat_window_html"))
 
     def update_texts(self):
-        pass
+        print(self.color)
+        js_color = "document.body.style.backgroundColor = 'rgba(" + ','.join(
+            map(str, self.color)) + ")';"
+        self.web.page().runJavaScript(js_color)
+        self.web.page().runJavaScript("document.documentElement.style.overflowX = 'hidden';")
 
     def update_chat(self, source: str, message: str):
         js_string = "var chat = document.getElementById('chat-window');\n"
@@ -83,5 +91,36 @@ class ChatWindow(QtWidgets.QMainWindow):
     def check_for_chat_update(self):
         if self.user_utterance:
             self.update_chat("u", self.user_utterance)
+            self.user_utterance = ""
         if self.mycroft_response:
             self.update_chat("r", self.mycroft_response)
+            self.mycroft_response = ""
+
+    def closeEvent(self, event: QtGui.QCloseEvent) -> None:
+        self.close_window = MessageBox(_("are you sure?"))
+        self.close_window.setStandardButtons(
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
+        self.close_res = self.close_window.exec()
+        print(self.close_res)
+        if self.close_res == QtWidgets.QMessageBox.Yes:
+            self.timer.stop()
+            self.closing_window = ProgressBox(_("closing mycroft"))
+            self.closing_window.show()
+            self.closing_thread = CloseMycroft()
+            self.closing_thread.finished.connect(  # type: ignore
+                self.finish_exit)
+            self.closing_thread.start()
+        else:
+            event.ignore()
+
+    def finish_exit(self):
+        sys.exit(0)
+
+    def on_send_pressed(self):
+        pass
+
+
+class CloseMycroft(QtCore.QThread):
+    def run(self):
+        subprocess.run("/usr/lib/mycroft-core/stop-mycroft.sh", shell=True)
+        self.finished.emit()

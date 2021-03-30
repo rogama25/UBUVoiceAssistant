@@ -2,9 +2,9 @@
 """
 import sys
 from PyQt5.QtCore import QTimer
+import time
 from ..GUI.link_mycroft import LinkMycroft
 import requests
-import time
 import subprocess
 from threading import Thread
 from os import path
@@ -15,6 +15,7 @@ from .message_box import MessageBox
 from .progress_box import ProgressBox
 from ..util.lang import Translator
 from ..util.util import create_server_socket
+from .chat_window import ChatWindow
 
 translator = Translator()
 _ = translator.translate
@@ -55,11 +56,11 @@ class LoginWindow(QtWidgets.QMainWindow):
         if not host:
             host = "https://ubuvirtual.ubu.es"
 
-        ws = WebService()
-        ws.set_host(host)
+        self.ws = WebService()
+        self.ws.set_host(host)
 
         try:
-            ws.set_url_with_token(user, password)
+            self.ws.set_url_with_token(user, password)
         # If the credentials are incorrect
         except KeyError:
             MessageBox(_("invalid credentials")).exec_()
@@ -67,12 +68,12 @@ class LoginWindow(QtWidgets.QMainWindow):
         except requests.exceptions.MissingSchema:
             MessageBox(_("missing url schema")).exec_()
             return
-        ws.initialize_useful_data()
+        self.ws.initialize_useful_data()
 
         # If Moodle lang is different from the selected
-        if ws.get_lang() not in translator.get_current_language():
+        if self.ws.get_lang() not in translator.get_current_language():
             MessageBox(_("language not supported by moodle")).exec_()
-        ws.set_user_courses()
+        self.ws.set_user_courses()
 
         self.starting_window = ProgressBox(_("starting mycroft"))
         self.starting_window.show()
@@ -81,7 +82,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         server_socket.setDaemon(True)
         server_socket.start()
 
-        mycroft_starter = Thread(self.start_mycroft)
+        mycroft_starter = Thread(target=self.start_mycroft)
         mycroft_starter.start()
 
         self.timer.start(1000)
@@ -97,18 +98,16 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.lblUser.setText(_("username"))
 
     def start_mycroft(self):
-        def f_mycroft_started():
+        def f_mycroft_started(event):
             self.mycroft_started = True
 
         self.bus = MessageBusClient()
         self.bus.on("mycroft.ready", f_mycroft_started)
-        subprocess.run("docker start mycroft", shell=True)
-        time.sleep(2)
-        try:
-            result = subprocess.run("docker exec mycroft ./startup.sh",
-                                    text=True, shell=True, capture_output=True, timeout=5)
-        except subprocess.TimeoutExpired:
-            pass
+        subprocess.run(
+            "/usr/lib/mycroft-core/start-mycroft.sh all", shell=True)
+        time.sleep(3)
+        self.bus.run_in_thread()
+        print("Launched Mycroft")
 
     def check_mycroft_started(self):
         """Checks if Mycroft was started and launches next window
@@ -117,11 +116,15 @@ class LoginWindow(QtWidgets.QMainWindow):
             return
         self.timer.stop()
         self.starting_window.close()
-        if not path.isfile("~/.config/mycroft-docker/identity/identity2.json"):
+        if not path.isfile(path.expanduser("~/.mycroft/identity/identity2.json")):
             self.new_window = LinkMycroft(self.bus)
-            self.hide()
             self.new_window.show()
+            self.hide()
             self.new_window.closed_signal.connect(self.check_mycroft_started)
+        else:
+            self.new_window = ChatWindow(self.bus, self.ws)
+            self.new_window.show()
+            self.hide()
 
 
 if __name__ == "__main__":

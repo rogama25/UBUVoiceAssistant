@@ -18,24 +18,27 @@ _ = Translator().translate
 class LinkMycroft(QtWidgets.QMainWindow):
     """Class for the linking Mycroft to web UI
     """
+    
+    closed_signal = pyqtSignal()
 
     def __init__(self, bus: MessageBusClient) -> None:
-        self.closed_signal = pyqtSignal()
         super().__init__()
         uic.loadUi("./UBUVoiceAssistant/GUI/forms/link-mycroft.ui", self)
         self.page = 0
         self.done = False
         self.code = _("wait a second")
 
-        self.btnPrev.setIcon(QtWidgets.QStyle.StandardPixmap.SP_ArrowLeft)
+        self.btnPrev.setIcon(self.style().standardIcon(
+            QtWidgets.QStyle.StandardPixmap.SP_ArrowLeft))
         self.btnPrev.clicked.connect(self.go_previous)
-        self.btnNext.setIcon(QtWidgets.QStyle.StandardPixmap.SP_ArrowRight)
+        self.btnNext.setIcon(self.style().standardIcon(
+            QtWidgets.QStyle.StandardPixmap.SP_ArrowRight))
         self.btnNext.clicked.connect(self.go_next)
 
-        self.file = open("/var/log/mycroft-docker/skills.log", "rb")
+        self.file = open("/var/log/mycroft/skills.log", "r")
         self.file.seek(0, 2)  # Goes to the end of the file
         msg = Message("recognizer_loop:utterance",
-                      utterance=[_("pair device")])
+                      data={'utterance': _("pair my device")})
         # On other languages different than English, we must send again the phrase for it to start pairing
         bus.emit(msg)
         bus.on("configuration.updated", self.pairing_done)
@@ -46,7 +49,7 @@ class LinkMycroft(QtWidgets.QMainWindow):
         self.code_checker.start()
         self.timer.start(1000)
 
-    def pairing_done(self):
+    def pairing_done(self, event):
         self.done = True
         self.file.close()
         self.close()
@@ -56,11 +59,15 @@ class LinkMycroft(QtWidgets.QMainWindow):
 
     def read_pairing_code(self):
         while not self.done:
+            print("Reading...")
             line = self.file.readline()
             if line:
+                print(line)
                 matches = re.findall(
                     "(?<=" + re.escape("PairingSkill | Pairing code: ") + ").+(?=\n)", line)
-                self.code = matches[0]
+                print(matches)
+                if matches:
+                    self.code = matches[0]
             else:
                 time.sleep(1)
 
@@ -124,8 +131,9 @@ class LinkMycroft(QtWidgets.QMainWindow):
             self.close_window = MessageBox(_("are you sure?"))
             self.close_window.setStandardButtons(
                 QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
-            self.close_window.exec()
-            if self.close == QtWidgets.QMessageBox.Yes:
+            self.close_res = self.close_window.exec()
+            print(self.close_res)
+            if self.close_res == QtWidgets.QMessageBox.Yes:
                 self.timer.stop()
                 self.closing_window = ProgressBox(_("closing mycroft"))
                 self.closing_window.show()
@@ -142,4 +150,5 @@ class LinkMycroft(QtWidgets.QMainWindow):
 
 class CloseMycroft(QThread):
     def run(self):
-        subprocess.run("docker stop mycroft", shell=True)
+        subprocess.run("/usr/lib/mycroft-core/stop-mycroft.sh", shell=True)
+        self.finished.emit()
