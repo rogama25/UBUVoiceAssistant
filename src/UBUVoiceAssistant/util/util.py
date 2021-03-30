@@ -6,6 +6,7 @@ import re
 from os import environ
 from typing import List, Optional
 from ..model.course import Course
+from .settings import Settings
 
 SOCKET_HOST = 'localhost'
 SOCKET_PORT = 5555
@@ -79,7 +80,8 @@ def translate_moodle_words(string: str) -> str:
     Returns:
         str: Better strings
     """
-    if environ['lang'] == 'es-es':
+    cfg = Settings()
+    if cfg['lang'] == 'es-es':
         for k, val in moodle_words.items():
             string = re.sub(k, val, string)
     return string

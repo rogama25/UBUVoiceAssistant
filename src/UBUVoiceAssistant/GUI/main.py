@@ -115,6 +115,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         if not self.mycroft_started:
             return
         self.timer.stop()
+        self.starting_window.done = True
         self.starting_window.close()
         if not path.isfile(path.expanduser("~/.mycroft/identity/identity2.json")):
             self.new_window = LinkMycroft(self.bus)

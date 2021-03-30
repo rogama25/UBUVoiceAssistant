@@ -2,6 +2,7 @@
 """
 import json
 from typing import Any
+from os.path import expanduser
 from ..util.util import Singleton
 
 
@@ -24,7 +25,7 @@ class Settings(metaclass = Singleton):
         """Loads and parses the settings file.
         """
         try:
-            with open("~/.config/UBUVoiceAssistant/config.cfg") as config_file:
+            with open(expanduser("~/.config/UBUVoiceAssistant/config.cfg")) as config_file:
                 self._config = json.load(config_file)
         except OSError as ex:
             print("Error loading config file", ex)
@@ -39,7 +40,7 @@ class Settings(metaclass = Singleton):
         """Saves the settings to disk.
         """
         try:
-            with open("~/.config/UBUVoiceAssistant/config.cfg", "w") as config_file:
+            with open(expanduser("~/.config/UBUVoiceAssistant/config.cfg"), "w") as config_file:
                 json.dump(self._config, config_file)
         except OSError as ex:
             print("Error saving config file", ex)

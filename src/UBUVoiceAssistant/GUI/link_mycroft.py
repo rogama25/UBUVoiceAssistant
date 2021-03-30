@@ -28,6 +28,13 @@ class LinkMycroft(QtWidgets.QMainWindow):
         self.done = False
         self.code = _("wait a second")
 
+        self.update_texts()
+        self.hide_all_elements()
+
+        self.imgAddDevice.setVisible(True)
+        self.lblRegisterAddDevice.setVisible(True)
+        self.btnNext.setEnabled(True)
+
         self.btnPrev.setIcon(self.style().standardIcon(
             QtWidgets.QStyle.StandardPixmap.SP_ArrowLeft))
         self.btnPrev.clicked.connect(self.go_previous)
@@ -45,7 +52,7 @@ class LinkMycroft(QtWidgets.QMainWindow):
         self.timer = QTimer()
         self.timer.timeout.connect(self.add_pairing_code)  # type: ignore
 
-        self.code_checker = Thread(target=self.read_pairing_code)
+        self.code_checker = Thread(target=self.read_pairing_code, daemon=True)
         self.code_checker.start()
         self.timer.start(1000)
 
