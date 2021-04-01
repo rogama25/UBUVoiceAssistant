@@ -15,6 +15,7 @@ from .message_box import MessageBox
 from .progress_box import ProgressBox
 from ..util.lang import Translator
 from ..util.util import create_server_socket
+from ..util.settings import Settings
 from .chat_window import ChatWindow
 
 translator = Translator()
@@ -28,8 +29,11 @@ class LoginWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("./UBUVoiceAssistant/GUI/forms/login.ui", self)
+        self.cfg = Settings()
         self.dropLang: QtWidgets.QComboBox
-        self.dropLang.addItems(translator.find_available_languages())
+        langs = translator.find_available_languages()
+        self.dropLang.addItems(langs)
+        self.dropLang.setCurrentIndex(langs.index("English"))
         self.dropLang.currentIndexChanged.connect(self.on_lang_changed)
         self.btnLogin: QtWidgets.QPushButton
         self.btnLogin.clicked.connect(self.on_login)
@@ -46,9 +50,12 @@ class LoginWindow(QtWidgets.QMainWindow):
         Args:
             value (int): new position of the dropdown menu
         """
+        print("Lang changed", value)
         translator.change_language(value)
+        self.update_texts()
 
     def on_login(self):
+        self.cfg.save_settings()
         user = str(self.tbxUser.text())
         password = self.tbxPassword.text()
         host = str(self.tbxHost.text())
@@ -63,19 +70,19 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.ws.set_url_with_token(user, password)
         # If the credentials are incorrect
         except KeyError:
-            MessageBox(_("invalid credentials")).exec_()
+            MessageBox(_("Invalid Moodle username or password.")).exec_()
             return
         except requests.exceptions.MissingSchema:
-            MessageBox(_("missing url schema")).exec_()
+            MessageBox(_("Missing http:// or https:// at the beginning")).exec_()
             return
         self.ws.initialize_useful_data()
 
         # If Moodle lang is different from the selected
         if self.ws.get_lang() not in translator.get_current_language():
-            MessageBox(_("language not supported by moodle")).exec_()
+            MessageBox(_("This language is not supported by your Moodle server")).exec_()
         self.ws.set_user_courses()
 
-        self.starting_window = ProgressBox(_("starting mycroft"))
+        self.starting_window = ProgressBox(_("Starting Mycroft, please wait..."))
         self.starting_window.show()
 
         server_socket = Thread(target=create_server_socket, args=[self.ws])
@@ -90,12 +97,13 @@ class LoginWindow(QtWidgets.QMainWindow):
     def update_texts(self) -> None:
         """Retranslates the UI texts
         """
-        self.btnLogin.setText(_("login"))
-        self.chkHost.setText(_("remember host"))
-        self.chkUser.setText(_("remember username"))
-        self.lblHost.setText(_("moodle url"))
-        self.lblPassword.setText(_("password"))
-        self.lblUser.setText(_("username"))
+        print("Updating texts...", _("Login"))
+        self.btnLogin.setText(_("Login"))
+        self.chkHost.setText(_("Remember host"))
+        self.chkUser.setText(_("Remember username"))
+        self.lblHost.setText(_("Moodle url"))
+        self.lblPassword.setText(_("Password"))
+        self.lblUser.setText(_("Username"))
 
     def start_mycroft(self):
         def f_mycroft_started(event):

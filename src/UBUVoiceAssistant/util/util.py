@@ -101,12 +101,3 @@ def get_course_id_by_name(course_to_find: str, user_courses: List[Course]) -> Op
         if course_to_find.upper() in course.get_name().upper():
             return str(course.get_id())
     return None
-
-class Singleton(type): # https://stackoverflow.com/questions/6760685/creating-a-singleton-in-python
-    """Singleton class
-    """
-    _instances = {}
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]

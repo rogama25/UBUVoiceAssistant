@@ -5,7 +5,7 @@ from typing import Union, List, Tuple
 import os
 import json
 from babel import Locale  # type: ignore
-from ..util.util import Singleton
+from .singleton import Singleton
 
 
 class Translator(metaclass=Singleton):
@@ -24,7 +24,7 @@ class Translator(metaclass=Singleton):
         self._available_langs: List[str] = []
         self._language_names: List[str] = []
         self._domain = "UBUVoiceAssistant"
-        self._lang_dir = "./UBUVoiceAssistant/lang"
+        self._lang_dir = "./UBUVoiceAssistant/lang/"
         self._translator: gettext.NullTranslations = None  # type: ignore
         self.find_available_languages()
         self.change_language(lang)

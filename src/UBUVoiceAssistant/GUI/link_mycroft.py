@@ -24,9 +24,10 @@ class LinkMycroft(QtWidgets.QMainWindow):
     def __init__(self, bus: MessageBusClient) -> None:
         super().__init__()
         uic.loadUi("./UBUVoiceAssistant/GUI/forms/link-mycroft.ui", self)
+        self.bus = bus
         self.page = 0
         self.done = False
-        self.code = _("wait a second")
+        self.code = _("Code is not ready yet, please wait.")
 
         self.update_texts()
         self.hide_all_elements()
@@ -44,10 +45,9 @@ class LinkMycroft(QtWidgets.QMainWindow):
 
         self.file = open("/var/log/mycroft/skills.log", "r")
         self.file.seek(0, 2)  # Goes to the end of the file
-        msg = Message("recognizer_loop:utterance",
-                      data={'utterance': _("pair my device")})
+        self.bus.emit(Message("recognizer_loop:utterance",  
+                          {'utterances': [_("pair my device")]}))
         # On other languages different than English, we must send again the phrase for it to start pairing
-        bus.emit(msg)
         bus.on("configuration.updated", self.pairing_done)
         self.timer = QTimer()
         self.timer.timeout.connect(self.add_pairing_code)  # type: ignore
@@ -79,14 +79,14 @@ class LinkMycroft(QtWidgets.QMainWindow):
                 time.sleep(1)
 
     def update_texts(self):
-        self.lblWelcome.setText(_("welcome!"))
-        self.lblFirstRun.setText(_("it's your first time using"))
-        self.btnPrev.setText(_("previous"))
-        self.btnNext.setText(_("next"))
+        self.lblWelcome.setText(_("Welcome!"))
+        self.lblFirstRun.setText(_("It's your first time using Mycroft, so please follow these instructions"))
+        self.btnPrev.setText(_("Previous"))
+        self.btnNext.setText(_("Next"))
         self.lblRegisterAddDevice.setText(
-            _("create an account and click add a device"))
-        self.lblSelectVoice.setText(_("select google voice"))
-        self.lblInfoCode.setText(_("input this code on the website"))
+            _("Create an account on https://home.mycroft.ai and click add a device on the top right corner."))
+        self.lblSelectVoice.setText(_("Select Google Voice and Hey Mycroft"))
+        self.lblInfoCode.setText(_("Input this code on the website"))
 
     def go_next(self):
         self.hide_all_elements()
@@ -135,14 +135,14 @@ class LinkMycroft(QtWidgets.QMainWindow):
             self.closed_signal.emit()  # type: ignore
             event.accept()
         else:
-            self.close_window = MessageBox(_("are you sure?"))
+            self.close_window = MessageBox(_("Are you sure?"))
             self.close_window.setStandardButtons(
                 QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
             self.close_res = self.close_window.exec()
             print(self.close_res)
             if self.close_res == QtWidgets.QMessageBox.Yes:
                 self.timer.stop()
-                self.closing_window = ProgressBox(_("closing mycroft"))
+                self.closing_window = ProgressBox(_("Closing Mycroft, please wait..."))
                 self.closing_window.show()
                 self.closing_thread = CloseMycroft()
                 self.closing_thread.finished.connect(  # type: ignore

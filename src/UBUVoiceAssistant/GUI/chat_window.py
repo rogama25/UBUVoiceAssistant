@@ -77,9 +77,10 @@ class ChatWindow(QtWidgets.QMainWindow):
         js_string += "var msg = document.createElement('li');\n"
         if source == "u":
             js_string += "msg.classList.add('right-msg');\n"
-        js_string += "msg.appendChild(document.createTextNode('" + \
-            message + "'));\n"
+        js_string += "msg.appendChild(document.createTextNode(`" + \
+            message + "`));\n"
         js_string += "chat.appendChild(msg);"
+        print(js_string)
         self.web.page().runJavaScript(js_string)
 
     def handle_speak(self, message: Message):
@@ -97,14 +98,14 @@ class ChatWindow(QtWidgets.QMainWindow):
             self.mycroft_response = ""
 
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
-        self.close_window = MessageBox(_("are you sure?"))
+        self.close_window = MessageBox(_("Are you sure?"))
         self.close_window.setStandardButtons(
             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
         self.close_res = self.close_window.exec()
         print(self.close_res)
         if self.close_res == QtWidgets.QMessageBox.Yes:
             self.timer.stop()
-            self.closing_window = ProgressBox(_("closing mycroft"))
+            self.closing_window = ProgressBox(_("Closing Mycroft, please wait..."))
             self.closing_window.show()
             self.closing_thread = CloseMycroft()
             self.closing_thread.finished.connect(  # type: ignore

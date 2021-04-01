@@ -3,7 +3,7 @@
 import json
 from typing import Any
 from os.path import expanduser
-from ..util.util import Singleton
+from .singleton import Singleton
 
 
 class Settings(metaclass = Singleton):
@@ -29,11 +29,11 @@ class Settings(metaclass = Singleton):
                 self._config = json.load(config_file)
         except OSError as ex:
             print("Error loading config file", ex)
-        if "user" not in self:
+        if "user" not in self._config:
             self["user"] = None
-        if "host" not in self:
+        if "host" not in self._config:
             self["host"] = None
-        if "lang" not in self:
+        if "lang" not in self._config:
             self["lang"] = "es_ES"
 
     def save_settings(self) -> None:

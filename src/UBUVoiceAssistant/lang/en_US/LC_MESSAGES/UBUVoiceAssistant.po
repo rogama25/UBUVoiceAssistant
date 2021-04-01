@@ -7,37 +7,100 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-05 17:34+0100\n"
-"PO-Revision-Date: 2021-03-05 17:39+0100\n"
-"Language-Team: \n"
+"POT-Creation-Date: 2021-04-01 12:12+0200\n"
+"PO-Revision-Date: 2021-04-01 12:33+0200\n"
+"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
 "Last-Translator: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: en_US\n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.4.1\n"
 
-#: src/GUI/main.py:23
-msgid "login"
-msgstr "Login"
-
-#: src/GUI/main.py:24
-msgid "remember host"
-msgstr "Remember host"
-
-#: src/GUI/main.py:25
-msgid "remember username"
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:29
+msgid "Code is not ready yet, please wait."
 msgstr ""
 
-#: src/GUI/main.py:26
-msgid "moodle url"
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:48
+msgid "pair my device"
 msgstr ""
 
-#: src/GUI/main.py:27
-msgid "password"
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:82
+msgid "Welcome!"
 msgstr ""
 
-#: src/GUI/main.py:28
-msgid "username"
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:83
+msgid "It's your first time using Mycroft, so please follow these instructions"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:84
+msgid "Previous"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:85
+msgid "Next"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:87
+msgid ""
+"Create an account on https://home.mycroft.ai and click add a device on the "
+"top right corner."
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:88
+msgid "Select Google Voice and Hey Mycroft"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:89
+msgid "Input this code on the website"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:138
+#: src/UBUVoiceAssistant/GUI/chat_window.py:101
+msgid "Are you sure?"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:145
+#: src/UBUVoiceAssistant/GUI/chat_window.py:108
+msgid "Closing Mycroft, please wait..."
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:69
+msgid "Invalid Moodle username or password."
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:72
+msgid "Missing http:// or https:// at the beginning"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:78
+msgid "This language is not supported by your Moodle server"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:81
+msgid "Starting Mycroft, please wait..."
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:96
+msgid "Login"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:97
+msgid "Remember host"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:98
+msgid "Remember username"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:99
+msgid "Moodle url"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:100
+msgid "Password"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:101
+msgid "Username"
 msgstr ""
