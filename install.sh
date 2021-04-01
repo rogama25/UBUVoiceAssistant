@@ -21,7 +21,8 @@ install() {
   # Get python packages
   printf "${GREEN}Installing system dependencies...${NC}\n"
   apt-get install python3-pip python3-pyqt5 python3-pyqt5.qtwebengine -y
-  pip3 install mycroft-messagebus-client
+  pip3 install mycroft-messagebus-client babel
+  sudo apt install libjack-dev libjack0 -y
   printf "${GREEN}Finished installing system dependencies${NC}\n"
 
   # # Add docker dependencies
@@ -86,7 +87,7 @@ install() {
   printf "${GREEN}Finished downloading Mycroft${NC}\n"
 
   printf "${GREEN}Configuring Mycroft...${NC}\n"
-  echo YYYY | sudo -u $USERNAME bash dev_setup.sh -sm
+  echo -e YYYY | sudo -u $USERNAME bash dev_setup.sh -sm
   printf "${GREEN}Finished configuring Mycroft${NC}\n"
 
   # Copy UBU skills inside
