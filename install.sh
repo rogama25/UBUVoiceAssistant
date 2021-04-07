@@ -5,6 +5,8 @@ GREEN='\033[0;32m'
 NC='\033[0m'
 DIR=`pwd`
 
+set -e
+
 help() {
   echo "UBUVoiceAssistant installer"
   echo "Available options:"
@@ -20,7 +22,7 @@ install() {
 
   # Get python packages
   printf "${GREEN}Installing system dependencies...${NC}\n"
-  apt-get install python3-pip python3-pyqt5 python3-pyqt5.qtwebengine -y
+  apt-get install python3-pip python3-pyqt5 python3-pyqt5.qtwebengine git -y
   pip3 install mycroft-messagebus-client babel
   sudo apt install libjack-dev libjack0 -y
   printf "${GREEN}Finished installing system dependencies${NC}\n"
@@ -130,7 +132,7 @@ uninstall() {
   rm -rf /usr/lib/UBUVoiceAssistant
   rm -f /usr/bin/UBUVoiceAssistant
   rm -f /usr/share/applications/UBUVoiceAssistant.desktop
-  rm -rf /usr/lib/mycroft-core
+  # rm -rf /usr/lib/mycroft-core
   rm -rf /home/${USERNAME}/.mycroft
   # rm -rf /home/${USERNAME}/.config/mycroft-docker
   # rm -rf /opt/mycroft-docker
