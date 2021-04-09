@@ -22,6 +22,12 @@
      <height>595</height>
     </rect>
    </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <widget class="QComboBox" name="dropLang">
     <property name="geometry">
      <rect>
@@ -51,40 +57,49 @@
    <widget class="QLabel" name="lblUser">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>40</x>
       <y>450</y>
-      <width>91</width>
-      <height>17</height>
+      <width>231</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>#UserLabel</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
    </widget>
    <widget class="QLabel" name="lblPassword">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>40</x>
       <y>480</y>
-      <width>121</width>
-      <height>17</height>
+      <width>231</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>#PasswordLabel</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
    </widget>
    <widget class="QLabel" name="lblHost">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>30</x>
       <y>510</y>
-      <width>101</width>
-      <height>17</height>
+      <width>241</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>#HostLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QLineEdit" name="tbxUser">
@@ -92,7 +107,7 @@
      <rect>
       <x>280</x>
       <y>450</y>
-      <width>151</width>
+      <width>191</width>
       <height>25</height>
      </rect>
     </property>
@@ -102,7 +117,7 @@
      <rect>
       <x>280</x>
       <y>480</y>
-      <width>151</width>
+      <width>191</width>
       <height>25</height>
      </rect>
     </property>
@@ -115,7 +130,7 @@
      <rect>
       <x>280</x>
       <y>510</y>
-      <width>151</width>
+      <width>191</width>
       <height>25</height>
      </rect>
     </property>
@@ -126,9 +141,9 @@
    <widget class="QCheckBox" name="chkUser">
     <property name="geometry">
      <rect>
-      <x>440</x>
+      <x>480</x>
       <y>450</y>
-      <width>191</width>
+      <width>251</width>
       <height>23</height>
      </rect>
     </property>
@@ -139,9 +154,9 @@
    <widget class="QCheckBox" name="chkHost">
     <property name="geometry">
      <rect>
-      <x>440</x>
+      <x>480</x>
       <y>510</y>
-      <width>181</width>
+      <width>251</width>
       <height>23</height>
      </rect>
     </property>
@@ -152,9 +167,9 @@
    <widget class="QPushButton" name="btnLogin">
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>282</x>
       <y>550</y>
-      <width>83</width>
+      <width>191</width>
       <height>25</height>
      </rect>
     </property>
