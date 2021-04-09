@@ -1,14 +1,13 @@
 """Module for the main UI
 """
 import sys
-from PyQt5.QtCore import QTimer
 import time
 from ..GUI.link_mycroft import LinkMycroft
 import requests
 import subprocess
 from threading import Thread
 from os import path
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, uic, QtCore
 from mycroft_bus_client import MessageBusClient
 from ..webservice.web_service import WebService
 from .message_box import MessageBox
@@ -39,7 +38,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.btnLogin.clicked.connect(self.on_login)
         self.update_texts()
         self.mycroft_started = False
-        self.timer = QTimer()
+        self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.check_mycroft_started)
         self.show()
 
@@ -134,6 +133,10 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.new_window = ChatWindow(self.bus, self.ws)
             self.new_window.show()
             self.hide()
+
+    def keyPressEvent(self, event):
+        if event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return):
+            self.on_login_pressed()
 
 
 if __name__ == "__main__":

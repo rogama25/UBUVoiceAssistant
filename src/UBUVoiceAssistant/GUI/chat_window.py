@@ -117,8 +117,14 @@ class ChatWindow(QtWidgets.QMainWindow):
     def finish_exit(self):
         sys.exit(0)
 
+    def keyPressEvent(self, event):
+        if event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return):
+            self.on_send_pressed()
+    
     def on_send_pressed(self):
-        pass
+        self.user_utterance = self.tbxInput.text()
+        self.bus.emit(Message('recognizer_loop:utterance', {'utterances': [self.user_utterance]}))
+        self.tbxInput.setText('')
 
 
 class CloseMycroft(QtCore.QThread):
