@@ -36,7 +36,9 @@ class ChatWindow(QtWidgets.QMainWindow):
             self.palette().color(QtGui.QPalette.ColorRole.Background).getRgb())
         # We need to divide this to get a floating value for HTML
         self.color[3] /= 255.0
-        self.btnMute.clicked.connect(self.on_send_pressed)
+        self.btnMute.clicked.connect(self.on_mic_pressed)
+
+        self.on_mic_pressed(True)
 
         self.dangerous_skills = ['mycroft-volume.mycroftai',
                                  'mycroft-stop.mycroftai',
@@ -58,19 +60,40 @@ class ChatWindow(QtWidgets.QMainWindow):
                       "skill": "mycroft-volume.mycroftai"}))
 
         self.web: QWebEngineView
-        self.web.loadFinished.connect(self.update_texts)
+        self.web.loadFinished.connect(self.set_elements_web)
         self.web.load(QtCore.QUrl.fromLocalFile(
             os.path.abspath(os.getcwd())+"/UBUVoiceAssistant/GUI/forms/chat_window_html/message-bubbles.html"))
         # with open("./UBUVoiceAssistant/GUI/forms/chat_window_html/message-bubbles.html") as file:
         #     self.web.setHtml(file.read(), baseUrl=QtCore.QUrl().fromLocalFile(
         #         os.path.abspath(os.getcwd())+"/UBUVoiceAssistant/GUI/forms/chat_window_html"))
 
-    def update_texts(self):
+    def set_elements_web(self):
         print(self.color)
         js_color = "document.body.style.backgroundColor = 'rgba(" + ','.join(
             map(str, self.color)) + ")';"
         self.web.page().runJavaScript(js_color)
         self.web.page().runJavaScript("document.documentElement.style.overflowX = 'hidden';")
+        message = _("Hey, I'm Mycroft\n")
+        message += _("Just say: \"Hey Mycroft!\" and then ask one of these:\n\n")
+        message += "· " + _("Open the calendar\n")
+        message += "· " + _("Tell me about the forums of (course)\n")
+        message += "· " + _("Tell me my grades\n")
+        message += "· " + _("Tell me about the events of (course)\n")
+        message += "· " + _("Tell me about the events on (month) (day) (year)\n")
+        message += "· " + _("Tell me about the changes of (course)\n")
+        message += "· " + _("Tell me the grades of (course)\n\n")
+        message += _("And, if you want me to stop, say \"stop\"\n")
+        js_string = "var chat = document.getElementById('chat-window');\n"
+        js_string += "var msg = document.createElement('li');\n"
+        js_string += "msg.appendChild(document.createTextNode(`" + \
+            message + "`));\n"
+        js_string += "chat.appendChild(msg);"
+        self.web.page().runJavaScript(js_string)
+
+    def update_texts(self):
+        self.btnConfig.setText(_("Settings"))
+        self.btnSend.setText(_("Send"))
+        self.tbxInput.setPlaceholderText(_("Type your command here..."))
 
     def update_chat(self, source: str, message: str):
         js_string = "var chat = document.getElementById('chat-window');\n"
@@ -79,7 +102,8 @@ class ChatWindow(QtWidgets.QMainWindow):
             js_string += "msg.classList.add('right-msg');\n"
         js_string += "msg.appendChild(document.createTextNode(`" + \
             message + "`));\n"
-        js_string += "chat.appendChild(msg);"
+        js_string += "chat.appendChild(msg);\n"
+        js_string += "window.scrollTo(0,document.body.scrollHeight);"
         print(js_string)
         self.web.page().runJavaScript(js_string)
 
@@ -105,7 +129,8 @@ class ChatWindow(QtWidgets.QMainWindow):
         print(self.close_res)
         if self.close_res == QtWidgets.QMessageBox.Yes:
             self.timer.stop()
-            self.closing_window = ProgressBox(_("Closing Mycroft, please wait..."))
+            self.closing_window = ProgressBox(
+                _("Closing Mycroft, please wait..."))
             self.closing_window.show()
             self.closing_thread = CloseMycroft()
             self.closing_thread.finished.connect(  # type: ignore
@@ -120,11 +145,27 @@ class ChatWindow(QtWidgets.QMainWindow):
     def keyPressEvent(self, event):
         if event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return):
             self.on_send_pressed()
-    
+
     def on_send_pressed(self):
         self.user_utterance = self.tbxInput.text()
-        self.bus.emit(Message('recognizer_loop:utterance', {'utterances': [self.user_utterance]}))
+        self.bus.emit(Message('recognizer_loop:utterance', {
+                      'utterances': [self.user_utterance]}))
         self.tbxInput.setText('')
+
+    def on_mic_pressed(self, startup: bool = False):
+        # Switch between muted and unmuted when the mic is pressed
+        if self.mic_muted or startup:
+            self.mic_muted = False
+            self.btnMute.setIcon(self.mic_icon)
+            self.btnMute.setText(_('Mute'))
+            self.btnMute.setStyleSheet("background-color: green")
+            self.bus.emit(Message('mycroft.mic.unmute'))
+        else:
+            self.mic_muted = True
+            self.btnMute.setIcon(self.mic_muted_icon)
+            self.btnMute.setText(_('Unmute'))
+            self.btnMute.setStyleSheet("background-color: red")
+            self.bus.emit(Message('mycroft.mic.mute'))
 
 
 class CloseMycroft(QtCore.QThread):

@@ -35,8 +35,8 @@
   <widget class="QPushButton" name="btnMute">
    <property name="geometry">
     <rect>
-     <x>590</x>
-     <y>160</y>
+     <x>400</x>
+     <y>10</y>
      <width>181</width>
      <height>41</height>
     </rect>
@@ -49,9 +49,9 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>210</y>
+     <y>70</y>
      <width>761</width>
-     <height>331</height>
+     <height>471</height>
     </rect>
    </property>
   </widget>
@@ -82,46 +82,6 @@
    </property>
    <property name="text">
     <string>send</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lblHeyMycroft">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>10</y>
-     <width>561</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Fira Sans</family>
-     <pointsize>14</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>#Hey Mycroft</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lblQuestions">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>50</y>
-     <width>561</width>
-     <height>151</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>#questions</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
    </property>
   </widget>
  </widget>

@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="message-bubbles.min.css">
-        <script src="message-bubbles.min.js"></script>
-    </head>
-    <body>
-        <ul class="rounded-messages messages-width-full" id="chat-window">
-            <li>Mensaje Mycroft</li>
-            <li class="right-msg">Mensaje usuario</li>
-        </ul>
-    </body>
+
+<head>
+    <link rel="stylesheet" href="message-bubbles.min.css">
+    <script src="message-bubbles.min.js"></script>
+    <style>
+        .left-msg,
+        .right-msg,
+        li:not(.right-msg) {
+            white-space: pre-line;
+        }
+    </style>
+</head>
+
+<body>
+    <ul class="rounded-messages messages-width-full" id="chat-window">
+    </ul>
+</body>
+
 </html>
