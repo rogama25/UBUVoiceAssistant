@@ -77,7 +77,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.ws.initialize_useful_data()
 
         # If Moodle lang is different from the selected
-        if self.ws.get_lang() not in translator.get_current_language():
+        if not translator.check_language_supported(self.ws.get_lang()):
             MessageBox(_("This language is not supported by your Moodle server")).exec_()
         self.ws.set_user_courses()
 

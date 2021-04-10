@@ -63,6 +63,7 @@ class ChatWindow(QtWidgets.QMainWindow):
         self.web.loadFinished.connect(self.set_elements_web)
         self.web.load(QtCore.QUrl.fromLocalFile(
             os.path.abspath(os.getcwd())+"/UBUVoiceAssistant/GUI/forms/chat_window_html/message-bubbles.html"))
+        self.update_texts()
         # with open("./UBUVoiceAssistant/GUI/forms/chat_window_html/message-bubbles.html") as file:
         #     self.web.setHtml(file.read(), baseUrl=QtCore.QUrl().fromLocalFile(
         #         os.path.abspath(os.getcwd())+"/UBUVoiceAssistant/GUI/forms/chat_window_html"))

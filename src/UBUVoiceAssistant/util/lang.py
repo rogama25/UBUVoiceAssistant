@@ -100,3 +100,6 @@ class Translator(metaclass=Singleton):
         mycroft_cfg["tts"]["google"]["slow"] = False
         with open(os.path.expanduser("~/.mycroft/mycroft.conf"), "w") as mycroft_cfg_file:  # type: ignore
             json.dump(mycroft_cfg, mycroft_cfg_file)
+
+    def check_language_supported(self, lang: str) -> bool:
+        return lang == self.get_current_language()[0].split("_")[0]
