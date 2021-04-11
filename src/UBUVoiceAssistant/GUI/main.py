@@ -109,10 +109,12 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.mycroft_started = True
 
         self.bus = MessageBusClient()
+        self.set_reconnect_1s()
         self.bus.on("mycroft.ready", f_mycroft_started)
+        self.bus.on("error", self.set_reconnect_1s)
+        self.bus.on("open", self.set_reconnect_1s)
         subprocess.run(
             "/usr/lib/mycroft-core/start-mycroft.sh all", shell=True)
-        time.sleep(3)
         self.bus.run_in_thread()
         print("Launched Mycroft")
 
@@ -133,6 +135,10 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.new_window = ChatWindow(self.bus, self.ws)
             self.new_window.show()
             self.hide()
+
+    def set_reconnect_1s(self, event = None):
+        print("Set reconnect time")
+        self.bus.retry = 0.5
 
     def keyPressEvent(self, event):
         if event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return):
