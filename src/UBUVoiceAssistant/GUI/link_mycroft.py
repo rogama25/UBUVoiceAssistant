@@ -132,7 +132,8 @@ class LinkMycroft(QtWidgets.QMainWindow):
 
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
         if self.done:
-            self.closed_signal.emit()  # type: ignore
+            self.closed_signal.emit()
+            time.sleep(2)  # type: ignore
             event.accept()
         else:
             self.close_window = MessageBox(_("Are you sure?"))

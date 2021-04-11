@@ -44,6 +44,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.btnLogin.clicked.connect(self.on_login)
         self.update_texts()
         self.mycroft_started = False
+        self.finished = False
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.check_mycroft_started)
         self.show()
@@ -138,15 +139,18 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.timer.stop()
         self.starting_window.done = True
         self.starting_window.close()
+        print("Pairing file:", path.isfile(path.expanduser("~/.mycroft/identity/identity2.json")))
         if not path.isfile(path.expanduser("~/.mycroft/identity/identity2.json")):
             self.new_window = LinkMycroft(self.bus)
             self.new_window.show()
             self.hide()
             self.new_window.closed_signal.connect(self.check_mycroft_started)
         else:
-            self.new_window = ChatWindow(self.bus, self.ws)
-            self.new_window.show()
-            self.hide()
+            if not self.finished:
+                self.new_window = ChatWindow(self.bus, self.ws)
+                self.new_window.show()
+                self.hide()
+                self.finished = True
 
     def set_reconnect_1s(self, event = None):
         print("Set reconnect time")
