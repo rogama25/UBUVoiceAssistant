@@ -30,9 +30,15 @@ class LoginWindow(QtWidgets.QMainWindow):
         uic.loadUi("./UBUVoiceAssistant/GUI/forms/login.ui", self)
         self.cfg = Settings()
         self.dropLang: QtWidgets.QComboBox
-        langs = translator.find_available_languages()
-        self.dropLang.addItems(langs)
-        self.dropLang.setCurrentIndex(langs.index("English"))
+        self.dropLang.addItems(translator.find_available_languages())
+        if self.cfg["user"]:
+            self.tbxUser.setText(self.cfg["user"])
+            self.chkUser.setChecked(True)
+        if self.cfg["host"]:
+            self.tbxHost.setText(self.cfg["host"])
+            self.chkHost.setChecked(True)
+        self.dropLang.setCurrentIndex(translator.get_language_index(self.cfg["lang"]))
+        self.on_lang_changed(translator.get_language_index(self.cfg["lang"]))
         self.dropLang.currentIndexChanged.connect(self.on_lang_changed)
         self.btnLogin: QtWidgets.QPushButton
         self.btnLogin.clicked.connect(self.on_login)
@@ -54,7 +60,6 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.update_texts()
 
     def on_login(self):
-        self.cfg.save_settings()
         user = str(self.tbxUser.text())
         password = self.tbxPassword.text()
         host = str(self.tbxHost.text())
@@ -74,6 +79,13 @@ class LoginWindow(QtWidgets.QMainWindow):
         except requests.exceptions.MissingSchema:
             MessageBox(_("Missing http:// or https:// at the beginning")).exec_()
             return
+        
+        if self.chkUser.isChecked():
+            self.cfg["user"] = user
+        if self.chkHost.isChecked():
+            self.cfg["host"] = host
+        self.cfg["lang"] = translator.get_current_language()[0]
+        self.cfg.save_settings()
         self.ws.initialize_useful_data()
 
         # If Moodle lang is different from the selected
