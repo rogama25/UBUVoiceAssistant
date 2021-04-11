@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-01 12:12+0200\n"
+"POT-Creation-Date: 2021-04-11 13:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/UBUVoiceAssistant/GUI/link_mycroft.py:29
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:30
 msgid "Code is not ready yet, please wait."
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/link_mycroft.py:48
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:49
 msgid "pair my device"
 msgstr ""
 
@@ -56,51 +56,119 @@ msgid "Input this code on the website"
 msgstr ""
 
 #: src/UBUVoiceAssistant/GUI/link_mycroft.py:138
-#: src/UBUVoiceAssistant/GUI/chat_window.py:101
+#: src/UBUVoiceAssistant/GUI/chat_window.py:128
 msgid "Are you sure?"
 msgstr ""
 
 #: src/UBUVoiceAssistant/GUI/link_mycroft.py:145
-#: src/UBUVoiceAssistant/GUI/chat_window.py:108
+#: src/UBUVoiceAssistant/GUI/chat_window.py:136
 msgid "Closing Mycroft, please wait..."
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/main.py:69
+#: src/UBUVoiceAssistant/GUI/chat_window.py:79
+msgid "Hey, I'm Mycroft\n"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:80
+msgid ""
+"Just say: \"Hey Mycroft!\" and then ask one of these:\n"
+"\n"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:81
+msgid "Open the calendar\n"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:82
+msgid "Tell me about the forums of (course)\n"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:83
+msgid "Tell me my grades\n"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:84
+msgid "Tell me about the events of (course)\n"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:85
+msgid "Tell me about the events on (month) (day) (year)\n"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:86
+msgid "Tell me about the changes of (course)\n"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:87
+msgid ""
+"Tell me the grades of (course)\n"
+"\n"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:88
+msgid "And, if you want me to stop, say \"stop\"\n"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:97
+msgid "Manage skills"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:98
+msgid "Send"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:99
+msgid "Type your command here..."
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:163
+msgid "Mute"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:169
+msgid "Unmute"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:183
+msgid "Save"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:77
 msgid "Invalid Moodle username or password."
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/main.py:72
+#: src/UBUVoiceAssistant/GUI/main.py:80
 msgid "Missing http:// or https:// at the beginning"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/main.py:78
+#: src/UBUVoiceAssistant/GUI/main.py:93
 msgid "This language is not supported by your Moodle server"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/main.py:81
+#: src/UBUVoiceAssistant/GUI/main.py:96
 msgid "Starting Mycroft, please wait..."
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/main.py:96
+#: src/UBUVoiceAssistant/GUI/main.py:111 src/UBUVoiceAssistant/GUI/main.py:112
 msgid "Login"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/main.py:97
+#: src/UBUVoiceAssistant/GUI/main.py:113
 msgid "Remember host"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/main.py:98
+#: src/UBUVoiceAssistant/GUI/main.py:114
 msgid "Remember username"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/main.py:99
+#: src/UBUVoiceAssistant/GUI/main.py:115
 msgid "Moodle url"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/main.py:100
+#: src/UBUVoiceAssistant/GUI/main.py:116
 msgid "Password"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/main.py:101
+#: src/UBUVoiceAssistant/GUI/main.py:117
 msgid "Username"
 msgstr ""
