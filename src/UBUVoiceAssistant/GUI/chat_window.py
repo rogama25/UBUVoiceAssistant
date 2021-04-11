@@ -29,8 +29,8 @@ class ChatWindow(QtWidgets.QMainWindow):
         self.next_message = 0
         self.intent_labels = []
 
-        self.mic_icon = QtGui.QIcon(QtGui.QPixmap("imgs/ic.svg"))
-        self.mic_muted_icon = QtGui.QIcon(QtGui.QPixmap("imgs/mic_muted.svg"))
+        self.mic_icon = QtGui.QIcon(QtGui.QPixmap("UBUVoiceAssistant/imgs/ic.svg"))
+        self.mic_muted_icon = QtGui.QIcon(QtGui.QPixmap("UBUVoiceAssistant/imgs/mic_muted.svg"))
 
         self.color: List[Union[int, float]] = list(
             self.palette().color(QtGui.QPalette.ColorRole.Background).getRgb())
@@ -39,6 +39,8 @@ class ChatWindow(QtWidgets.QMainWindow):
         self.btnMute.clicked.connect(self.on_mic_pressed)
 
         self.on_mic_pressed(True)
+
+        self.btnConfig.clicked.connect(self.on_skills_pressed)
 
         self.dangerous_skills = ['mycroft-volume.mycroftai',
                                  'mycroft-stop.mycroftai',
@@ -92,7 +94,7 @@ class ChatWindow(QtWidgets.QMainWindow):
         self.web.page().runJavaScript(js_string)
 
     def update_texts(self):
-        self.btnConfig.setText(_("Settings"))
+        self.btnConfig.setText(_("Manage skills"))
         self.btnSend.setText(_("Send"))
         self.tbxInput.setPlaceholderText(_("Type your command here..."))
 
@@ -167,6 +169,87 @@ class ChatWindow(QtWidgets.QMainWindow):
             self.btnMute.setText(_('Unmute'))
             self.btnMute.setStyleSheet("background-color: red")
             self.bus.emit(Message('mycroft.mic.mute'))
+
+    def on_skills_pressed(self):
+
+        self.skills_dialog = QtWidgets.QDialog(self)
+        self.skills_dialog.setWindowTitle('Mycroft Skills')
+        self.skills_dialog.resize(600, 600)
+
+        self.pushButton_manage_skills = QtWidgets.QPushButton(self.skills_dialog)
+        self.pushButton_manage_skills.setGeometry(QtCore.QRect(470, 10, 120, 40))
+        self.pushButton_manage_skills.clicked.connect(self.on_manage_skills_pressed)
+
+        self.pushButton_manage_skills.setText(_("Save"))
+
+        scroll_area_skills = QtWidgets.QScrollArea(self.skills_dialog)
+        scroll_area_skills.setGeometry(QtCore.QRect(10, 10, 450, 580))
+        scroll_area_skills.setWidgetResizable(True)
+        scroll_area_widget_skills = QtWidgets.QWidget()
+        scroll_area_skills.setWidget(scroll_area_widget_skills)
+
+        skills_grid_layout = QtWidgets.QGridLayout(scroll_area_widget_skills)
+        skills_grid_layout.setGeometry(QtCore.QRect(10, 10, 450, 580))
+
+        self.active_skills_checkBoxes = []
+        self.inactive_skills_checkBoxes = []
+
+        # Create checkboxes for every skill in self.active_skills
+        for count, name in enumerate(self.active_skills):
+            check_box = QtWidgets.QCheckBox(scroll_area_widget_skills)
+            spacer = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+            check_box.setText(name)
+            check_box.setChecked(True)
+            logo = QtWidgets.QLabel(scroll_area_widget_skills)
+            if 'ubu' in name:
+                logo.setPixmap(QtGui.QPixmap('UBUVoiceAssistant/imgs/ubu_logo.jpg').scaled(20, 20))
+            else:
+                logo.setPixmap(QtGui.QPixmap('UBUVoiceAssistant/imgs/Mycroft_logo.png').scaled(20, 20))
+            self.active_skills_checkBoxes.append(check_box)
+            skills_grid_layout.addWidget(logo, count, 0)
+            skills_grid_layout.addWidget(check_box, count, 1)
+            skills_grid_layout.addItem(spacer, count, 2, QtCore.Qt.AlignLeft)
+
+        # Create checkboxes for every skill in self.inactive_skills
+        for count, name in enumerate(self.inactive_skills, len(self.active_skills)):
+            check_box = QtWidgets.QCheckBox(scroll_area_widget_skills)
+            check_box.setText(name)
+            logo = QtWidgets.QLabel(scroll_area_widget_skills)
+            if 'ubu' in name:
+                logo.setPixmap(QtGui.QPixmap('UBUVoiceAssistant/imgs/ubu_logo.jpg').scaled(20, 20))
+            else:
+                logo.setPixmap(QtGui.QPixmap('UBUVoiceAssistant/imgs/Mycroft_logo.png').scaled(20, 20))
+            self.inactive_skills_checkBoxes.append(check_box)
+            skills_grid_layout.addWidget(logo, count, 0)
+            skills_grid_layout.addWidget(check_box, count, 1)
+            skills_grid_layout.addItem(spacer, count, 2, QtCore.Qt.AlignLeft)
+
+        self.skills_dialog.show()
+
+    def on_manage_skills_pressed(self):
+        """ Adds the checked skills to self.active_skills and the unchecked to
+            self.inactive_skills and activates or deactivates those skills.
+        """
+        deactivated = []
+        activated = []
+        for cb in self.active_skills_checkBoxes:
+            if not cb.isChecked():
+                self.bus.emit(Message('skillmanager.deactivate', {'skill': cb.text()}))
+                deactivated.append(cb.text())
+
+        for cb in self.inactive_skills_checkBoxes:
+            if cb.isChecked():
+                self.bus.emit(Message('skillmanager.activate', {'skill': cb.text()}))
+                activated.append(cb.text())
+
+        self.active_skills = [skill for skill in self.active_skills if skill not in deactivated]
+        self.active_skills.extend(activated)
+
+        self.inactive_skills = [skill for skill in self.inactive_skills if skill not in activated]
+        self.inactive_skills.extend(deactivated)
+
+        self.skills_dialog.hide()
+        self.on_skills_pressed()
 
 
 class CloseMycroft(QtCore.QThread):
