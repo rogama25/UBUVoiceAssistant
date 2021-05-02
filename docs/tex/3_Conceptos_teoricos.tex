@@ -25,3 +25,6 @@ El contexto es una herramienta que se usa cada vez más dentro de los asistentes
 
 \subsection{Prompt}
 Los prompts son preguntas que el asistente hace al usuario si el asistente necesita más información para completar la orden del usuario. Por ejemplo, si queremos crear un hilo en los foros de una asignatura, el asistente podría repetir el texto que ha entendido, y finalmente, usando un prompt, preguntar al usuario si el texto que ha entendido es correcto o no.
+
+\section{Fuzzy matching}
+Debido a que los sistemas de reconocimiento de voz a día de hoy distan bastante de ser perfectos, en ocasiones no detectan correctamente las palabras que el usuario dijo. Esto suele ocurrir de manera más habitual en el caso de palabras que no están recogidas en un diccionario o son usadas de manera frecuente. Si se tiene una lista de opciones entre las que el usuario tiene que elegir una, se puede usar fuzzy matching para estimar cuál es la palabra más parecida de entre las opciones a lo que el usuario quiso decir.
