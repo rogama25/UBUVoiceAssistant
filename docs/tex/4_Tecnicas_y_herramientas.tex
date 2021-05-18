@@ -1,6 +1,91 @@
 \capitulo{4}{Técnicas y herramientas}
 
-Esta parte de la memoria tiene como objetivo presentar las técnicas metodológicas y las herramientas de desarrollo que se han utilizado para llevar a cabo el proyecto. Si se han estudiado diferentes alternativas de metodologías, herramientas, bibliotecas se puede hacer un resumen de los aspectos más destacados de cada alternativa, incluyendo comparativas entre las distintas opciones y una justificación de las elecciones realizadas. 
-No se pretende que este apartado se convierta en un capítulo de un libro dedicado a cada una de las alternativas, sino comentar los aspectos más destacados de cada opción, con un repaso somero a los fundamentos esenciales y referencias bibliográficas para que el lector pueda ampliar su conocimiento sobre el tema.
+\section{API REST}
+Una API (Application Program Interface) es un conjunto de definiciones y protocolos usados para desarrollar e integrar diferentes aplicaciones entre sí. En una API REST se establecen una serie de posibles peticiones HTTP que se pueden usar para intercambiar datos o realizar operaciones entre los diferentes componentes del sistema final.
 
+\section{Moodle}
+Moodle es una plataforma educativa gratuita y de código abierta que permite poner de manera sencilla a profesores y estudiantes en contacto, y ofrece multitud de herramientas para impartir y gestionar cursos a distancia. Se puede descargar desde su página oficial e instalar en prácticamente cualquier máquina en cuestión de minutos, o bien usar una versión de prueba como la Mount Orange School.
+Moodle se usa en un gran número de colegios y universidades en todas partes del mundo, aunque en muchas de ellas se han implementado funciones específicas que son necesarias para esa institución concreta u ofrecer un diseño alternativo de la plataforma, pero manteniendo las funcionalidades básicas y las ventajas que ofrece, como la API REST, entre otras.
+Este es el caso de la Universidad de Burgos, cuya plataforma se llama UBUVirtual.
+\subsection{WebServices}
+Web Services es el nombre que da Moodle a su API REST. Estos dan muchas facilidades a la hora de interactuar con la plataforma desde aplicaciones de terceros debido a que son peticiones muy simples y concretas. Son una gran ventaja con respecto a otras plataformas que no tienen este tipo de tecnologías ya que en esos otros casos habría que recurrir a técnicas bastante más complejas.
+Como en la mayoría de APIs, es necesario primero obtener un código que identifica la sesión del usuario, habitualmente conocido como token, mediante las APIs que nos ofrecen para identificarnos como si estuviésemos usando la aplicación oficial de Moodle. A partir de ese punto, enviando nuestro token en cada petición a la API podemos interactuar con el resto de la plataforma y realizar las diferentes acciones, como consultar el calendario, los foros o los mensajes.
 
+\section{Mycroft}
+Mycroft es un asistente de voz gratuito y de código abierto. Actualmente está disponible tanto para sistemas basados en Linux como para Android, Raspberry Pi y dos dispositivos fabricados por Mycroft, el Mark 1 y el Mark II.
+Es una aplicación que se ejecuta directamente en la máquina cliente, a diferencia de otros como Google Assistant que se ejecutan completamente en el servidor. También es diferente con respecto a otros muchos asistentes ya que Mycroft es modular y permite activar, desactivar y sustituir componentes, dependiendo de las necesidades.
+
+Además, una de las principales ventajas de ser código abierto es que se pueden ver los componentes que lo forman de manera más sencilla y poder separar responsabilidades en el caso de tener que reimplementar alguno de sus componentes. Por defecto trae implementados seis componentes, aunque sólo nos importan cuatro de ellos para este proyecto.
+\subsection{Audio}
+Este componente se encarga tanto de transformar la voz del usuario al texto que se usa como entrada (llamado speech-to-text o STT) como de transformar el texto de salida a voz (text-to-speech o TTS).
+Para STT actualmente se usa por defecto el motor de análisis de voz de Google, aunque también es importante destacar que están trabajando en un motor completamente open-source en colaboración con Mozilla, llamado DeepSpeech. A pesar de usar estos por defecto, también se pueden usar otros como el IBM Watson o el servicio de wit.ai. Debido a que para usar la mayoría de estos motores se necesita un modelo entrenado previamente, que puede llegar a ser muy pesado y habitualmente es imposible descargar al ser software privativo, en la mayoría de estas opciones es necesario recurrir a un servidor en Internet que analice los clips de sonido que se han grabado en el cliente.
+Con respecto a TTS, algunas de las configuraciones más básicas se pueden hacer desde su página web. Ahí te permiten seleccionar tres motores, Mimic 1 si seleccionas British Male, Mimic 2 si seleccionas American Male o Google Voice para usar la API de Google TTS. Se pueden configurar algunos otros como eSpeak, Microsoft Azure o Amazon Polly editando la configuración de forma local. Ya que algunos de estos motores son más ligeros e incluso hay opciones de código abierto, es posible generar y reproducir la respuesta sin necesidad de conexión a Internet.
+\subsection{Voice}
+Este módulo es el que se encarga de detectar la Wake Word dicha por el usuario. Por defecto se usa Precise, que es una red neuronal entrenada con sonidos y que permite usar cualquier frase especificando los fonemas usados. Sin embargo, en caso de que este motor no esté disponible, ya sea porque es incompatible o porque el equipo no tiene tanta potencia de cálculo, es posible usar PocketSphinx que es más ligero pero sólo funciona correctamente en inglés.
+\subsection{Skills}
+Esta parte de Mycroft es un servicio que se encarga de relacionar el utterance entendido por el módulo de audio con alguno de los intents definidos en las skills que haya instaladas. También se encarga de analizar alguna de enlazar alguna de las palabras de la utterance con las variables que hay en los intents (por ejemplo, en ``Dime los próximos eventos de Sistemas Distribuidos'', asigna ``Sistemas Distribuidos'' a la variable de curso). Esto se consigue gracias a un intent parser.
+Actualmente hay dos, Adapt y Padatious. Padatious está basado en redes neuronales y es bastante sencillo de usar, ya que tiene una buena documentación, se pueden declarar los intents de manera muy sencilla y gran parte del trabajo lo hace la red neuronal de manera transparente al programador. Adapt, en cambio, es un sistema bastante más ligero que está pensado para dispositivos con menos capacidad de cómputo ya que la mayor parte del trabajo se hace en el momento de programar la skill, lo que junto a su mala documentación, hace que sea más complejo de usar. Sin embargo, en el primero no se ha implementado la posibilidad de usar contexto, ya que es un sistema que necesita bastante más tiempo de desarrollo
+\subsection{MessageBus}
+El MessageBus es un módulo que permite que los componentes anteriormente mencionados se comuniquen entre sí. Se basa en un websocket que se usa para transferir mensajes entre las diferentes partes de Mycroft e incluso permite integrar aplicaciones de terceros. Por ejemplo, cuando el usuario dice una frase, esta se interpreta en el módulo de Audio y se transfiere el texto al módulo de Skills mediante el bus, y este le devuelve la respuesta a través del bus, que se transforma a voz y se reproduce.
+
+\section{Qt5}
+Qt es un framework orientado a objetos que permite desarrollar interfaces gráficas, que puede usarse tanto en Windows como en Mac o Linux, entre otros, sin tener que realizar grandes cambios en la aplicación. Gran parte del código está hecho y pensado para C++, aunque hay un gran número de bindings que permiten usar sus ventajas en otros lenguajes de programación. Este framework está disponible bajo dos tipos de licencias, una de código abierto y otra comercial.
+\subsection{Qt Designer}
+Qt Designer es una aplicación que permite desarrollar de manera muy rápida e intuitiva prototipos para interfaces que usen la biblioteca Qt. Permite usar un gran número de Widgets que trae la biblioteca, como campos de texto, imágenes, casillas, o desplegables. Sin embargo, para funcionalidades más avanzadas es necesario hacerlo mediante código. La aplicación permite convertir los prototipos a código fuente o exportarlo a un formato que se puede cargar en muchos de los lenguajes soportados.
+
+\section{Poedit}
+Poedit es un programa multiplataforma que está pensado para ayudar a traducir multitud de programas de una manera sencilla. Tiene una versión gratuita y de código abierto que permite editar archivos basados en la biblioteca GNU gettext. También ofrece una versión comercial que ofrece algunas funciones adicionales, como es la posibilidad de unirse a la comunidad de usuarios para compartir y descargar traducciones, lo que agiliza el trabajo.
+
+\section{Python}
+Python es un lenguaje de programación interpretado y con tipado dinámico. Es multiplataforma ya que se puede usar en Windows, Mac y Linux y también multiparadigma, porque se puede usar para hacer programación imperativa, orientada a objetos y en las últimas versiones también para programación funcional.
+En los últimos años se ha vuelto extremadamente popular debido a que es un lenguaje sencillo de entender, tiene una gran cantidad de bibliotecas para realizar todo tipo de aplicaciones y además permite crear programas en un menor tiempo que otros lenguajes.
+Algunas de las bibliotecas reseñables que he usado son las siguientes:
+\subsection{PyQt5}
+Esta biblioteca es un binding no oficial para usar la biblioteca de interfaces gráficas que hemos elegido, Qt. Sin embargo, pese a no ser oficial, es el más completo disponible y además se puede usar sin muchos problemas siguiendo la documentación oficial de Qt.
+\subsection{requests}
+Requests nos ofrece la posibilidad de hacer peticiones HTTP de manera más sencilla y más elegante que usando las bibliotecas por defecto de Python. Se ha usado para interactuar con la API de Moodle de una manera eficaz.
+\subsection{gettext}
+Gettext es una biblioteca que viene en el paquete por defecto de Python que sirve para hacer bastante más sencilla la internacionalización de un programa. Esta biblioteca permite cargar las frases de texto a partir de archivos codificados en un estándar usado habitualmente en sistemas GNU.
+\subsection{babel}
+Babel trae una serie de herramientas relacionadas con el idioma. En concreto, permite obtener de manera automática el nombre del idioma sin tener que añadirlo explícitamente en cada idioma nuevo que añadamos al programa.
+\subsection{fuzzywuzzy}
+Esta biblioteca permite simplificar el proceso del fuzzy matching al tener que comparar el nombre dicho por el usuario con los elementos que encontramos en la plataforma, especialmente útil para tratar con nombres propios.
+
+\section{Bash}
+Bash es un lenguaje de órdenes usado ampliamente en los sistemas Linux. Este lenguaje permite al usuario escribir órdenes en forma de texto desde una terminal. Nos ofrece numerosas herramientas, siendo una de las más importantes la posibilidad de ejecutar comandos de manera automatizada desde un archivo de texto, conocido habitualmente como script. En el proyecto se ha usado para crear la herramienta de instalación.
+
+\section{LaTeX}
+LaTeX es un sistema de composición de textos, usado habitualmente para artículos y libros científicos ya que permite conseguir alta calidad tipográfica. Una de las principales características es que procesa archivos de texto plano en los que se incluyen marcas que indican el formato que tiene que usarse en el documento final.
+Hay múltiples paquetes que permiten crear documentos usando este sistema, siendo Tex Live una de las más habituales y completas.
+
+\section{Metodología de desarrollo}
+Para desarrollar el proyecto se ha hecho uso de una de las metodologías ágiles más populares, SCRUM, aplicándole algunos cambios que son necesarios. A lo largo del proyecto se han ido realizando una serie de sprints, siendo los primeros de dos semanas y los finales de sólo una para arreglar los últimos errores. También se han sustituido las reuniones diarias por una reunión al principio y al final de cada sprint. Se han seguido también algunas prácticas como la integración continua, en la que se realizan pruebas del código de forma habitual a lo largo del desarrollo.
+
+\section{Git}
+Git es un programa de control de versiones ampliamente utilizado para gestionar el código fuente durante el desarrollo de aplicaciones. Este sistema se puede usar de forma local o también se puede sincronizar el contenido de los proyectos en un repositorio, permitiendo a múltiples personas colaborar. Una de las funcionalidades clave es el sistema de ramas, que permiten trabajar en diferentes funciones independientes entre sí al mismo tiempo.
+\subsection{Github}
+Github es una de los principales servidores que usan Git para el control de versiones. Esta plataforma aloja gran cantidad de repositorios de código abierto de forma gratuita. Además, permite crear Issues o tareas en las que ir organizando el trabajo a realizar. Ofrece una herramienta muy potente para integración continua llamada Github Actions. Además, Github tiene una API que permite a otros desarrolladores añadir funcionalidades extra para adaptarlo a tus necesidades.
+\subsection{Zenhub}
+Zenhub es una de las múltiples aplicaciones integradas con Github que existen para poder crear un tablero Kanban para organizar las tareas y usar otra serie de funcionalidades útiles relacionadas con SCRUM y otras metodologías ágiles, como la gestión de sprints o la generación de gráficas que permiten conocer la evolución del proyecto a lo largo del tiempo.
+
+\section{Visual Studio Code}
+VSCode es un entorno de desarrollo integrado, o IDE, que permite editar archivos de texto plano, como el código fuente, y además cuenta con una serie de herramientas que permiten hacer más cómodo y rápido el trabajo y detectar algunos errores antes de llegar a probar el código. Está desarrollado por Microsoft y tiene una gran comunidad que ha desarrollado numerosas extensiones que añaden algunas funcionalidades muy útiles. Las más relevantes son:
+\subsection{Code Spell Checker}
+Esta extensión es un corrector que analiza los ficheros que tengas abiertos y marca las palabras con errores tipográficos. Soporta varios idiomas, entre ellos el inglés y el español, ambos usados en el proyecto.
+\subsection{GitLens}
+GitLens añade una serie de funcionalidades adicionales a la potente integración con Git ya incluida en el IDE. En concreto, mejora la gestión de ramas y la visualización de cambios en los commits anteriores.
+\subsection{LaTeX Workshop}
+Esta extensión permite trabajar de forma sencilla con los documentos LaTeX, añadiendo algunas plantillas de autocompletado para las marcas de capítulo, sección o tablas, y añadiendo la posibilidad de generar los archivos PDF finales de la memoria una vez acabada la redacción.
+\subsection{Pylance y Python}
+Estas dos extensiones ofrecen funcionalidades imprescindibles para trabajar con Python dentro de Visual Studio Code, siendo algunas de las más importantes el autocompletado, las ayudas de tipos o la búsqueda de errores y debugging.
+\subsection{Python Docstring Generator}
+Esta última extensión permite generar parte de la documentación incluida en cada método a partir del código que hemos programado anteriormente. Es especialmente importante porque dejar una buena documentación mejora la calidad del código.
+
+\section{Análisis del software}
+Uno de los procesos que se debe hacer en el desarrollo de software es su análisis. En este proceso se comprueban algunos aspectos del mismo, como la calidad, mantenibilidad y seguridad. Debido a que es un proceso muy importante, han surgido multitud de herramientas, entre las cuales destacaré:
+\subsection{SonarCloud}
+Es un servicio gratuito en la nube que permite analizar y visualizar mediante una página web algunas de las características más importantes del análisis del software.
+\subsection{Pylint}
+Es una herramienta gratuita y de código abierto que se ejecuta de forma local e informa al desarrollador acerca de algunos posibles errores en el código que podrían pasar inadvertidos y podrían causar problemas graves en un futuro si no se corrigen.
+\subsection{Mypy}
+Es una herramienta de código abierto que analiza los archivos fuente para avisar de posibles incoherencias de tipos que podrían causar errores graves más adelante.

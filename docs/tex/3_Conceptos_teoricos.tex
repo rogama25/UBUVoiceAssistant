@@ -1,83 +1,30 @@
 \capitulo{3}{Conceptos teóricos}
 
-En aquellos proyectos que necesiten para su comprensión y desarrollo de unos conceptos teóricos de una determinada materia o de un determinado dominio de conocimiento, debe existir un apartado que sintetice dichos conceptos.
+En este apartado se desarrollan algunos de los principales conceptos teóricos que son necesarios para comprender el proyecto, como las definiciones de los componentes usados, o su funcionamiento.
 
-Algunos conceptos teóricos de \LaTeX \footnote{Créditos a los proyectos de Álvaro López Cantero: Configurador de Presupuestos y Roberto Izquierdo Amo: PLQuiz}.
+\section{Asistente de voz}
+Los asistentes de voz son programas que permiten a un usuario interactuar con una máquina, intentando que la comunicación entre ellos sea lo más natural posible, como si estuviésemos hablando con otra persona. Habitualmente para esto se usa directamente la voz, aunque también se suelen poder introducir órdenes escritas que realizan las mismas funciones. El asistente procesa las órdenes y responde de una forma similar.
 
-\section{Secciones}
+\section{Wake word}
+Para poder distinguir si una persona está hablando a un asistente de voz o lo está haciendo por cualquier otro motivo, se suelen usar una serie de palabras que el usuario debe pronunciar para que el asistente comience a escuchar y procese la orden que se le da. En este asistente es configurable, pero se suele usar \textit{``Hey Mycroft''}
 
-Las secciones se incluyen con el comando section.
+\section{Skill}
+Las skills son programas o aplicaciones que están diseñadas para un asistente de voz. Normalmente cada una de las skills se encarga de una función diferente, por ejemplo, una podría encargarse de mostrarte los próximos eventos del calendario mientras que otra se encarga de leerte las últimas noticias. Cada skill está compuesta por varios elementos, como pueden ser las utterance, los intents, los dialogs, los prompts o el contexto, que se describen más adelante.
 
-\subsection{Subsecciones}
+\subsection{Utterance}
+Una utterance es la frase que dice el usuario que sirve para activar una skill concreta y que en algunos causará que el asistente realice una acción determinada. Un posible ejemplo de utterance sería: ``Dime los próximos eventos de Sistemas Distribuidos''
 
-Además de secciones tenemos subsecciones.
+\subsection{Intent}
+Un intent son unas palabras clave del utterance que permiten al asistente determinar cuál es la acción que el usuario quiere realizar. Una skill puede tener asociados varios intents. Varios de ellos pueden lanzar una misma acción, consiguiendo una interacción más natural, ya que el usuario puede pedir lo mismo de diferentes formas, por ejemplo: ``Abrir el calendario'' o ``Consultar los eventos''.
 
-\subsubsection{Subsubsecciones}
+\subsection{Dialog}
+Este término es específico de Mycroft, aunque muchos otros asistentes usan otras herramientas para desempeñar la misma función. Los dialogs son las frases con las que responde el asistente a las peticiones que hace el usuario. También es posible que en vez de un dialog, la respuesta sea completamente dinámica y no se usen. En el ejemplo anterior, el dialog podría ser ``Los próximos eventos son: Entrega de la práctica 2 para el viernes 30 de Abril''.
 
-Y subsecciones. 
+\subsection{Contexto}
+El contexto es una herramienta que se usa cada vez más dentro de los asistentes de voz ya que sirve para guardar parte de la información que se ha intercambiado en las anteriores preguntas y hacer que en las próximas interacciones los resultados ofrecidos por el programa estén relacionados. Por ejemplo, podríamos decir primero ``Dime los foros de Sistemas Distribuidos'' y si luego decimos ``Crear un hilo en los foros de esa asignatura'', el programa asociará ``esa asignatura'' con ``Sistemas Distribuidos''.
 
+\subsection{Prompt}
+Los prompts son preguntas que el asistente hace al usuario si el asistente necesita más información para completar la orden del usuario. Por ejemplo, si queremos crear un hilo en los foros de una asignatura, el asistente podría repetir el texto que ha entendido, y finalmente, usando un prompt, preguntar al usuario si el texto que ha entendido es correcto o no.
 
-\section{Referencias}
-
-Las referencias se incluyen en el texto usando cite \cite{wiki:latex}. Para citar webs, artículos o libros \cite{koza92}.
-
-
-\section{Imágenes}
-
-Se pueden incluir imágenes con los comandos standard de \LaTeX, pero esta plantilla dispone de comandos propios como por ejemplo el siguiente:
-
-\imagen{escudoInfor}{Autómata para una expresión vacía}
-
-
-
-\section{Listas de items}
-
-Existen tres posibilidades:
-
-\begin{itemize}
-	\item primer item.
-	\item segundo item.
-\end{itemize}
-
-\begin{enumerate}
-	\item primer item.
-	\item segundo item.
-\end{enumerate}
-
-\begin{description}
-	\item[Primer item] más información sobre el primer item.
-	\item[Segundo item] más información sobre el segundo item.
-\end{description}
-	
-\begin{itemize}
-\item 
-\end{itemize}
-
-\section{Tablas}
-
-Igualmente se pueden usar los comandos específicos de \LaTeX o bien usar alguno de los comandos de la plantilla.
-
-\tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
-{ \multicolumn{1}{l}{Herramientas} & App AngularJS & API REST & BD & Memoria \\}{ 
-HTML5 & X & & &\\
-CSS3 & X & & &\\
-BOOTSTRAP & X & & &\\
-JavaScript & X & & &\\
-AngularJS & X & & &\\
-Bower & X & & &\\
-PHP & & X & &\\
-Karma + Jasmine & X & & &\\
-Slim framework & & X & &\\
-Idiorm & & X & &\\
-Composer & & X & &\\
-JSON & X & X & &\\
-PhpStorm & X & X & &\\
-MySQL & & & X &\\
-PhpMyAdmin & & & X &\\
-Git + BitBucket & X & X & X & X\\
-Mik\TeX{} & & & & X\\
-\TeX{}Maker & & & & X\\
-Astah & & & & X\\
-Balsamiq Mockups & X & & &\\
-VersionOne & X & X & X & X\\
-} 
+\section{Fuzzy matching}
+Debido a que los sistemas de reconocimiento de voz a día de hoy distan bastante de ser perfectos, en ocasiones no detectan correctamente las palabras que el usuario dijo. Esto suele ocurrir de manera más habitual en el caso de palabras que no están recogidas en un diccionario o son usadas de manera frecuente, como por ejemplo, los nombres propios. Si se tiene una lista de opciones entre las que el usuario tiene que elegir una, se puede usar fuzzy matching para estimar cuál es la palabra más parecida de entre las opciones a lo que el usuario quiso decir. En nuestra aplicación, se pueden obtener los nombres de los contactos del usuario, estimar el parecido de la frase identificada por el reconocimiento de voz con cada uno de ellos y elegir el más similar.
