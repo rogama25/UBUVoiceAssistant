@@ -1,10 +1,12 @@
 """Module for the Course class
 """
 
-from typing import List
-from ..model.event import Event
-from ..model.grade_item import GradeItem
-from ..model.forum import Forum
+from typing import Dict, List, Union
+
+from .event import Event
+from .forum import Forum
+from .grade_item import GradeItem
+from .user import User
 
 
 class Course():
@@ -24,6 +26,7 @@ class Course():
         self.__grades = []
         self.__events = []
         self.__forums = []
+        self.__participants: Dict[int, User] = {}
 
     def get_id(self) -> int: # TODO revisar
         """Gets the Course id
@@ -88,3 +91,15 @@ class Course():
             forums (List[Forum]): List of forums
         """
         self.__forums = forums
+
+    def set_participants(self, participants: Union[List[User], Dict[int, User]]):
+        if isinstance(participants, List):
+            self.__participants = {}
+            for p in participants:
+                self.__participants[p.get_id()] = p
+            return
+        else:
+            self.__participants = participants
+    
+    def get_participants(self) -> Dict[int, User]:
+        return self.__participants

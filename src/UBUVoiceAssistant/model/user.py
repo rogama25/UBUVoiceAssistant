@@ -1,9 +1,11 @@
 """Module fo the User class
 """
 
-from typing import Dict, List
-from ..model.course import Course
-from ..model.grade_item import GradeItem
+from typing import Dict, List, Optional, Union
+
+from .course import Course
+from .grade_item import GradeItem
+
 
 class User():
     """ Represents a Moodle's user.
@@ -11,16 +13,20 @@ class User():
     Contains the user's id and courses.
     """
 
-    def __init__(self, user_id):
+    def __init__(self, user: Union[int, dict]):
         """ Constructor.
         ---
             Parameters:
                 - user_id: int with the user's id.
         """
-        self.__user_id = user_id
-        # dict with the key being the course's id and the value the Course object
-        self.__courses = {}
-        self.__final_grades = []
+        self.__courses: Dict[int, Course] = {}
+        self.__final_grades: List[GradeItem] = []
+        if isinstance(user, int):
+            self.__user_id = user
+            self.__fullname = ""
+        else:
+            self.__user_id = user["id"]
+            self.__fullname = user["fullname"]
 
     def get_id(self) -> int:
         """Gets the id of the user
@@ -47,7 +53,7 @@ class User():
         for course in courses:
             self.set_course(course)
 
-    def get_course(self, course_id: int) -> Course:
+    def get_course(self, course_id: int) -> Optional[Course]:
         """Gets a course from id
 
         Args:
@@ -81,3 +87,9 @@ class User():
             grades (List[GradeItem]): list of grades
         """
         self.__final_grades = grades
+
+    def set_fullname(self, name: str):
+        self.__fullname = name
+
+    def get_fullname(self) -> str:
+        return self.__fullname
