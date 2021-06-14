@@ -20,7 +20,7 @@ class Conversation():
         self.__members: Dict[int, User] = {}
         for member in json["members"]:
             self.__members[member["id"]] = User(member)
-        self.__messages: Dict[int, Message]
+        self.__messages: Dict[int, Message] = {}
         for message in json["messages"]:
             self.__messages[message["id"]] = Message(message)
 

@@ -158,7 +158,7 @@ class LoginWindow(QtWidgets.QMainWindow):
 
     def keyPressEvent(self, event):
         if event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return):
-            self.on_login_pressed()
+            self.on_login()
 
 
 if __name__ == "__main__":

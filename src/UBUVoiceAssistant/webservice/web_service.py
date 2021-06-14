@@ -250,8 +250,9 @@ class WebService:
 
     def get_conversations(self) -> List[Conversation]:
         url = (self.__url_with_token + "core_message_get_conversations")
-        params = {"userid": self.get_user().get_id}
+        params = {"userid": self.get_user().get_id()}
         req = requests.get(url, params).json()
+        print(req)
         result: List[Conversation] = []
         for conversation in req["conversations"]:
             result.append(Conversation(conversation))
