@@ -6,7 +6,6 @@ from typing import Dict, List, Union
 from .event import Event
 from .forum import Forum
 from .grade_item import GradeItem
-from .user import User
 
 
 class Course():
@@ -26,7 +25,7 @@ class Course():
         self.__grades = []
         self.__events = []
         self.__forums = []
-        self.__participants: Dict[int, User] = {}
+        self.__participants: Dict[int, "User"] = {}
 
     def get_id(self) -> int: # TODO revisar
         """Gets the Course id
@@ -92,7 +91,7 @@ class Course():
         """
         self.__forums = forums
 
-    def set_participants(self, participants: Union[List[User], Dict[int, User]]):
+    def set_participants(self, participants: Union[List["User"], Dict[int, "User"]]):
         if isinstance(participants, List):
             self.__participants = {}
             for p in participants:
@@ -101,5 +100,5 @@ class Course():
         else:
             self.__participants = participants
     
-    def get_participants(self) -> Dict[int, User]:
+    def get_participants(self) -> Dict[int, "User"]:
         return self.__participants

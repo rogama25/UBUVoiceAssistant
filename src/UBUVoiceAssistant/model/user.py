@@ -21,7 +21,7 @@ class User():
         """
         self.__courses: Dict[int, Course] = {}
         self.__final_grades: List[GradeItem] = []
-        if isinstance(user, int):
+        if isinstance(user, int) or isinstance(user, str):
             self.__user_id = user
             self.__fullname = ""
         else:

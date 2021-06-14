@@ -1,6 +1,6 @@
 from typing import Dict
-from . import User
-from . import Message
+from .user import User
+from .message import Message
 
 
 class Conversation():
