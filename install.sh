@@ -12,6 +12,8 @@ help() {
   echo "Available options:"
   echo "\"install.sh install\" to install the program"
   echo "\"install.sh uninstall\" to remove the program"
+  echo "\"install.sh update-skills\" to update all the ubu-skills"
+  echo "\"install.sh update\" to update UBUVoiceAssistant and ubu-skills"
 } 
 
 install() {
@@ -27,60 +29,10 @@ install() {
   sudo apt install libjack-dev libjack0 -y
   printf "${GREEN}Finished installing system dependencies${NC}\n"
 
-  # # Add docker dependencies
-  # printf "${GREEN}Downloading docker dependencies...${NC}\n"
-  # apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
-  # printf "${GREEN}Finished downloading docker dependencies${NC}\n"
-
-  # # Add Docker repo
-  # printf "${GREEN}Adding docker repository for Ubuntu...${NC}\n"
-  # curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-  # add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-  #   $(lsb_release -cs) stable" -y
-  # printf "${GREEN}Finished adding docker repository${NC}\n"
-
-  # # Force-refresh packages
-  # printf "${GREEN}Refreshing packages...${NC}\n"
-  # apt-get update
-  # printf "${GREEN}Finished refreshing packages${NC}\n"
-
-  # # Install Docker
-  # printf "${GREEN}Installing docker...${NC}\n"
-  # apt-get install docker-ce docker-ce-cli containerd.io
-  # printf "${GREEN}Finished installing docker${NC}\n"
-
-  # # Get Mycroft Docker image
-  # printf "${GREEN}Getting Mycroft image from docker...${NC}\n"
-  # docker pull mycroftai/docker-mycroft
-  # printf "${GREEN}Mycroft image downloaded${NC}\n"
-
   # Prepare user folder
-  # sudo -u $USERNAME mkdir -p /home/${USERNAME}/.config/mycroft-docker
   sudo -u $USERNAME mkdir -p /home/${USERNAME}/.config/UBUVoiceAssistant
   sudo -u $USERNAME mkdir -p /home/${USERNAME}/.mycroft
-  # mkdir -p /opt/mycroft-docker
 
-  # # Create docker container
-  # printf "${GREEN}Creating docker container...${NC}\n"
-  # sudo -u $USERNAME docker create --device /dev/snd -e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native \
-  # -v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
-  # -v ~/.config/pulse/cookie:/root/.config/pulse/cookie \
-  # -p 8181:8181 --name mycroft mycroftai/docker-mycroft
-
-  # docker cp -a mycroft:/root/.mycroft/. /home/${USERNAME}/.config/mycroft-docker
-  # docker cp -a mycroft:/var/log/mycroft/. /var/log/mycroft-docker
-  # docker cp -a mycroft:/opt/mycroft/. /opt/mycroft-docker
-
-  # sudo -u $USERNAME docker rm -v mycroft
-
-  # sudo -u $USERNAME docker create -v /home/${USERNAME}/.config/mycroft-docker:/root/.mycroft \
-  #     --device /dev/snd -e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native \
-  #     -v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
-  #     -v /home/${USERNAME}/.config/pulse/cookie:/root/.config/pulse/cookie \
-  #     -v /var/log/mycroft-docker:/var/log/mycroft -v /opt/mycroft-docker:/opt/mycroft \
-  #     -p 8181:8181 -p 5555:5555 --name mycroft mycroftai/docker-mycroft
-  # printf "${GREEN}Created docker container${NC}\n"
-  
   printf "${GREEN}Downloading Mycroft...${NC}\n"
   mkdir -p /usr/lib/mycroft-core
   chown $USERNAME /usr/lib/mycroft-core
@@ -94,12 +46,6 @@ install() {
 
   # Copy UBU skills inside
   printf "${GREEN}Installing UBU skills...${NC}\n"
-  # sudo -u $USERNAME docker cp ./src/UBUVoiceAssistant/skills/. mycroft:/opt/mycroft/skills
-  # sudo -u $USERNAME mkdir -p /tmp/UBUVoiceAssistant
-  # sudo -u $USERNAME cp -r ./src/UBUVoiceAssistant/model /tmp/UBUVoiceAssistant/
-  # sudo -u $USERNAME cp -r ./src/UBUVoiceAssistant/util /tmp/UBUVoiceAssistant/
-  # sudo -u $USERNAME cp -r ./src/UBUVoiceAssistant/webservice /tmp/UBUVoiceAssistant/
-  # sudo -u $USERNAME docker cp /tmp/UBUVoiceAssistant mycroft:/usr/lib/
   cd $DIR
   sudo -u $USERNAME cp -r ./src/UBUVoiceAssistant/skills/. /opt/mycroft/skills
   printf "${GREEN}Installed UBU skills${NC}\n"
@@ -111,7 +57,6 @@ install() {
   echo "cd /usr/lib" >> /usr/bin/UBUVoiceAssistant
   echo "python3 -m UBUVoiceAssistant.GUI.main" >> /usr/bin/UBUVoiceAssistant
   chmod a+x /usr/bin/UBUVoiceAssistant
-  xdg-desktop-menu forceupdate
   cp -r ./src/UBUVoiceAssistant/. /usr/lib/UBUVoiceAssistant
   printf "${GREEN}Installed to a permanent location${NC}\n"
 
@@ -125,23 +70,33 @@ install() {
   echo "Exec=UBUVoiceAssistant" >> /usr/share/applications/UBUVoiceAssistant.desktop
   echo "Icon=UBUVoiceAssistant.png" >> /usr/share/applications/UBUVoiceAssistant.desktop
   echo "Categories=Utility;Education;Accessibility;Qt;" >> /usr/share/applications/UBUVoiceAssistant.desktop
+  xdg-desktop-menu forceupdate
   printf "${GREEN}Created app launcher icon${NC}\n"
+  printf "${GREEN}Install completed :)${NC}\n"
 }
 
 uninstall() {
   rm -rf /usr/lib/UBUVoiceAssistant
+  rm -rf /usr/lib/mycroft-core
   rm -f /usr/bin/UBUVoiceAssistant
   rm -f /usr/share/applications/UBUVoiceAssistant.desktop
-  # rm -rf /usr/lib/mycroft-core
   rm -rf /home/${USERNAME}/.mycroft
-  # rm -rf /home/${USERNAME}/.config/mycroft-docker
-  # rm -rf /opt/mycroft-docker
-  printf "${GREEN}UBUVoiceAssistant was uninstalled. You may want to remove the docker containers to free space using the following commands:${NC}\n"
-  echo "docker rm -v mycroft"
-  echo "docker image rm mycroftai/docker-mycroft"
+  printf "${GREEN}UBUVoiceAssistant was uninstalled.${NC}\n"
 }
 
-if [[ $1 == "install" || $1 == "uninstall" ]]; then
+updateskills() {
+  rm -rf /opt/mycroft/skills/*
+  sudo -u $USERNAME cp -r ./src/UBUVoiceAssistant/skills/. /opt/mycroft/skills
+}
+
+update() {
+  rm -rf /usr/lib/UBUVoiceAssistant
+  mkdir -p /usr/lib/UBUVoiceAssistant
+  cp -r ./src/UBUVoiceAssistant/. /usr/lib/UBUVoiceAssistant
+  updateskills
+}
+
+if [[ $1 == "install" || $1 == "uninstall" || $1 == "update-skills" || $1 == "update" ]]; then
   # Checking if the script was launched as root
   if [ "$EUID" -ne 0 ]
     then echo "Please, run again the script as sudo."
@@ -149,6 +104,10 @@ if [[ $1 == "install" || $1 == "uninstall" ]]; then
   fi
   if [ $1 = "install" ]; then
     install
+  elif [ $1 = "update-skills" ]; then
+    updateskills
+  elif [ $1 = "update" ]; then
+    update
   else
     uninstall
   fi
