@@ -1,7 +1,10 @@
 """WebService file
 """
-from typing import List
+from typing import Dict, List, Optional, Union
+
 import requests
+
+from ..model.conversation import Conversation
 from ..model.course import Course
 from ..model.user import User
 
@@ -10,11 +13,11 @@ class WebService:
     """WebService class
     """
     def __init__(self) -> None:
-        self.__host = None
-        self.__url_with_token = None
-        self.__user = None
-        self.__lang = None
-        self.__user_courses = None
+        self.__host: str = ""
+        self.__url_with_token: str = ""
+        self.__user: User = None
+        self.__lang: str = ""
+        self.__user_courses: List[Course] = []
 
     def set_host(self, host: str):
         """Sets the WebService host
@@ -244,3 +247,49 @@ class WebService:
             + discussionid)
         req = requests.get(url).json()
         return req
+
+    def get_conversations(self) -> List[Conversation]:
+        url = (self.__url_with_token + "core_message_get_conversations")
+        params = {"userid": self.get_user().get_id}
+        req = requests.get(url, params).json()
+        result: List[Conversation] = []
+        for conversation in req["conversations"]:
+            result.append(Conversation(conversation))
+        return result
+
+    def send_message_to_conversation(self, message: str, conversation: int):
+        url = (self.__url_with_token + "core_message_send_messages_to_conversation")
+        params: Dict[str, Union[str, int]] = {
+            "conversationid": conversation,
+            "messages[0][text]": message,
+            "messages[0][textformat]": 2 # PLAIN
+        }
+        req = requests.get(url, params).json()
+
+    def send_message_to_user(self, message: str, user: int):
+        url = (self.__url_with_token + "core_message_send_instant_messages")
+        params: Dict[str, Union[str, int]] = {
+            "messages[0][touserid]": user,
+            "messages[0][text]": message,
+            "messages[0][textformat]": 2 # PLAIN
+        }
+        req = requests.get(url, params).json()
+
+    def check_can_message_user(self, user: int) -> bool:
+        url = (self.__url_with_token + "core_message_get_member_info")
+        params = {
+            "referenceuserid": self.__user.get_id(),
+            "userids[0]": user,
+            "includeprivacyinfo": 1
+        }
+        req = requests.get(url, params).json()
+        return bool(req[0]["canmessage"])
+
+    def get_participants_by_course(self, course: int) -> List[User]:
+        url = (self.__url_with_token + "core_enrol_get_enrolled_users")
+        params = {"courseid": course}
+        req = requests.get(url, params).json()
+        result = []
+        for participant in req:
+            result.append(User(participant))
+        return result
