@@ -1,3 +1,5 @@
+from bs4 import BeautifulSoup
+
 class Message():
     def __init__(self, json: dict) -> None:
         self.__message_id: int = json["id"]
@@ -16,3 +18,6 @@ class Message():
 
     def get_timecreated(self) -> int:
         return self.__timecreated
+
+    def get_clean_text(self) -> str:
+        return BeautifulSoup(self.__text, "html.parser").get_text()

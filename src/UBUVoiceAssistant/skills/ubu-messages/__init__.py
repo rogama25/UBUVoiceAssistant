@@ -16,14 +16,14 @@ class UbuMessagesSkill(MycroftSkill):
 
     @intent_handler(IntentBuilder("UnreadMessagesIntent").require("UnreadMessagesVoc"))
     def handle_unread_messages(self, message):
-        convers = self.ws.get_conversations()
+        convers = self.ws.get_conversations_with_messages()
         messages = {}
         for conver in convers:
             messages.update(conver.get_messages())
         l = messages.keys()
         l = sorted(l, reverse=True)
         for n, m in enumerate(l):
-            self.speak(messages[m].get_text())
+            self.speak(messages[m].get_clean_text())
             wait_while_speaking()
             if n == 4:
                 break

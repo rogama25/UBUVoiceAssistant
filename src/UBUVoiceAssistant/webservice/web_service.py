@@ -252,10 +252,24 @@ class WebService:
         url = (self.__url_with_token + "core_message_get_conversations")
         params = {"userid": self.get_user().get_id()}
         req = requests.get(url, params).json()
-        print(req)
         result: List[Conversation] = []
         for conversation in req["conversations"]:
             result.append(Conversation(conversation))
+        return result
+
+    def get_conversations_with_messages(self) -> List[Conversation]:
+        convers = self.get_conversations()
+        url = (self.__url_with_token + "core_message_get_conversation")
+        result: List[Conversation] = []
+        for c in convers:
+            params = {
+                "userid": self.get_user().get_id(),
+                "conversationid": c.get_conversation_id(),
+                "includecontactrequests": 0,
+                "includeprivacyinfo": 0
+            }
+            req = requests.get(url, params).json()
+            result.append(Conversation(req))
         return result
 
     def send_message_to_conversation(self, message: str, conversation: int):
