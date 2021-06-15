@@ -16,7 +16,7 @@ moodle_words = {'opens': 'se abre', 'closes': 'se cierra', '&aacute;': 'á',
                 '&uacute;': 'ú', '\xa0': ' '}
 
 
-def create_server_socket(unserialized_data, host=SOCKET_HOST, port=SOCKET_PORT): # TODO Document
+def create_server_socket(unserialized_data, host=SOCKET_HOST, port=SOCKET_PORT):  # TODO Document
     """Creates a server socket
 
     Args:
@@ -33,7 +33,7 @@ def create_server_socket(unserialized_data, host=SOCKET_HOST, port=SOCKET_PORT):
         client_socket.send(data)
 
 
-def get_data_from_server(host=SOCKET_HOST, port=SOCKET_PORT): # TODO Document
+def get_data_from_server(host=SOCKET_HOST, port=SOCKET_PORT):  # TODO Document
     """Gets data from the server.
 
     Args:
@@ -101,3 +101,8 @@ def get_course_id_by_name(course_to_find: str, user_courses: List[Course]) -> Op
         if course_to_find.upper() in course.get_name().upper():
             return str(course.get_id())
     return None
+
+
+def reorder_name(fullname: str) -> str:
+    lastname, firstname = fullname.split(", ")
+    return " ".join([firstname, lastname])
