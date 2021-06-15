@@ -1,11 +1,39 @@
 \apendice{Especificación de Requisitos}
 
 \section{Introducción}
+En este apéndice se explican los objetivos del proyecto y los requisitos que se han definido para llevarlo a cabo.
 
 \section{Objetivos generales}
+El principal objetivo del proyecto es mejorar la versión anterior del asistente del UBUVoiceAssistant. Para cumplirlo, se proponen algunas mejoras, como una mejora en el proceso de instalación y configuración inicial o en la interacción con el asistente. También se propone conseguir una mayor robustez en la aplicación, obtener más información de Moodle e incluso poder enviar datos a la plataforma.
 
 \section{Catalogo de requisitos}
+Los nuevos requisitos que se han añadido a la aplicación son los siguientes:
+\subsection{Requisitos funcionales}
+\begin{itemize}
+    \item RF-1 Obtener datos de Moodle: La aplicación debe poder obtener distintos datos de Moodle.
+    \begin{itemize}
+        \item RF-1.1 Obtener los mensajes privados: La aplicación debe poder leer los últimos mensajes que ha recibido el usuario de la misma.
+        \item RF-1.2 Buscar en los foros: La aplicación debe poder buscar en los foros los hilos relacionados con una frase que diga el usuario.
+    \end{itemize}
+    \item RF-2 Enviar datos a Moodle: La aplicación debe poder enviar algunos datos a nuestra plataforma de Moodle.
+    \begin{itemize}
+        \item RF-2.1 Enviar mensajes privados: La aplicación debe poder enviar mensajes privados a otros usuarios con los que se tiene una conversación abierta o que comparten un curso con el usuario de la aplicación.
+    \end{itemize}
+    \item RF-3 Mostrar un sistema de ayuda: La aplicación debe poder indicar al usuario cómo interactuar, sugiriéndole algunas frases que puede decir.
+    \item RF-4 Mejorar la instalación: Se deben mejorar varios aspectos para hacer más cómodo el proceso de puesta en marcha.
+    \begin{itemize}
+        \item RF-4.1 Crear un instalador: Se debe crear un programa que prepare todas las dependencias necesarias y coloque todos los archivos en las ubicaciones necesarias para el correcto funcionamiento de la aplicación.
+        \item RF-4.2 Crear un asistente de emparejamiento: La aplicación debe guiar al usuario por el proceso de emparejamiento del cliente con el servidor de Mycroft.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Requisitos no funcionales}
+\begin{itemize}
+    \item RNF-1 Soporte para Windows: La aplicación debe poder ser ejecutada en Windows 10.
+    \item RNF-2 Naturalidad: La interacción de la aplicación con el usuario debe ser lo más natural posible.
+    \item RNF-3 Robustez: Se debe mejorar la robustez de la aplicación, haciéndola más tolerante a fallos.
+    \item RNF-4 Internacionalización: La aplicación tiene que permitir añadir idiomas nuevos fácilmente.
+    \item RNF-5 Calidad de código: La calidad del código debe ser buena, y tener una documentación completa.
+\end{itemize}
 
 \section{Especificación de requisitos}
-
-

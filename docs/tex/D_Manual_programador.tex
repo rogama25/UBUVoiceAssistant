@@ -1,11 +1,123 @@
 \apendice{Documentación técnica de programación}
 
 \section{Introducción}
+En este capítulo se van a mencionar todos los aspectos relevantes que es necesario conocer para poder seguir trabajando en una versión futura de la aplicación.
 
 \section{Estructura de directorios}
+Para organizar el proyecto, se ha hecho de la siguiente manera:
+\begin{itemize}
+    \item /docs/: Carpeta que contiene todos los documentos e imágenes para generar los archivos PDF con la memoria y anexos.
+    \item /scripts/: Varios scripts que se han usado para automatizar algunas acciones frecuentes, como la ejecución del programa desde la versión en desarrollo, la generación de la plantilla para las traducciones, o para realizar las pruebas de calidad de código.
+    \item /testing/: Algunos archivos de prueba que he ido generando a lo largo del proyecto para probar algunas funcionalidades sin tener que lanzar el programa completo.
+    \item /src/UBUVoiceAssistant/: La carpeta base del código fuente del proyecto. Tiene las siguientes carpetas en su interior:
+    \begin{itemize}
+        \item GUI: Contiene los archivos necesarios para la interfaz gráfica
+        \item GUI/old\_files: Archivos que hacían funcionar la anterior interfaz gráfica. No se usan, pero se han dejado como referencia.
+        \item GUI/forms: En esta carpeta se encuentran los formularios generados con QtDesigner.
+        \item GUI/forms/chat\_window\_html: Los documentos html, javascript y CSS necesarios para mostrar los bocadillos en la ventana de chat con el asistente.
+        \item imgs: Contiene las imágenes que se usan en la interfaz gráfica.
+        \item lang: Los archivos para traducir la interfaz gráfica. Tiene la plantilla llamada ``translation\_template.pot'' y las carpetas para cada uno de los idiomas. Siguen la estructura \textit{languageCode\_countryCode}/LC\_MESSAGES/UBUVoiceAssistant
+        \item model: Archivos que representan los datos de Moodle
+        \item prototipo: Archivos para un prototipo de skill para Alexa que se usaron en la anterior versión del proyecto.
+        \item skills: Contiene las \textit{Skills} del proyecto.
+        \item util: Archivos que ofrecen varias funcionalidades para el proyecto.
+        \item webservice: Código encargado de realizar las peticiones web al servidor de Moodle
+    \end{itemize}
+\end{itemize}
 
 \section{Manual del programador}
+Como entorno de programación se recomienda usar como sistema operativo la última versión normal de Ubuntu, aunque también es posible usar la última LTS o cualquiera de las distribuciones que derivan de ellas. Es necesario instalar las dependencias de python3 que hemos usado en el proyecto, Mycroft, QtDesigner, Poedit y un editor de código como Visual Studio Code con algunas extensiones recomendadas para facilitar el trabajo.
+
+\subsection{Python3}
+Python3 ya viene preinstalado en Ubuntu, pero para que la aplicación funcione correctamente necesitamos instalar las bibliotecas usadas en el proyecto. Esto se puede hacer escribiendo los siguientes comandos en una terminal:
+\begin{itemize}
+    \item \texttt{sudo apt-get install python3-pip python3-pyqt5 \textbackslash\newline python3-pyqt5.qtwebengine git gettext mypy pylint -y}
+    \item \texttt{sudo pip3 install mycroft-messagebus-client babel}
+    
+    En el caso de que se vayan a modificar o crear skills nuevas, es recomendable ejecutar los siguientes comandos para tener autocompletado dentro del IDE:
+    \item \texttt{sudo apt-get install libfann-dev python3-dev swig -y}
+    \item \texttt{sudo pip3 install adapt-parser padatious}
+\end{itemize}
+
+\subsection{Mycroft}
+Para poder usar Mycroft es necesario tener una cuenta en \href{https://mycroft.ai}{su página web}. También será necesario descargar el código de Mycroft desde \href{https://github.com/MycroftAI/mycroft-core}{su repositorio}. Lo podemos hacer ejecutando los siguientes comandos:
+\begin{itemize}
+    \item \texttt{sudo mkdir -p /usr/lib/mycroft-core}
+    \item \texttt{sudo chown SUDO\_USER /usr/lib/mycroft-core}
+    \item \texttt{git clone https://github.com/MycroftAI/mycroft-core.git \textbackslash\newline /usr/lib/mycroft-core}
+    \item \texttt{/usr/lib/mycroft-core/dev\_setup.sh -sm}
+\end{itemize}
+Tras introducir el último comando se abrirá una instalación interactiva de Mycroft. En todas las preguntas deberemos responder escribiendo la letra Y en la terminal.
+
+Cuando termine, podemos emparejarlo abriendo la consola de Mycroft escribiendo los siguientes comandos:
+\begin{itemize}
+    \item \texttt{cd /usr/lib/mycroft-core}
+    \item \texttt{./start-mycroft.sh debug}
+\end{itemize}
+
+Tras esto, se mostrará en la terminal los registros de las operaciones que realiza Mycroft en la parte superior, mientras que en la parte inferior aparecen los registros de los mensajes intercambiados entre el usuario y Mycroft. Pasados unos segundos o unos minutos, dependiendo de la velocidad tanto del equipo como de la conexión a internet, se iniciará el proceso de emparejamiento. En caso de no realizarse de manera automática, podemos escribir ``pair my device'' para iniciarlo manualmente.
+Mycroft recitará y escribirá lo que tenemos que hacer en este punto. Tendremos que ir a \href{https://mycroft.ai}{la página web de Mycroft}, y en la parte superior derecha, hacer click en \textbf{Add device}. Deberemos introducir el código de 6 caracteres en el campo que pone \textbf{Pairing Code}. En la parte inferior deberemos seleccionar \textbf{Google Voice} como motor de voz.
+Una vez hecho, Mycroft dirá que se ha emparejado correctamente y puede empezar a funcionar. Podemos cerrar la interfaz de Mycroft pulsando \textit{ctrl + c} o escribiendo \texttt{:exit}.
+
+\subsection{QtDesigner}
+Para instalar QtDesigner deberemos escribir el siguiente comando en una terminal:
+\begin{itemize}
+    \item \texttt{sudo apt-get install qttools5-dev-tools}
+\end{itemize}
+Una vez hecho esto, podremos acceder al programa desde el menú de aplicaciones del sistema.
+
+-- Completar explicación de uso --
+
+\subsection{Poedit}
+Para editar los archivos de traducción de la interfaz es recomendable usar un programa que las muestre de forma visual y ofrezca algunas herramientas, como Poedit.
+
+Para instalarlo, es tan sencillo como hacer:
+\begin{itemize}
+    \item \texttt{sudo apt install poedit}
+\end{itemize}
+
+-- Completar pequeño manual de uso --
+
+\subsection{Visual Studio Code}
+Si bien es posible usar cualquier editor de texto, voy a describir el proceso para instalar Visual Studio Code, ya que es uno de los editores más completos que existen a día de hoy.
+
+Para descargarlo tendremos que ir a \href{https://code.visualstudio.com/}{su página web}, descargamos el archivo .deb, y hacemos doble click sobre él para instalarlo. En caso de que no funcione, podemos abrir una terminal, navegar hasta la carpeta donde se encuentra el archivo usando el comando \texttt{cd} y realizar la instalación usando \texttt{sudo apt install ./\textit{nombreDelArchivo.deb}}.
+
+Una vez instalado, lo abrimos desde el menú de aplicaciones del sistema, hacemos click en el icono de las extensiones de la barra lateral e instalamos las siguientes:
+\begin{itemize}
+    \item \texttt{Python}, de Microsoft. Nos permite usar funciones de autocompletado en el IDE.
+    \item \texttt{Python Docstring Generator}, de Nils Werner. Nos permite generar la documentación de los métodos, a partir de los argumentos definidos en sus cabeceras.
+    \item \texttt{Pylance}, de Microsoft. Mejora el autocompletado, permitiendo tener en cuenta el tipado.
+    \item \texttt{Code Spell Checker}, de Street Side Software. Añade un corrector con las palabras inglesas.
+    \item \texttt{Spanish - Code Spell Checker}, de Street Side Software. Añade el español como paquete de idioma a la anterior extensión.
+\end{itemize}
 
 \section{Compilación, instalación y ejecución del proyecto}
+Descargamos el repositorio del proyecto desde la web usando el comando \texttt{git clone https://github.com/rogama25/UBUVoiceAssistant}.
+
+Posteriormente, debemos usar los siguientes comandos para crear las carpetas necesarias y colocar los archivos en las rutas correctas:
+\begin{itemize}
+    \item \texttt{cd UBUVoiceAssistant}
+    \item \texttt{mkdir -p \char`\~/.config/UBUVoiceAssistant}
+    \item \texttt{mkdir -p \char`\~/.config/mycroft}
+    \item \texttt{cp -r ./src/UBUVoiceAssistant/skills/. /opt/mycroft/skills}
+    \item \texttt{sudo mkdir -p /usr/lib/UBUVoiceAssistant}
+    \item \texttt{sudo cp -r ./src/UBUVoiceAssistant/. /usr/lib/UBUVoiceAssistant}
+\end{itemize}
+
+Para ejecutarlo desde el entorno de desarrollo, escribimos:
+\begin{itemize}
+    \item \texttt{cd src}
+    \item \texttt{python3 -m UBUVoiceAssistant.GUI.main}
+\end{itemize}
 
 \section{Pruebas del sistema}
+Para realizar las pruebas de calidad de código lo podemos hacer con las herramientas Pylint y mypy. Sin embargo, debido a que en las carpetas de las skills de Mycroft se suelen usar guiones y que no son caracteres válidos en Python, es necesario renombrar temporalmente las carpetas para que tengan un guión bajo.
+
+Después podremos hacer:
+\begin{itemize}
+    \item \texttt{pylint src -ry}
+    \item \texttt{mypy src}
+\end{itemize}
+
+Para las pruebas de funcionalidad lo podemos realizar conectándonos a un servidor de Moodle cualquiera. Durante el desarrollo se ha usado tanto UBUVirtual, como \href{https://school.moodledemo.net/}{Mount Orange School} como un servidor Moodle instalado en la propia máquina, usando la \href{https://docs.moodle.org/311/en/Step-by-step_Installation_Guide_for_Ubuntu}{documentación oficial}.

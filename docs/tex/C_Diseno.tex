@@ -1,11 +1,80 @@
 \apendice{Especificación de diseño}
 
 \section{Introducción}
+En este apartado se detalla el diseño del proyecto, indicando claramente cuáles han sido los cambios más importantes con respecto a la versión anterior.
 
 \section{Diseño de datos}
+El modelo de datos que se usa dentro de la aplicación está fuertemente ligado con la estructura de datos que se usa dentro de Moodle. Sólo se ha creado el modelado necesario para almacenar los datos que se usan en las diferentes skills. Todos los archivos fuente que componen el modelo de datos se encuentran en la carpeta src/UBUVoiceAssistant/model. Las clases que lo forman son las siguientes:
+
+\begin{itemize}
+    \item \textbf{Course} guarda los datos relacionados con los cursos.
+    \item \textbf{Forum} almacena los foros de un curso.
+    \item \textbf{Discussion} representa cada uno de los hilos de un foro.
+    \item \textbf{GradeItem} guarda las notas.
+    \item \textbf{Event} representa los eventos del calendario.
+    \item \textbf{User} almacena todos los datos relacionados con el usuario.
+    \item Se ha añadido la clase \textbf{Conversation} que almacena las conversaciones por mensaje privado.
+    \item La nueva clase \textbf{Message} representa cada mensaje de una conversación.
+\end{itemize}
+
+\tablaSmallSinColores{Diccionario de datos de Conversation}{l c c}{data_conversation}{
+    Atributo & Tipo de dato & Descripción \\
+}{
+    conversation\_id & int & Identificador de la conversación \\
+    isread & bool & Indica si hay mensajes sin leer \\
+    unreadcount & int & Número de mensajes pendientes \\
+    name & str & Nombre de la conversación \\
+    subname & str & Subtítulo de la conversación \\
+    members & dict & Diccionario de miembros \\
+     & & Son objetos de tipo User \\
+     & & La clave es el id del usuario \\
+    messages & dict & Diccionario de mensajes \\
+     & & Son objetos de tipo Message \\
+     & & La clave es el id del mensaje \\
+}
+
+\tablaSmallSinColores{Diccionario de datos de Message}{l c c}{data_message}{
+    Atributo & Tipo de dato & Descripción \\
+}{
+    message\_id & int & Identificador del mensaje \\
+    useridfrom & int & Identificador del usuario que \\
+     & & ha mandado este mensaje \\
+    text & str & Contenido del mensaje \\
+     & & Contiene algunas etiquetas HTML \\
+    timecreated & int & Momento de envío del mensaje \\
+     & & Timestamp en formato Unix \\
+}
+
+\tablaSmallSinColores{Diccionario de datos de User}{l c c}{data_user}
+{
+    Atributo & Tipo de dato & Descripción \\
+}{
+    user\_id & int & Identificador del usuario \\
+    courses & dict & Diccionario de los cursos del usuario \\
+     & & Son objetos de tipo Course \\
+     & & La clave es el id del curso \\
+     & & Está vacío si no representa \\
+     & & al usuario de la aplicación \\
+    fullname & str & Nombre completo del usuario \\
+}
+
+\tablaSmallSinColores{Diccionario de datos de Course}{l c c}{data_course}
+{
+    Atributo & Tipo de dato & Descripción \\
+}{
+    course\_id & str & Identificador del curso   \\
+    name & str & Nombre del curso	\\
+    grades & list & Lista que contiene las calificaciones\\
+     & & del usuario de ese curso \\
+    events & list & Lista que contiene los eventos del curso \\
+    forums & list & Lista que contiene los foros de ese curso \\
+    participants & dict & Diccionario de los participantes \\
+     & & Son objetos de tipo User \\
+     & & La clave es el id del usuario \\
+}
+
+Las clases ``Forum'', ``Discussion'', ``GradeItem'' y ``Event'' no han sufrido cambios.
 
 \section{Diseño procedimental}
 
 \section{Diseño arquitectónico}
-
-
