@@ -71,10 +71,10 @@ class LinkMycroft(QtWidgets.QMainWindow):
             if line:
                 print(line)
                 matches = re.findall(
-                    "(?<=" + re.escape("PairingSkill | Pairing code: ") + ").+(?=\n)", line)
+                    "(?<=" + re.escape("PairingSkill | ") + ")[a-zA-Z0-9 ]*: [A-Z0-9]{6}(?=\n)", line)
                 print(matches)
                 if matches:
-                    self.code = matches[0]
+                    self.code = matches[0][-6:]
             else:
                 time.sleep(1)
 
