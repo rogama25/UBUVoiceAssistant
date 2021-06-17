@@ -55,6 +55,7 @@ class LinkMycroft(QtWidgets.QMainWindow):
         self.code_checker = Thread(target=self.read_pairing_code, daemon=True)
         self.code_checker.start()
         self.timer.start(1000)
+        self.setFixedSize(self.size())
 
     def pairing_done(self, event):
         self.done = True

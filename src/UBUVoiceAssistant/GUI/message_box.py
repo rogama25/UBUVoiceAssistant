@@ -9,3 +9,4 @@ class MessageBox(QtWidgets.QMessageBox):
         super().__init__()
         self.setWindowTitle("UBUVoiceAssistant")
         self.setText(text)
+        self.setFixedSize(self.size())

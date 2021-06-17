@@ -13,6 +13,7 @@ class ProgressBox(QtWidgets.QProgressDialog):
         self.setModal(True)
         self.setCancelButton(None)  # type: ignore
         self.forceShow()
+        self.setFixedSize(self.size())
         self.done = False
 
     def closeEvent(self, event) -> None:

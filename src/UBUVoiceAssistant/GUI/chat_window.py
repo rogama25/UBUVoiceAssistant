@@ -29,7 +29,7 @@ class ChatWindow(QtWidgets.QMainWindow):
         self.next_message = 0
         self.intent_labels = []
 
-        self.mic_icon = QtGui.QIcon(QtGui.QPixmap("UBUVoiceAssistant/imgs/ic.svg"))
+        self.mic_icon = QtGui.QIcon(QtGui.QPixmap("UBUVoiceAssistant/imgs/mic.svg"))
         self.mic_muted_icon = QtGui.QIcon(QtGui.QPixmap("UBUVoiceAssistant/imgs/mic_muted.svg"))
 
         self.color: List[Union[int, float]] = list(
@@ -66,6 +66,7 @@ class ChatWindow(QtWidgets.QMainWindow):
         self.web.load(QtCore.QUrl.fromLocalFile(
             os.path.abspath(os.getcwd())+"/UBUVoiceAssistant/GUI/forms/chat_window_html/message-bubbles.html"))
         self.update_texts()
+        self.setFixedSize(self.size())
         # with open("./UBUVoiceAssistant/GUI/forms/chat_window_html/message-bubbles.html") as file:
         #     self.web.setHtml(file.read(), baseUrl=QtCore.QUrl().fromLocalFile(
         #         os.path.abspath(os.getcwd())+"/UBUVoiceAssistant/GUI/forms/chat_window_html"))

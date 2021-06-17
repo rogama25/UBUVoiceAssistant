@@ -2,6 +2,8 @@
 """
 import sys
 import time
+
+from PyQt5.QtGui import QIcon
 from ..GUI.link_mycroft import LinkMycroft
 import requests
 import subprocess
@@ -47,6 +49,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.finished = False
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.check_mycroft_started)
+        self.setFixedSize(self.size())
         self.show()
 
     # pylint: disable=R0201
@@ -164,5 +167,6 @@ class LoginWindow(QtWidgets.QMainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     app.setApplicationName("UBUVoiceAssistant")
+    app.setWindowIcon(QIcon("UBUVoiceAssistant/imgs/appicon.png"))
     window = LoginWindow()
     app.exec_()
