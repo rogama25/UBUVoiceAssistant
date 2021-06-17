@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>686</width>
+    <height>440</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>UBUVoiceAssistant</string>
@@ -31,8 +37,8 @@
    <widget class="QComboBox" name="dropLang">
     <property name="geometry">
      <rect>
-      <x>560</x>
-      <y>20</y>
+      <x>460</x>
+      <y>10</y>
       <width>221</width>
       <height>25</height>
      </rect>
@@ -41,25 +47,25 @@
    <widget class="QLabel" name="img">
     <property name="geometry">
      <rect>
-      <x>110</x>
-      <y>80</y>
-      <width>533</width>
-      <height>357</height>
+      <x>230</x>
+      <y>50</y>
+      <width>225</width>
+      <height>225</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../imgs/UBUVoiceAssistant_logo.png</pixmap>
+     <pixmap>../../imgs/appicon.png</pixmap>
     </property>
    </widget>
    <widget class="QLabel" name="lblUser">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>450</y>
-      <width>231</width>
+      <x>10</x>
+      <y>290</y>
+      <width>221</width>
       <height>20</height>
      </rect>
     </property>
@@ -73,9 +79,9 @@
    <widget class="QLabel" name="lblPassword">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>480</y>
-      <width>231</width>
+      <x>10</x>
+      <y>320</y>
+      <width>221</width>
       <height>20</height>
      </rect>
     </property>
@@ -89,9 +95,9 @@
    <widget class="QLabel" name="lblHost">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>510</y>
-      <width>241</width>
+      <x>0</x>
+      <y>350</y>
+      <width>231</width>
       <height>20</height>
      </rect>
     </property>
@@ -105,9 +111,9 @@
    <widget class="QLineEdit" name="tbxUser">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>450</y>
-      <width>191</width>
+      <x>240</x>
+      <y>290</y>
+      <width>201</width>
       <height>25</height>
      </rect>
     </property>
@@ -115,9 +121,9 @@
    <widget class="QLineEdit" name="tbxPassword">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>480</y>
-      <width>191</width>
+      <x>240</x>
+      <y>320</y>
+      <width>201</width>
       <height>25</height>
      </rect>
     </property>
@@ -128,9 +134,9 @@
    <widget class="QLineEdit" name="tbxHost">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>510</y>
-      <width>191</width>
+      <x>240</x>
+      <y>350</y>
+      <width>201</width>
       <height>25</height>
      </rect>
     </property>
@@ -141,8 +147,8 @@
    <widget class="QCheckBox" name="chkUser">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>450</y>
+      <x>450</x>
+      <y>290</y>
       <width>311</width>
       <height>23</height>
      </rect>
@@ -154,8 +160,8 @@
    <widget class="QCheckBox" name="chkHost">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>510</y>
+      <x>450</x>
+      <y>350</y>
       <width>311</width>
       <height>23</height>
      </rect>
@@ -167,9 +173,9 @@
    <widget class="QPushButton" name="btnLogin">
     <property name="geometry">
      <rect>
-      <x>282</x>
-      <y>550</y>
-      <width>191</width>
+      <x>240</x>
+      <y>400</y>
+      <width>201</width>
       <height>25</height>
      </rect>
     </property>

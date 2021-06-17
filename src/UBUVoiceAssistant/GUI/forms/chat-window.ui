@@ -84,6 +84,22 @@
     <string>send</string>
    </property>
   </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>50</width>
+     <height>50</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>../../imgs/appicon.png</pixmap>
+   </property>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>
