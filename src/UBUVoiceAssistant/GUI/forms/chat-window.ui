@@ -99,6 +99,9 @@
    <property name="pixmap">
     <pixmap>../../imgs/appicon.png</pixmap>
    </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
   </widget>
  </widget>
  <customwidgets>
