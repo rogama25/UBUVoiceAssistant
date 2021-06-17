@@ -68,7 +68,7 @@ install() {
   echo "Comment=UBUVoiceAssistant" >> /usr/share/applications/UBUVoiceAssistant.desktop
   echo "Terminal=false" >> /usr/share/applications/UBUVoiceAssistant.desktop
   echo "Exec=UBUVoiceAssistant" >> /usr/share/applications/UBUVoiceAssistant.desktop
-  echo "Icon=UBUVoiceAssistant.png" >> /usr/share/applications/UBUVoiceAssistant.desktop
+  echo "Icon=/usr/lib/UBUVoiceAssistant/imgs/appicon.png" >> /usr/share/applications/UBUVoiceAssistant.desktop
   echo "Categories=Utility;Education;Accessibility;Qt;" >> /usr/share/applications/UBUVoiceAssistant.desktop
   xdg-desktop-menu forceupdate
   printf "${GREEN}Created app launcher icon${NC}\n"
