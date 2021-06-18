@@ -11,6 +11,7 @@ help() {
   echo "UBUVoiceAssistant installer"
   echo "Available options:"
   echo "\"install.sh install\" to install the program"
+  echo "\"install.sh install --manual\" to install without autocompleting Mycroft prompts"
   echo "\"install.sh uninstall\" to remove the program"
   echo "\"install.sh update-skills\" to update all the ubu-skills"
   echo "\"install.sh update\" to update UBUVoiceAssistant and ubu-skills"
@@ -41,7 +42,14 @@ install() {
   printf "${GREEN}Finished downloading Mycroft${NC}\n"
 
   printf "${GREEN}Configuring Mycroft...${NC}\n"
-  echo -e YYYY | sudo -u $USERNAME bash dev_setup.sh -sm
+  if [ $1 = "--manual" ]; then
+    printf "${GREEN}A list of questions will be asked now to configure Mycroft. Answer by pressing Y in all of them.\n"
+    printf "Se van a hacer una serie de preguntas para configurar Mycroft. Responde a todas pulsando Y${NC}\n"
+    read -s -p "Press Enter to continue."
+    sudo -u $USERNAME bash dev_setup.sh -sm
+  else
+    echo -e YYYYYYYYYYY | sudo -u $USERNAME bash dev_setup.sh -sm
+  fi
   printf "${GREEN}Finished configuring Mycroft${NC}\n"
 
   # Copy UBU skills inside
@@ -103,7 +111,7 @@ if [[ $1 == "install" || $1 == "uninstall" || $1 == "update-skills" || $1 == "up
     exit
   fi
   if [ $1 = "install" ]; then
-    install
+    install $2
   elif [ $1 = "update-skills" ]; then
     updateskills
   elif [ $1 = "update" ]; then
