@@ -1,0 +1,15 @@
+[submodule "src/UBUVoiceAssistant/skills/ubu-messages"]
+	path = src/UBUVoiceAssistant/skills/ubu-messages
+	url = https://github.com/ubu-skills/ubu-messages
+[submodule "src/UBUVoiceAssistant/skills/ubu-calendar"]
+	path = src/UBUVoiceAssistant/skills/ubu-calendar
+	url = https://github.com/ubu-skills/ubu-calendar
+[submodule "src/UBUVoiceAssistant/skills/ubu-course"]
+	path = src/UBUVoiceAssistant/skills/ubu-course
+	url = https://github.com/ubu-skills/ubu-course
+[submodule "src/UBUVoiceAssistant/skills/ubu-grades"]
+	path = src/UBUVoiceAssistant/skills/ubu-grades
+	url = https://github.com/ubu-skills/ubu-grades
+[submodule "src/UBUVoiceAssistant/skills/ubu-help"]
+	path = src/UBUVoiceAssistant/skills/ubu-help
+	url = https://github.com/ubu-skills/ubu-help
