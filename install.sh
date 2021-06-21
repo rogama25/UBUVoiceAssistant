@@ -66,10 +66,10 @@ install() {
   printf "${GREEN}Installing to a permanent location...${NC}\n"
   mkdir -p /usr/lib/UBUVoiceAssistant
   echo "#!/bin/bash" > /usr/bin/UBUVoiceAssistant
-  echo "cd /usr/lib" >> /usr/bin/UBUVoiceAssistant
+  echo "cd /usr/lib/UBUVoiceAssistant" >> /usr/bin/UBUVoiceAssistant
   echo "python3 -m UBUVoiceAssistant.GUI.main" >> /usr/bin/UBUVoiceAssistant
   chmod a+x /usr/bin/UBUVoiceAssistant
-  cp -r ./src/UBUVoiceAssistant/. /usr/lib/UBUVoiceAssistant
+  cp -r ./src/UBUVoiceAssistant/ /usr/lib/UBUVoiceAssistant
   printf "${GREEN}Installed to a permanent location${NC}\n"
 
   # Create app launcher icon
@@ -80,7 +80,7 @@ install() {
   echo "Comment=UBUVoiceAssistant" >> /usr/share/applications/UBUVoiceAssistant.desktop
   echo "Terminal=false" >> /usr/share/applications/UBUVoiceAssistant.desktop
   echo "Exec=UBUVoiceAssistant" >> /usr/share/applications/UBUVoiceAssistant.desktop
-  echo "Icon=/usr/lib/UBUVoiceAssistant/imgs/appicon.png" >> /usr/share/applications/UBUVoiceAssistant.desktop
+  echo "Icon=/usr/lib/UBUVoiceAssistant/UBUVoiceAssistant/imgs/appicon.png" >> /usr/share/applications/UBUVoiceAssistant.desktop
   echo "Categories=Utility;Education;Accessibility;Qt;" >> /usr/share/applications/UBUVoiceAssistant.desktop
   xdg-desktop-menu forceupdate
   printf "${GREEN}Created app launcher icon${NC}\n"
@@ -104,7 +104,7 @@ updateskills() {
 updateall() {
   rm -rf /usr/lib/UBUVoiceAssistant
   mkdir -p /usr/lib/UBUVoiceAssistant
-  cp -r ./src/UBUVoiceAssistant/. /usr/lib/UBUVoiceAssistant
+  cp -r ./src/UBUVoiceAssistant/ /usr/lib/UBUVoiceAssistant
   updateskills
 }
 

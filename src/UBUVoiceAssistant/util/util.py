@@ -104,5 +104,8 @@ def get_course_id_by_name(course_to_find: str, user_courses: List[Course]) -> Op
 
 
 def reorder_name(fullname: str) -> str:
-    lastname, firstname = fullname.split(", ")
-    return " ".join([firstname, lastname])
+    try:
+        lastname, firstname = fullname.split(", ")
+        return " ".join([firstname, lastname])
+    except ValueError:
+        return fullname
