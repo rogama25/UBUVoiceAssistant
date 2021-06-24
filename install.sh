@@ -26,7 +26,7 @@ install() {
   # Get python packages
   printf "${GREEN}Installing system dependencies...${NC}\n"
   apt-get install python3-pip python3-pyqt5 python3-pyqt5.qtwebengine git -y
-  pip3 install mycroft-messagebus-client babel
+  pip3 install mycroft-messagebus-client babel bs4
   sudo apt install libjack-dev libjack0 -y
   printf "${GREEN}Finished installing system dependencies${NC}\n"
 
@@ -42,7 +42,7 @@ install() {
   printf "${GREEN}Finished downloading Mycroft${NC}\n"
 
   printf "${GREEN}Configuring Mycroft...${NC}\n"
-  if [ $1 = "--manual" ]; then
+  if [[ -n $1 && $1 == "--manual" ]]; then
     printf "${GREEN}A list of questions will be asked now to configure Mycroft. Answer by pressing Y in all of them.\n"
     printf "Se van a hacer una serie de preguntas para configurar Mycroft. Responde a todas pulsando Y${NC}\n"
     read -s -p "Press Enter to continue."
@@ -55,17 +55,22 @@ install() {
   # Copy UBU skills inside
   printf "${GREEN}Installing UBU skills...${NC}\n"
   cd $DIR
-  sudo -u $USERNAME cp -r ./src/UBUVoiceAssistant/skills/. /opt/mycroft/skills
+  sudo -u $USERNAME /usr/lib/mycroft-core/bin/mycroft-msm install https://github.com/ubu-skills/ubu-messages
+  sudo -u $USERNAME /usr/lib/mycroft-core/bin/mycroft-msm install https://github.com/ubu-skills/ubu-grades
+  sudo -u $USERNAME /usr/lib/mycroft-core/bin/mycroft-msm install https://github.com/ubu-skills/ubu-course
+  sudo -u $USERNAME /usr/lib/mycroft-core/bin/mycroft-msm install https://github.com/ubu-skills/ubu-help
+  sudo -u $USERNAME /usr/lib/mycroft-core/bin/mycroft-msm install https://github.com/ubu-skills/ubu-calendar
   printf "${GREEN}Installed UBU skills${NC}\n"
 
   # Installing to a permanent location
   printf "${GREEN}Installing to a permanent location...${NC}\n"
   mkdir -p /usr/lib/UBUVoiceAssistant
   echo "#!/bin/bash" > /usr/bin/UBUVoiceAssistant
-  echo "cd /usr/lib" >> /usr/bin/UBUVoiceAssistant
-  echo "python3 -m UBUVoiceAssistant.GUI.main" >> /usr/bin/UBUVoiceAssistant
+  echo "cd /usr/lib/UBUVoiceAssistant" >> /usr/bin/UBUVoiceAssistant
+  echo "QT_QUICK_BACKEND=\"software\" python3 -m UBUVoiceAssistant.GUI.main" >> /usr/bin/UBUVoiceAssistant
   chmod a+x /usr/bin/UBUVoiceAssistant
-  cp -r ./src/UBUVoiceAssistant/. /usr/lib/UBUVoiceAssistant
+  chown $USERNAME /usr/lib/UBUVoiceAssistant
+  sudo -u $USERNAME cp -r ./src/UBUVoiceAssistant/ /usr/lib/UBUVoiceAssistant
   printf "${GREEN}Installed to a permanent location${NC}\n"
 
   # Create app launcher icon
@@ -76,7 +81,7 @@ install() {
   echo "Comment=UBUVoiceAssistant" >> /usr/share/applications/UBUVoiceAssistant.desktop
   echo "Terminal=false" >> /usr/share/applications/UBUVoiceAssistant.desktop
   echo "Exec=UBUVoiceAssistant" >> /usr/share/applications/UBUVoiceAssistant.desktop
-  echo "Icon=/usr/lib/UBUVoiceAssistant/imgs/appicon.png" >> /usr/share/applications/UBUVoiceAssistant.desktop
+  echo "Icon=/usr/lib/UBUVoiceAssistant/UBUVoiceAssistant/imgs/appicon.png" >> /usr/share/applications/UBUVoiceAssistant.desktop
   echo "Categories=Utility;Education;Accessibility;Qt;" >> /usr/share/applications/UBUVoiceAssistant.desktop
   xdg-desktop-menu forceupdate
   printf "${GREEN}Created app launcher icon${NC}\n"
@@ -89,33 +94,33 @@ uninstall() {
   rm -f /usr/bin/UBUVoiceAssistant
   rm -f /usr/share/applications/UBUVoiceAssistant.desktop
   rm -rf /home/${USERNAME}/.mycroft
+  rm -rf /opt/mycroft
   printf "${GREEN}UBUVoiceAssistant was uninstalled.${NC}\n"
 }
 
 updateskills() {
-  rm -rf /opt/mycroft/skills/*
-  sudo -u $USERNAME cp -r ./src/UBUVoiceAssistant/skills/. /opt/mycroft/skills
+  sudo -u $USERNAME /usr/lib/mycroft-core/bin/mycroft-msm update
 }
 
-update() {
+updateall() {
   rm -rf /usr/lib/UBUVoiceAssistant
   mkdir -p /usr/lib/UBUVoiceAssistant
-  cp -r ./src/UBUVoiceAssistant/. /usr/lib/UBUVoiceAssistant
+  cp -r ./src/UBUVoiceAssistant/ /usr/lib/UBUVoiceAssistant
   updateskills
 }
 
-if [[ $1 == "install" || $1 == "uninstall" || $1 == "update-skills" || $1 == "update" ]]; then
+if [[ -n $1 && $1 == "install" || $1 == "uninstall" || $1 == "update-skills" || $1 == "update" ]]; then
   # Checking if the script was launched as root
   if [ "$EUID" -ne 0 ]
     then echo "Please, run again the script as sudo."
     exit
   fi
-  if [ $1 = "install" ]; then
+  if [ $1 == "install" ]; then
     install $2
-  elif [ $1 = "update-skills" ]; then
+  elif [ $1 == "update-skills" ]; then
     updateskills
-  elif [ $1 = "update" ]; then
-    update
+  elif [ $1 == "update" ]; then
+    updateall
   else
     uninstall
   fi

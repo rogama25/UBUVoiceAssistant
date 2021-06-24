@@ -105,7 +105,7 @@ class ChatWindow(QtWidgets.QMainWindow):
         if source == "u":
             js_string += "msg.classList.add('right-msg');\n"
         js_string += "msg.appendChild(document.createTextNode(`" + \
-            message + "`));\n"
+            str(message) + "`));\n"
         js_string += "chat.appendChild(msg);\n"
         js_string += "window.scrollTo(0,document.body.scrollHeight);"
         print(js_string)
