@@ -69,6 +69,7 @@ install() {
   echo "cd /usr/lib/UBUVoiceAssistant" >> /usr/bin/UBUVoiceAssistant
   echo "QT_QUICK_BACKEND=\"software\" python3 -m UBUVoiceAssistant.GUI.main" >> /usr/bin/UBUVoiceAssistant
   chmod a+x /usr/bin/UBUVoiceAssistant
+  chown $USERNAME /usr/lib/UBUVoiceAssistant
   sudo -u $USERNAME cp -r ./src/UBUVoiceAssistant/ /usr/lib/UBUVoiceAssistant
   printf "${GREEN}Installed to a permanent location${NC}\n"
 
