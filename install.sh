@@ -67,7 +67,7 @@ install() {
   mkdir -p /usr/lib/UBUVoiceAssistant
   echo "#!/bin/bash" > /usr/bin/UBUVoiceAssistant
   echo "cd /usr/lib/UBUVoiceAssistant" >> /usr/bin/UBUVoiceAssistant
-  echo "python3 -m UBUVoiceAssistant.GUI.main" >> /usr/bin/UBUVoiceAssistant
+  echo "QT_QUICK_BACKEND=\"software\" python3 -m UBUVoiceAssistant.GUI.main" >> /usr/bin/UBUVoiceAssistant
   chmod a+x /usr/bin/UBUVoiceAssistant
   cp -r ./src/UBUVoiceAssistant/ /usr/lib/UBUVoiceAssistant
   printf "${GREEN}Installed to a permanent location${NC}\n"
