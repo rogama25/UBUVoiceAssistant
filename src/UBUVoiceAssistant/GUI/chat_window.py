@@ -85,8 +85,11 @@ class ChatWindow(QtWidgets.QMainWindow):
         message += "· " + _("Tell me about the events of (course)\n")
         message += "· " + _("Tell me about the events on (month) (day) (year)\n")
         message += "· " + _("Tell me about the changes of (course)\n")
-        message += "· " + _("Tell me the grades of (course)\n\n")
+        message += "· " + _("Tell me the grades of (course)\n")
+        message += "· " + _("Read the latest messages\n")
+        message += "· " + _("Send a message to (person)\n\n")
         message += _("And, if you want me to stop, say \"stop\"\n")
+        message += _("Or, you can ask for help saying \"help\", \"How do I (action)\" or \"What can you do?\"\n")
         js_string = "var chat = document.getElementById('chat-window');\n"
         js_string += "var msg = document.createElement('li');\n"
         js_string += "msg.appendChild(document.createTextNode(`" + \

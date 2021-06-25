@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-11 13:23+0200\n"
+"POT-Creation-Date: 2021-06-25 18:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,150 +25,164 @@ msgstr ""
 msgid "pair my device"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/link_mycroft.py:82
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:83
 msgid "Welcome!"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/link_mycroft.py:83
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:84
 msgid "It's your first time using Mycroft, so please follow these instructions"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/link_mycroft.py:84
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:85
 msgid "Previous"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/link_mycroft.py:85
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:86
 msgid "Next"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/link_mycroft.py:87
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:88
 msgid ""
 "Create an account on https://home.mycroft.ai and click add a device on the "
 "top right corner."
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/link_mycroft.py:88
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:89
 msgid "Select Google Voice and Hey Mycroft"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/link_mycroft.py:89
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:90
 msgid "Input this code on the website"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/link_mycroft.py:138
-#: src/UBUVoiceAssistant/GUI/chat_window.py:128
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:140
+#: src/UBUVoiceAssistant/GUI/chat_window.py:132
 msgid "Are you sure?"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/link_mycroft.py:145
-#: src/UBUVoiceAssistant/GUI/chat_window.py:136
+#: src/UBUVoiceAssistant/GUI/link_mycroft.py:147
+#: src/UBUVoiceAssistant/GUI/chat_window.py:140
 msgid "Closing Mycroft, please wait..."
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/chat_window.py:79
-msgid "Hey, I'm Mycroft\n"
+#: src/UBUVoiceAssistant/GUI/main.py:81
+msgid "Invalid Moodle username or password."
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:84
+msgid "Missing http:// or https:// at the beginning"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:97
+msgid "This language is not supported by your Moodle server"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:100
+msgid "Starting Mycroft, please wait..."
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:115 src/UBUVoiceAssistant/GUI/main.py:116
+msgid "Login"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:117
+msgid "Remember host"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:118
+msgid "Remember username"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:119
+msgid "Moodle url"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:120
+msgid "Password"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/main.py:121
+msgid "Username"
 msgstr ""
 
 #: src/UBUVoiceAssistant/GUI/chat_window.py:80
+msgid "Hey, I'm Mycroft\n"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:81
 msgid ""
 "Just say: \"Hey Mycroft!\" and then ask one of these:\n"
 "\n"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/chat_window.py:81
+#: src/UBUVoiceAssistant/GUI/chat_window.py:82
 msgid "Open the calendar\n"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/chat_window.py:82
+#: src/UBUVoiceAssistant/GUI/chat_window.py:83
 msgid "Tell me about the forums of (course)\n"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/chat_window.py:83
+#: src/UBUVoiceAssistant/GUI/chat_window.py:84
 msgid "Tell me my grades\n"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/chat_window.py:84
+#: src/UBUVoiceAssistant/GUI/chat_window.py:85
 msgid "Tell me about the events of (course)\n"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/chat_window.py:85
+#: src/UBUVoiceAssistant/GUI/chat_window.py:86
 msgid "Tell me about the events on (month) (day) (year)\n"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/chat_window.py:86
+#: src/UBUVoiceAssistant/GUI/chat_window.py:87
 msgid "Tell me about the changes of (course)\n"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/chat_window.py:87
+#: src/UBUVoiceAssistant/GUI/chat_window.py:88
+msgid "Tell me the grades of (course)\n"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:89
+msgid "Read the latest messages\n"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:90
 msgid ""
-"Tell me the grades of (course)\n"
+"Send a message to (person)\n"
 "\n"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/chat_window.py:88
+#: src/UBUVoiceAssistant/GUI/chat_window.py:91
 msgid "And, if you want me to stop, say \"stop\"\n"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/chat_window.py:97
+#: src/UBUVoiceAssistant/GUI/chat_window.py:92
+msgid ""
+"Or, you can ask for help saying \"help\", \"How do I (action)\" or \"What "
+"can you do?\"\n"
+msgstr ""
+
+#: src/UBUVoiceAssistant/GUI/chat_window.py:101
 msgid "Manage skills"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/chat_window.py:98
+#: src/UBUVoiceAssistant/GUI/chat_window.py:102
 msgid "Send"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/chat_window.py:99
+#: src/UBUVoiceAssistant/GUI/chat_window.py:103
 msgid "Type your command here..."
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/chat_window.py:163
+#: src/UBUVoiceAssistant/GUI/chat_window.py:167
 msgid "Mute"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/chat_window.py:169
+#: src/UBUVoiceAssistant/GUI/chat_window.py:173
 msgid "Unmute"
 msgstr ""
 
-#: src/UBUVoiceAssistant/GUI/chat_window.py:183
+#: src/UBUVoiceAssistant/GUI/chat_window.py:187
 msgid "Save"
-msgstr ""
-
-#: src/UBUVoiceAssistant/GUI/main.py:77
-msgid "Invalid Moodle username or password."
-msgstr ""
-
-#: src/UBUVoiceAssistant/GUI/main.py:80
-msgid "Missing http:// or https:// at the beginning"
-msgstr ""
-
-#: src/UBUVoiceAssistant/GUI/main.py:93
-msgid "This language is not supported by your Moodle server"
-msgstr ""
-
-#: src/UBUVoiceAssistant/GUI/main.py:96
-msgid "Starting Mycroft, please wait..."
-msgstr ""
-
-#: src/UBUVoiceAssistant/GUI/main.py:111 src/UBUVoiceAssistant/GUI/main.py:112
-msgid "Login"
-msgstr ""
-
-#: src/UBUVoiceAssistant/GUI/main.py:113
-msgid "Remember host"
-msgstr ""
-
-#: src/UBUVoiceAssistant/GUI/main.py:114
-msgid "Remember username"
-msgstr ""
-
-#: src/UBUVoiceAssistant/GUI/main.py:115
-msgid "Moodle url"
-msgstr ""
-
-#: src/UBUVoiceAssistant/GUI/main.py:116
-msgid "Password"
-msgstr ""
-
-#: src/UBUVoiceAssistant/GUI/main.py:117
-msgid "Username"
 msgstr ""
