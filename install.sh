@@ -83,7 +83,10 @@ install() {
   echo "Exec=UBUVoiceAssistant" >> /usr/share/applications/UBUVoiceAssistant.desktop
   echo "Icon=/usr/lib/UBUVoiceAssistant/UBUVoiceAssistant/imgs/appicon.png" >> /usr/share/applications/UBUVoiceAssistant.desktop
   echo "Categories=Utility;Education;Accessibility;Qt;" >> /usr/share/applications/UBUVoiceAssistant.desktop
-  xdg-desktop-menu forceupdate
+  if [ -f /usr/bin/xdg-desktop-menu ]; then
+      xdg-desktop-menu forceupdate
+  fi
+
   printf "${GREEN}Created app launcher icon${NC}\n"
   printf "${GREEN}Install completed :)${NC}\n"
 }
