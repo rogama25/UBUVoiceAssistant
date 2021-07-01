@@ -22,9 +22,9 @@
   <widget class="QLabel" name="lblWelcome">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>0</x>
      <y>10</y>
-     <width>341</width>
+     <width>801</width>
      <height>81</height>
     </rect>
    </property>
@@ -39,6 +39,9 @@
    <property name="text">
     <string>#WelcomeLabel</string>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
    <property name="wordWrap">
     <bool>false</bool>
    </property>
@@ -46,9 +49,9 @@
   <widget class="QLabel" name="lblFirstRun">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>0</x>
      <y>100</y>
-     <width>481</width>
+     <width>801</width>
      <height>61</height>
     </rect>
    </property>
@@ -211,9 +214,9 @@
   <widget class="QLabel" name="lblCode">
    <property name="geometry">
     <rect>
-     <x>71</x>
+     <x>0</x>
      <y>510</y>
-     <width>591</width>
+     <width>801</width>
      <height>41</height>
     </rect>
    </property>
