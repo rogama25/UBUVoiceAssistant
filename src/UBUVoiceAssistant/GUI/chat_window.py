@@ -41,6 +41,7 @@ class ChatWindow(QtWidgets.QMainWindow):
         self.on_mic_pressed(True)
 
         self.btnConfig.clicked.connect(self.on_skills_pressed)
+        self.btnSend.clicked.connect(self.on_send_pressed)
 
         self.dangerous_skills = ['mycroft-volume.mycroftai',
                                  'mycroft-stop.mycroftai',
