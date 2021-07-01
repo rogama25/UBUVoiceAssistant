@@ -7,6 +7,7 @@ from PyQt5.QtGui import QIcon
 from ..GUI.link_mycroft import LinkMycroft
 import requests
 import subprocess
+import simplejson
 from threading import Thread
 from os import path
 from PyQt5 import QtWidgets, uic, QtCore
@@ -83,7 +84,7 @@ class LoginWindow(QtWidgets.QMainWindow):
         except requests.exceptions.MissingSchema:
             MessageBox(_("Missing http:// or https:// at the beginning")).exec_()
             return
-        except requests.exceptions.ConnectionError:
+        except (requests.exceptions.ConnectionError, simplejson.errors.JSONDecodeError):
             MessageBox(_("Connection error. Please check that the URL is correct, your Internet connection is working and the server is up.")).exec_()
             return
         
