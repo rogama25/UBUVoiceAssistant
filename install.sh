@@ -26,7 +26,7 @@ install() {
   # Get python packages
   printf "${GREEN}Installing system dependencies...${NC}\n"
   apt-get install python3-pip python3-pyqt5 python3-pyqt5.qtwebengine git -y
-  pip3 install mycroft-messagebus-client babel bs4
+  pip3 install mycroft-messagebus-client babel bs4 fuzzywuzzy
   sudo apt install libjack-dev libjack0 -y
   printf "${GREEN}Finished installing system dependencies${NC}\n"
 
