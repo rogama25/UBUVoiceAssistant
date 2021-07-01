@@ -83,6 +83,9 @@ class LoginWindow(QtWidgets.QMainWindow):
         except requests.exceptions.MissingSchema:
             MessageBox(_("Missing http:// or https:// at the beginning")).exec_()
             return
+        except requests.exceptions.ConnectionError:
+            MessageBox(_("Connection error. Please check that the URL is correct, your Internet connection is working and the server is up.")).exec_()
+            return
         
         if self.chkUser.isChecked():
             self.cfg["user"] = user
