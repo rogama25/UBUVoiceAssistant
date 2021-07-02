@@ -52,6 +52,10 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.timer.timeout.connect(self.check_mycroft_started)
         self.setFixedSize(self.size())
         self.show()
+        if self.tbxUser.text():
+            self.tbxPassword.setFocus()
+        else:
+            self.tbxUser.setFocus()
 
     # pylint: disable=R0201
     def on_lang_changed(self, value: int) -> None:
@@ -156,6 +160,7 @@ class LoginWindow(QtWidgets.QMainWindow):
             if not self.finished:
                 self.new_window = ChatWindow(self.bus, self.ws)
                 self.new_window.show()
+                self.new_window.tbxInput.setFocus()
                 self.hide()
                 self.finished = True
 
