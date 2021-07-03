@@ -20,7 +20,7 @@ class Forum():
         self.__name = forum['name']
         self.__discussions = discussions
 
-    def get_id(self) -> int: # TODO Revisar si es correcto
+    def get_id(self) -> int:
         """Gets the id of the Forum
 
         Returns:

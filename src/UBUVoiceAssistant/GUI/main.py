@@ -1,24 +1,24 @@
 """Module for the main UI
 """
-import sys
-import time
-
-from PyQt5.QtGui import QIcon
-from ..GUI.link_mycroft import LinkMycroft
-import requests
 import subprocess
-import simplejson
-from threading import Thread
+import sys
 from os import path
-from PyQt5 import QtWidgets, uic, QtCore
+from threading import Thread
+
+import requests
+import simplejson
 from mycroft_bus_client import MessageBusClient
+from PyQt5 import QtCore, QtWidgets, uic
+from PyQt5.QtGui import QIcon
+
+from ..GUI.link_mycroft import LinkMycroft
+from ..util.lang import Translator
+from ..util.settings import Settings
+from ..util.util import create_server_socket
 from ..webservice.web_service import WebService
+from .chat_window import ChatWindow
 from .message_box import MessageBox
 from .progress_box import ProgressBox
-from ..util.lang import Translator
-from ..util.util import create_server_socket
-from ..util.settings import Settings
-from .chat_window import ChatWindow
 
 translator = Translator()
 _ = translator.translate
@@ -69,6 +69,8 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.update_texts()
 
     def on_login(self):
+        """This runs when the user clicks the login button or press enter
+        """
         user = str(self.tbxUser.text())
         password = self.tbxPassword.text()
         host = str(self.tbxHost.text())
@@ -76,11 +78,11 @@ class LoginWindow(QtWidgets.QMainWindow):
         if not host:
             host = "https://ubuvirtual.ubu.es"
 
-        self.ws = WebService()
-        self.ws.set_host(host)
+        self.webservice = WebService()
+        self.webservice.set_host(host)
 
         try:
-            self.ws.set_url_with_token(user, password)
+            self.webservice.set_url_with_token(user, password)
         # If the credentials are incorrect
         except KeyError:
             MessageBox(_("Invalid Moodle username or password.")).exec_()
@@ -91,24 +93,24 @@ class LoginWindow(QtWidgets.QMainWindow):
         except (requests.exceptions.ConnectionError, simplejson.errors.JSONDecodeError):
             MessageBox(_("Connection error. Please check that the URL is correct, your Internet connection is working and the server is up.")).exec_()
             return
-        
+
         if self.chkUser.isChecked():
             self.cfg["user"] = user
         if self.chkHost.isChecked():
             self.cfg["host"] = host
         self.cfg["lang"] = translator.get_current_language()[0]
         self.cfg.save_settings()
-        self.ws.initialize_useful_data()
+        self.webservice.initialize_useful_data()
 
         # If Moodle lang is different from the selected
-        if not translator.check_language_supported(self.ws.get_lang()):
+        if not translator.check_language_supported(self.webservice.get_lang()):
             MessageBox(_("This language is not supported by your Moodle server")).exec_()
-        self.ws.set_user_courses()
+        self.webservice.set_user_courses()
 
         self.starting_window = ProgressBox(_("Starting Mycroft, please wait..."))
         self.starting_window.show()
 
-        server_socket = Thread(target=create_server_socket, args=[self.ws])
+        server_socket = Thread(target=create_server_socket, args=[self.webservice])
         server_socket.setDaemon(True)
         server_socket.start()
 
@@ -129,6 +131,8 @@ class LoginWindow(QtWidgets.QMainWindow):
         self.lblUser.setText(_("Username"))
 
     def start_mycroft(self):
+        """Starts Mycroft and checks for when it's ready
+        """
         def f_mycroft_started(event):
             self.mycroft_started = True
 
@@ -158,17 +162,24 @@ class LoginWindow(QtWidgets.QMainWindow):
             self.new_window.closed_signal.connect(self.check_mycroft_started)
         else:
             if not self.finished:
-                self.new_window = ChatWindow(self.bus, self.ws)
+                self.new_window = ChatWindow(self.bus, self.webservice)
                 self.new_window.show()
                 self.new_window.tbxInput.setFocus()
                 self.hide()
                 self.finished = True
 
     def set_reconnect_1s(self, event = None):
+        """Set the bus reconnect time to 1 second
+        """
         print("Set reconnect time")
         self.bus.retry = 0.5
 
     def keyPressEvent(self, event):
+        """This happens when the user press a key
+
+        Args:
+            event: Qt Keypress event
+        """
         if event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return):
             self.on_login()
 

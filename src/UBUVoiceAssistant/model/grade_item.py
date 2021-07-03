@@ -16,11 +16,11 @@ class GradeItem():
         self.__name = grade['itemname']
         self.__type = grade['itemtype']
 
-    def get_value(self): # TODO Check type of value
+    def get_value(self):
         """Gets the grade value
 
         Returns:
-            [type]: Value of the grade
+            int, str: Value of the grade
         """
         return self.__value
 
@@ -32,11 +32,11 @@ class GradeItem():
         """
         return self.__name
 
-    def get_type(self): # TODO Check type of type
+    def get_type(self):
         """Gets the type of grade
 
         Returns:
-            [type]: type of grade
+            type of grade
         """
         return self.__type
 

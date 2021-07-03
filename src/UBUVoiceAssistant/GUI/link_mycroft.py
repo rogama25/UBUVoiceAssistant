@@ -18,7 +18,7 @@ _ = Translator().translate
 class LinkMycroft(QtWidgets.QMainWindow):
     """Class for the linking Mycroft to web UI
     """
-    
+
     closed_signal = pyqtSignal()
 
     def __init__(self, bus: MessageBusClient) -> None:
@@ -45,9 +45,10 @@ class LinkMycroft(QtWidgets.QMainWindow):
 
         self.file = open("/var/log/mycroft/skills.log", "r")
         self.file.seek(0, 2)  # Goes to the end of the file
-        self.bus.emit(Message("recognizer_loop:utterance",  
-                          {'utterances': [_("pair my device")]}))
-        # On other languages different than English, we must send again the phrase for it to start pairing
+        self.bus.emit(Message("recognizer_loop:utterance",
+                              {'utterances': [_("pair my device")]}))
+        # On other languages different than English, we must send again the phrase for it
+        # to start pairing
         bus.on("configuration.updated", self.pairing_done)
         self.timer = QTimer()
         self.timer.timeout.connect(self.add_pairing_code)  # type: ignore
@@ -58,21 +59,31 @@ class LinkMycroft(QtWidgets.QMainWindow):
         self.setFixedSize(self.size())
 
     def pairing_done(self, event):
+        """This function gets triggered when we finish pairing Mycroft.
+
+        Args:
+            event: Mycroft pairing event
+        """
         self.done = True
         self.file.close()
         self.close()
 
     def add_pairing_code(self):
+        """Sets the pairing code and shows it on the UI
+        """
         self.lblCode.setText(self.code)
 
     def read_pairing_code(self):
+        """Reads the skills file and sets the pairing code to a variable
+        """
         while not self.done:
             print("Reading...")
             line = self.file.readline()
             if line:
                 print(line)
                 matches = re.findall(
-                    "(?<=" + re.escape("PairingSkill | ") + ")[a-zA-Z0-9 ]*: [A-Z0-9]{6}(?=\n)", line)
+                    "(?<=" + re.escape("PairingSkill | ") + ")[a-zA-Z0-9 ]*: [A-Z0-9]{6}(?=\n)",
+                    line)
                 print(matches)
                 if matches:
                     self.code = matches[0][-6:]
@@ -80,8 +91,11 @@ class LinkMycroft(QtWidgets.QMainWindow):
                 time.sleep(1)
 
     def update_texts(self):
+        """Sets the localized texts in the UI
+        """
         self.lblWelcome.setText(_("Welcome!"))
-        self.lblFirstRun.setText(_("It's your first time using Mycroft, so please follow these instructions"))
+        self.lblFirstRun.setText(
+            _("It's your first time using Mycroft, so please follow these instructions"))
         self.btnPrev.setText(_("Previous"))
         self.btnNext.setText(_("Next"))
         self.lblRegisterAddDevice.setText(
@@ -90,6 +104,8 @@ class LinkMycroft(QtWidgets.QMainWindow):
         self.lblInfoCode.setText(_("Input this code on the website"))
 
     def go_next(self):
+        """This function gets executed when the user clicks the next button
+        """
         self.hide_all_elements()
         self.page = min(2, self.page + 1)
         if self.page == 1:
@@ -105,6 +121,8 @@ class LinkMycroft(QtWidgets.QMainWindow):
             self.btnPrev.setEnabled(True)
 
     def go_previous(self):
+        """This function gets executed when the user click the previous version
+        """
         self.hide_all_elements()
         self.page = max(0, self.page - 1)
         if self.page == 1:
@@ -119,6 +137,8 @@ class LinkMycroft(QtWidgets.QMainWindow):
             self.btnNext.setEnabled(True)
 
     def hide_all_elements(self):
+        """Hides all images and texts when switching pages
+        """
         self.imgSelectVoice.setVisible(False)
         self.imgAddDevice.setVisible(False)
         self.picInputCode.setVisible(False)
@@ -132,6 +152,11 @@ class LinkMycroft(QtWidgets.QMainWindow):
         self.btnNext.setEnabled(False)
 
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
+        """This get triggered when closing the window
+
+        Args:
+            event (QtGui.QCloseEvent): Qt Close event
+        """
         if self.done:
             self.closed_signal.emit()
             time.sleep(2)  # type: ignore
@@ -144,7 +169,8 @@ class LinkMycroft(QtWidgets.QMainWindow):
             print(self.close_res)
             if self.close_res == QtWidgets.QMessageBox.Yes:
                 self.timer.stop()
-                self.closing_window = ProgressBox(_("Closing Mycroft, please wait..."))
+                self.closing_window = ProgressBox(
+                    _("Closing Mycroft, please wait..."))
                 self.closing_window.show()
                 self.closing_thread = CloseMycroft()
                 self.closing_thread.finished.connect(  # type: ignore
@@ -154,10 +180,16 @@ class LinkMycroft(QtWidgets.QMainWindow):
                 event.ignore()
 
     def finish_exit(self):
+        """Exits the program
+        """
         sys.exit(0)
 
 
 class CloseMycroft(QThread):
+    """A thread to close Mycroft when exiting
+    """
     def run(self):
+        """Closes Mycroft and emits the event
+        """
         subprocess.run("/usr/lib/mycroft-core/stop-mycroft.sh", shell=True)
         self.finished.emit()
