@@ -1,3 +1,5 @@
+"""Module for the chat window GUI
+"""
 from threading import Thread
 import subprocess
 import sys
@@ -16,11 +18,13 @@ _ = Translator().translate
 
 
 class ChatWindow(QtWidgets.QMainWindow):
-    def __init__(self, bus: MessageBusClient, ws: WebService) -> None:
+    """Class for the Chat window GUI
+    """
+    def __init__(self, bus: MessageBusClient, webservice: WebService) -> None:
         super().__init__(parent=None)
         uic.loadUi("./UBUVoiceAssistant/GUI/forms/chat-window.ui", self)
         self.bus = bus
-        self.ws = ws
+        self.webservice = webservice
         self.user_utterance = ""
         self.mycroft_response = ""
         self.mic_muted = False
@@ -29,8 +33,10 @@ class ChatWindow(QtWidgets.QMainWindow):
         self.next_message = 0
         self.intent_labels = []
 
-        self.mic_icon = QtGui.QIcon(QtGui.QPixmap("UBUVoiceAssistant/imgs/mic.svg"))
-        self.mic_muted_icon = QtGui.QIcon(QtGui.QPixmap("UBUVoiceAssistant/imgs/mic_muted.svg"))
+        self.mic_icon = QtGui.QIcon(
+            QtGui.QPixmap("UBUVoiceAssistant/imgs/mic.svg"))
+        self.mic_muted_icon = QtGui.QIcon(
+            QtGui.QPixmap("UBUVoiceAssistant/imgs/mic_muted.svg"))
 
         self.color: List[Union[int, float]] = list(
             self.palette().color(QtGui.QPalette.ColorRole.Background).getRgb())
@@ -73,6 +79,8 @@ class ChatWindow(QtWidgets.QMainWindow):
         #         os.path.abspath(os.getcwd())+"/UBUVoiceAssistant/GUI/forms/chat_window_html"))
 
     def set_elements_web(self):
+        """Sets the initial elements for the HTML webview
+        """
         print(self.color)
         js_color = "document.body.style.backgroundColor = 'rgba(" + ','.join(
             map(str, self.color)) + ")';"
@@ -84,7 +92,8 @@ class ChatWindow(QtWidgets.QMainWindow):
         message += "· " + _("Tell me about the forums of (course)\n")
         message += "· " + _("Tell me my grades\n")
         message += "· " + _("Tell me about the events of (course)\n")
-        message += "· " + _("Tell me about the events on (month) (day) (year)\n")
+        message += "· " + \
+            _("Tell me about the events on (month) (day) (year)\n")
         message += "· " + _("Tell me about the changes of (course)\n")
         message += "· " + _("Tell me the grades of (course)\n")
         message += "· " + _("Read the latest messages\n")
@@ -99,11 +108,19 @@ class ChatWindow(QtWidgets.QMainWindow):
         self.web.page().runJavaScript(js_string)
 
     def update_texts(self):
+        """Sets the localized texts for the UI
+        """
         self.btnConfig.setText(_("Manage skills"))
         self.btnSend.setText(_("Send"))
         self.tbxInput.setPlaceholderText(_("Type your command here..."))
 
     def update_chat(self, source: str, message: str):
+        """Adds the new message to the chat
+
+        Args:
+            source (str): "u" when coming from user, "r" when coming from Mycroft
+            message (str): The message text
+        """
         js_string = "var chat = document.getElementById('chat-window');\n"
         js_string += "var msg = document.createElement('li');\n"
         if source == "u":
@@ -116,12 +133,24 @@ class ChatWindow(QtWidgets.QMainWindow):
         self.web.page().runJavaScript(js_string)
 
     def handle_speak(self, message: Message):
+        """Sets the Mycroft response variable when a message comes
+
+        Args:
+            message (Message): Mycroft bus message
+        """
         self.mycroft_response = message.data.get("utterance")
 
     def handle_utterance(self, message: Message):
+        """Sets the user message variable when you send a message
+
+        Args:
+            message (Message): User bus message
+        """
         self.user_utterance = message.data["utterances"][0]
 
     def check_for_chat_update(self):
+        """Checks if a new message arrives and updates the UI
+        """
         if self.user_utterance:
             self.update_chat("u", self.user_utterance)
             self.user_utterance = ""
@@ -130,6 +159,11 @@ class ChatWindow(QtWidgets.QMainWindow):
             self.mycroft_response = ""
 
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
+        """Handles when the user tries to close the window
+
+        Args:
+            event (QtGui.QCloseEvent): Qt Close Event
+        """
         self.close_window = MessageBox(_("Are you sure?"))
         self.close_window.setStandardButtons(
             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
@@ -148,19 +182,33 @@ class ChatWindow(QtWidgets.QMainWindow):
             event.ignore()
 
     def finish_exit(self):
+        """Exits the program
+        """
         sys.exit(0)
 
     def keyPressEvent(self, event):
+        """This is executed when the user press a key
+
+        Args:
+            event: Qt Keypress event
+        """
         if event.key() in (QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return):
             self.on_send_pressed()
 
     def on_send_pressed(self):
+        """This runs when the user press enter or clicks the button on the UI
+        """
         self.user_utterance = self.tbxInput.text()
         self.bus.emit(Message('recognizer_loop:utterance', {
                       'utterances': [self.user_utterance]}))
         self.tbxInput.setText('')
 
     def on_mic_pressed(self, startup: bool = False):
+        """This runs when the user clicks the mic button
+
+        Args:
+            startup (bool, optional): True if this is running at startup. Defaults to False.
+        """
         # Switch between muted and unmuted when the mic is pressed
         if self.mic_muted or startup:
             self.mic_muted = False
@@ -176,14 +224,19 @@ class ChatWindow(QtWidgets.QMainWindow):
             self.bus.emit(Message('mycroft.mic.mute'))
 
     def on_skills_pressed(self):
+        """This runs when you press the "manage skills" button. Shows the new window
+        """
 
         self.skills_dialog = QtWidgets.QDialog(self)
         self.skills_dialog.setWindowTitle('Mycroft Skills')
         self.skills_dialog.resize(600, 600)
 
-        self.pushButton_manage_skills = QtWidgets.QPushButton(self.skills_dialog)
-        self.pushButton_manage_skills.setGeometry(QtCore.QRect(470, 10, 120, 40))
-        self.pushButton_manage_skills.clicked.connect(self.on_manage_skills_pressed)
+        self.pushButton_manage_skills = QtWidgets.QPushButton(
+            self.skills_dialog)
+        self.pushButton_manage_skills.setGeometry(
+            QtCore.QRect(470, 10, 120, 40))
+        self.pushButton_manage_skills.clicked.connect(
+            self.on_manage_skills_pressed)
 
         self.pushButton_manage_skills.setText(_("Save"))
 
@@ -202,14 +255,17 @@ class ChatWindow(QtWidgets.QMainWindow):
         # Create checkboxes for every skill in self.active_skills
         for count, name in enumerate(self.active_skills):
             check_box = QtWidgets.QCheckBox(scroll_area_widget_skills)
-            spacer = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+            spacer = QtWidgets.QSpacerItem(
+                40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
             check_box.setText(name)
             check_box.setChecked(True)
             logo = QtWidgets.QLabel(scroll_area_widget_skills)
             if 'ubu' in name:
-                logo.setPixmap(QtGui.QPixmap('UBUVoiceAssistant/imgs/ubu_logo.jpg').scaled(20, 20))
+                logo.setPixmap(QtGui.QPixmap(
+                    'UBUVoiceAssistant/imgs/ubu_logo.jpg').scaled(20, 20))
             else:
-                logo.setPixmap(QtGui.QPixmap('UBUVoiceAssistant/imgs/Mycroft_logo.png').scaled(20, 20))
+                logo.setPixmap(QtGui.QPixmap(
+                    'UBUVoiceAssistant/imgs/Mycroft_logo.png').scaled(20, 20))
             self.active_skills_checkBoxes.append(check_box)
             skills_grid_layout.addWidget(logo, count, 0)
             skills_grid_layout.addWidget(check_box, count, 1)
@@ -221,9 +277,11 @@ class ChatWindow(QtWidgets.QMainWindow):
             check_box.setText(name)
             logo = QtWidgets.QLabel(scroll_area_widget_skills)
             if 'ubu' in name:
-                logo.setPixmap(QtGui.QPixmap('UBUVoiceAssistant/imgs/ubu_logo.jpg').scaled(20, 20))
+                logo.setPixmap(QtGui.QPixmap(
+                    'UBUVoiceAssistant/imgs/ubu_logo.jpg').scaled(20, 20))
             else:
-                logo.setPixmap(QtGui.QPixmap('UBUVoiceAssistant/imgs/Mycroft_logo.png').scaled(20, 20))
+                logo.setPixmap(QtGui.QPixmap(
+                    'UBUVoiceAssistant/imgs/Mycroft_logo.png').scaled(20, 20))
             self.inactive_skills_checkBoxes.append(check_box)
             skills_grid_layout.addWidget(logo, count, 0)
             skills_grid_layout.addWidget(check_box, count, 1)
@@ -233,24 +291,28 @@ class ChatWindow(QtWidgets.QMainWindow):
 
     def on_manage_skills_pressed(self):
         """ Adds the checked skills to self.active_skills and the unchecked to
-            self.inactive_skills and activates or deactivates those skills.
+            self.inactive_skills and activates or deactivates those skills when pressing save.
         """
         deactivated = []
         activated = []
-        for cb in self.active_skills_checkBoxes:
-            if not cb.isChecked():
-                self.bus.emit(Message('skillmanager.deactivate', {'skill': cb.text()}))
-                deactivated.append(cb.text())
+        for checkbox in self.active_skills_checkBoxes:
+            if not checkbox.isChecked():
+                self.bus.emit(
+                    Message('skillmanager.deactivate', {'skill': checkbox.text()}))
+                deactivated.append(checkbox.text())
 
-        for cb in self.inactive_skills_checkBoxes:
-            if cb.isChecked():
-                self.bus.emit(Message('skillmanager.activate', {'skill': cb.text()}))
-                activated.append(cb.text())
+        for checkbox in self.inactive_skills_checkBoxes:
+            if checkbox.isChecked():
+                self.bus.emit(
+                    Message('skillmanager.activate', {'skill': checkbox.text()}))
+                activated.append(checkbox.text())
 
-        self.active_skills = [skill for skill in self.active_skills if skill not in deactivated]
+        self.active_skills = [
+            skill for skill in self.active_skills if skill not in deactivated]
         self.active_skills.extend(activated)
 
-        self.inactive_skills = [skill for skill in self.inactive_skills if skill not in activated]
+        self.inactive_skills = [
+            skill for skill in self.inactive_skills if skill not in activated]
         self.inactive_skills.extend(deactivated)
 
         self.skills_dialog.hide()
@@ -258,6 +320,9 @@ class ChatWindow(QtWidgets.QMainWindow):
 
 
 class CloseMycroft(QtCore.QThread):
+    """Thread to close Mycroft"""
     def run(self):
+        """Closes Mycroft and emits a signal when finished
+        """
         subprocess.run("/usr/lib/mycroft-core/stop-mycroft.sh", shell=True)
         self.finished.emit()

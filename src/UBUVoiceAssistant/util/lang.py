@@ -102,7 +102,23 @@ class Translator(metaclass=Singleton):
             json.dump(mycroft_cfg, mycroft_cfg_file)
 
     def get_language_index(self, lang_code: str) -> int:
+        """Gets the position for the language
+
+        Args:
+            lang_code (str): Language code, similar to es_ES
+
+        Returns:
+            int: The position in the list of loaded languages
+        """
         return self._available_langs.index(lang_code)
 
     def check_language_supported(self, lang: str) -> bool:
+        """Checks if the language is supported on Moodle
+
+        Args:
+            lang (str): Language code from Moodle, similar to es
+
+        Returns:
+            bool: true if the language is supported, false if not
+        """
         return lang == self.get_current_language()[0].split("_")[0]

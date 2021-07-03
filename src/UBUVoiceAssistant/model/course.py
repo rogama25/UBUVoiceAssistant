@@ -27,7 +27,7 @@ class Course():
         self.__forums = []
         self.__participants: Dict[int, "User"] = {}
 
-    def get_id(self) -> int: # TODO revisar
+    def get_id(self) -> int:
         """Gets the Course id
 
         Returns:
@@ -92,13 +92,22 @@ class Course():
         self.__forums = forums
 
     def set_participants(self, participants: Union[List["User"], Dict[int, "User"]]):
-        if isinstance(participants, List):
+        """Sets the participants of the course
+
+        Args:
+            participants (List[User] or Dict[int, User]): List of users or dictionary of userid, user
+        """
+        if isinstance(participants, list):
             self.__participants = {}
-            for p in participants:
-                self.__participants[p.get_id()] = p
+            for participant in participants:
+                self.__participants[participant.get_id()] = participant
             return
-        else:
-            self.__participants = participants
-    
+        self.__participants = participants
+
     def get_participants(self) -> Dict[int, "User"]:
+        """Gets the list of participants
+
+        Returns:
+            Dict[int, User]: Dictionary of userid, user
+        """
         return self.__participants

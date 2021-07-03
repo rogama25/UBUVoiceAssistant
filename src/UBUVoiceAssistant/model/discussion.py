@@ -15,7 +15,7 @@ class Discussion():
         self.__discussion_id = discussion['discussion']
         self.__name = discussion['name']
 
-    def get_id(self) -> int: # TODO Check type
+    def get_id(self) -> int:
         """Gets the id of the discussion
 
         Returns:

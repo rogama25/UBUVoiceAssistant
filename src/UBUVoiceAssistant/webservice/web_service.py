@@ -1,6 +1,6 @@
 """WebService file
 """
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Union
 
 import requests
 
@@ -249,6 +249,11 @@ class WebService:
         return req
 
     def get_conversations(self) -> List[Conversation]:
+        """Gets the list of conversations for the user
+
+        Returns:
+            List[Conversation]: List of conversations
+        """
         url = (self.__url_with_token + "core_message_get_conversations")
         params = {"userid": self.get_user().get_id()}
         req = requests.get(url, params).json()
@@ -258,13 +263,18 @@ class WebService:
         return result
 
     def get_conversations_with_messages(self) -> List[Conversation]:
-        convers = self.get_conversations()
+        """Gets the list of conversations with messages for the user
+
+        Returns:
+            List[Conversation]: List of conversations
+        """
+        conversations = self.get_conversations()
         url = (self.__url_with_token + "core_message_get_conversation")
         result: List[Conversation] = []
-        for c in convers:
+        for conversation in conversations:
             params = {
                 "userid": self.get_user().get_id(),
-                "conversationid": c.get_conversation_id(),
+                "conversationid": conversation.get_conversation_id(),
                 "includecontactrequests": 0,
                 "includeprivacyinfo": 0
             }
@@ -273,24 +283,44 @@ class WebService:
         return result
 
     def send_message_to_conversation(self, message: str, conversation: int):
+        """Sends a message to an already existing conversation
+
+        Args:
+            message (str): Message text
+            conversation (int): Conversation id
+        """
         url = (self.__url_with_token + "core_message_send_messages_to_conversation")
         params: Dict[str, Union[str, int]] = {
             "conversationid": conversation,
             "messages[0][text]": message,
             "messages[0][textformat]": 2 # PLAIN
         }
-        req = requests.get(url, params).json()
+        requests.get(url, params)
 
     def send_message_to_user(self, message: str, user: int):
+        """Sends a message to another user
+
+        Args:
+            message (str): Message text
+            user (int): User id
+        """
         url = (self.__url_with_token + "core_message_send_instant_messages")
         params: Dict[str, Union[str, int]] = {
             "messages[0][touserid]": user,
             "messages[0][text]": message,
             "messages[0][textformat]": 2 # PLAIN
         }
-        req = requests.get(url, params).json()
+        requests.get(url, params)
 
     def check_can_message_user(self, user: int) -> bool:
+        """Checks if the user can message another user
+
+        Args:
+            user (int): User id
+
+        Returns:
+            bool: True if you can message that user, false if not
+        """
         url = (self.__url_with_token + "core_message_get_member_info")
         params = {
             "referenceuserid": self.__user.get_id(),
@@ -301,6 +331,15 @@ class WebService:
         return bool(req[0]["canmessage"])
 
     def get_participants_by_course(self, course: int) -> List[User]:
+        """Gets the list of participants in a course. In UBUVirtual, if you are a student, you
+            can only see the teachers.
+
+        Args:
+            course (int): Course id
+
+        Returns:
+            List[User]: List of participants
+        """
         url = (self.__url_with_token + "core_enrol_get_enrolled_users")
         params = {"courseid": course}
         req = requests.get(url, params).json()

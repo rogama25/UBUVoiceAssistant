@@ -3,7 +3,6 @@
 import pickle
 import socket
 import re
-from os import environ
 from typing import List, Optional
 from ..model.course import Course
 from .settings import Settings
@@ -16,13 +15,14 @@ moodle_words = {'opens': 'se abre', 'closes': 'se cierra', '&aacute;': 'á',
                 '&uacute;': 'ú', '\xa0': ' '}
 
 
-def create_server_socket(unserialized_data, host=SOCKET_HOST, port=SOCKET_PORT):  # TODO Document
-    """Creates a server socket
+def create_server_socket(unserialized_data, host=SOCKET_HOST, port=SOCKET_PORT):
+    """Creates a server socket. This is used to send the webservice object from the frontend
+        to the backend
 
     Args:
-        unserialized_data ([type]): [description]
-        host ([type], optional): [description]. Defaults to SOCKET_HOST.
-        port ([type], optional): [description]. Defaults to SOCKET_PORT.
+        unserialized_data ([type]): unserialized data to send
+        host ([type], optional): ip to bind the socket to. Defaults to SOCKET_HOST.
+        port ([type], optional): port to listen. Defaults to SOCKET_PORT.
     """
     server_socket = socket.socket()
     server_socket.bind((host, port))
@@ -33,15 +33,15 @@ def create_server_socket(unserialized_data, host=SOCKET_HOST, port=SOCKET_PORT):
         client_socket.send(data)
 
 
-def get_data_from_server(host=SOCKET_HOST, port=SOCKET_PORT):  # TODO Document
-    """Gets data from the server.
+def get_data_from_server(host=SOCKET_HOST, port=SOCKET_PORT):
+    """Gets data from the server. This is used to get the webservice object in the skills
 
     Args:
-        host ([type], optional): [description]. Defaults to SOCKET_HOST.
-        port ([type], optional): [description]. Defaults to SOCKET_PORT.
+        host ([type], optional): host where it's the socket. Defaults to SOCKET_HOST.
+        port ([type], optional): port where it's the socket. Defaults to SOCKET_PORT.
 
     Returns:
-        [type]: [description]
+        Unserialized data. This will usually be a webservice
     """
     client_socket = socket.socket()
     client_socket.connect((host, port))
@@ -87,7 +87,7 @@ def translate_moodle_words(string: str) -> str:
     return string
 
 
-def get_course_id_by_name(course_to_find: str, user_courses: List[Course]) -> Optional[Course]:
+def get_course_id_by_name(course_to_find: str, user_courses: List[Course]) -> Optional[str]:
     """Finds a course by its name
 
     Args:
@@ -104,6 +104,15 @@ def get_course_id_by_name(course_to_find: str, user_courses: List[Course]) -> Op
 
 
 def reorder_name(fullname: str) -> str:
+    """Reorders the name from "surname, name" to "name surname". Doesn't change anything if there
+        is no comma in the text.
+
+    Args:
+        fullname (str): fullname to reorder
+
+    Returns:
+        str: ordered fullname
+    """
     try:
         lastname, firstname = fullname.split(", ")
         return " ".join([firstname, lastname])

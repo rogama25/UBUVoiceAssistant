@@ -21,7 +21,7 @@ class User():
         """
         self.__courses: Dict[int, Course] = {}
         self.__final_grades: List[GradeItem] = []
-        if isinstance(user, int) or isinstance(user, str):
+        if isinstance(user, (int, str)):
             self.__user_id = user
             self.__fullname = ""
         else:
@@ -89,7 +89,17 @@ class User():
         self.__final_grades = grades
 
     def set_fullname(self, name: str):
+        """Sets the user fullname
+
+        Args:
+            name (str): fullname
+        """
         self.__fullname = name
 
     def get_fullname(self) -> str:
+        """Gets the user fullname
+
+        Returns:
+            str: fullname
+        """
         return self.__fullname

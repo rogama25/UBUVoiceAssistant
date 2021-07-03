@@ -1,3 +1,5 @@
+"""Module for the singleton class
+"""
 class Singleton(type): # https://stackoverflow.com/questions/6760685/creating-a-singleton-in-python
     """Singleton class
     """

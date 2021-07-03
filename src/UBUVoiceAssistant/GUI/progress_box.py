@@ -1,6 +1,6 @@
 """Module for infinite progress bars
 """
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets
 
 
 class ProgressBox(QtWidgets.QProgressDialog):
@@ -17,6 +17,12 @@ class ProgressBox(QtWidgets.QProgressDialog):
         self.done = False
 
     def closeEvent(self, event) -> None:
+        """This event gets triggered when trying to close the Window. We ignore them if we haven't
+            finished yet
+
+        Args:
+            event: Qt Close event
+        """
         if not self.done:
             event.ignore()
         else:
