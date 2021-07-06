@@ -1,66 +1,106 @@
 \apendice{Documentación de usuario}
+\textbf{Nota importante a partir de este punto: Muchos lectores de PDF introducen saltos de línea que hacen que los comandos más largos dejen de funcionar. Cada comando debe introducirse por completo en una línea y luego pulsar Enter para ejecutarlo. Además, dependiendo del lector de PDF, puede que algunos comandos no contengan los caracteres correctos. Por ello, he dejado los comandos en \href{https://gist.github.com/rogama25/3f7754431ae2acbdcab625117e012432}{Github Gists}}
 
 \section{Introducción}
 En este apartado se explica cómo se puede instalar y usar el proyecto.
 
 \section{Requisitos de usuarios}
 \begin{itemize}
-    \item Sistema operativo Windows 10 u Ubuntu 20.04 o superior.
+    \item Sistema operativo Windows 10 o Ubuntu 20.04 o superior.
     \item Conexión a internet
-    \item 3GB de memoria RAM
+    \item 4GB de memoria RAM para Ubuntu, 6GB para Windows
     \item 5GB de espacio en disco libres
 \end{itemize}
 
 \section{Instalación}
+Para instalar el proyecto se puede hacer o bien en Windows o bien en Ubuntu. Por el momento, se recomienda optar por la segunda opción ya que es un proceso considerablemente más sencillo debido a que la opción para Windows todavía no es completamente estable.
+
+En el caso de estar usando una máquina virtual dentro de Windows, es recomendable desactivar Hyper-V. Esto se debe a que impide que el flag ``AVX'' se pase a la máquina virtual y no funcione correctamente el sonido. Para comprobar si está activo, hay que ejecutar el siguiente comando en una terminal de la máquina virtual:
+
+\texttt{cat /proc/cpuinfo | grep avx}
+
+En el caso de que este no devuelva salida, tendremos que desactivarlo. Esto se consigue ejecutando los siguientes comandos en Windows y después reiniciando la máquina anfitriona.
+
+\begin{itemize}
+    \item \texttt{bcdedit /set hypervisorlaunchtype off}
+    \item \texttt{DISM /Online /Disable-Feature:Microsoft-Hyper-V}
+\end{itemize}
+
+En algunas versiones de Windows, el segundo comando devolverá un error informando que la característica no existe. En tal caso, ejecutaremos este comando: \newline \texttt{Disable-WindowsOptionalFeature -Online -FeatureName \newline Microsoft-Hyper-V-Hypervisor}
+
+Después de ejecutar estos comandos, puede que haya funciones que dependan de la virtualización nativa de Windows que dejen de funcionar, como el WSL. Tenemos que tener en cuenta que no es posible tener la virtualización nativa de Windows y una máquina virtual que pase correctamente el flag ``AVX'', por lo que tendremos que pensar si queremos estar usando una máquina virtual o, por el contrario, WSL. Para volver a activarlos, hay que ejecutar lo siguiente y después reiniciar:
+
+\begin{itemize}
+    \item \texttt{bcdedit /set hypervisorlaunchtype auto}
+    \item \texttt{DISM /Online /Enable-Feature:Microsoft-Hyper-V}
+    \item \texttt{Enable-WindowsOptionalFeature -Online -FeatureName \newline Microsoft-Hyper-V-Hypervisor}
+\end{itemize}
 
 \subsection{Windows Susbsystem for Linux}
-En el caso de que hayamos optado por usar Windows 10 como sistema operativo, es necesario que instalemos este sistema para poder ejecutar la aplicación. Si se va a usar Ubuntu, saltar a la siguiente sección.
+En el caso de que hayamos optado por usar Windows 10 como sistema operativo, es necesario que instalemos este componente para poder ejecutar la aplicación. Si se va a usar Ubuntu, saltar a la siguiente sección.
 
 \subsubsection{Instalación de WSL}
 Para comenzar, deberemos conocer la versión de Windows 10 que estamos ejecutando en nuestro equipo. Para ello, abrimos el menú de configuración de Windows, hacemos click en Sistema'' y luego en Acerca de''. En esa pantalla deberemos fijarnos que tengamos un sistema operativo de 64 bits y tengamos la versión 1607 o superior.
 
 Ahora, tenemos que buscar Powershell'' en el menú de inicio y la ejecutaremos como administrador. En esa ventana, escribimos el siguiente comando:
 
-\texttt{dism.exe /online /enable-feature \`{}\newline
+\texttt{dism.exe /online /enable-feature \newline
 /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart}
 
-En el caso de que tengamos la versión 1903 o superior, con la compilación 18362 o superior, es recomendable instalar WSL2 para obtener un mayor rendimiento. En el caso de no tenerlo, saltamos al apartado de la instalación de Ubuntu para WSL.
+En el caso de que además tengamos la versión 1903 o superior, con la compilación 18362 o superior, es recomendable instalar WSL2 para obtener un mayor rendimiento. \textbf{En el caso de no tenerlo, reiniciamos el equipo y saltamos al apartado de la instalación de Ubuntu para WSL.}
 
 Lo siguiente es activar la virtualización, usando este comando en la Powershell que habíamos abierto:
 
-\texttt{dism.exe /online /enable-feature \`{}\newline
+\texttt{dism.exe /online /enable-feature \newline
 /featurename:VirtualMachinePlatform /all /norestart}
 
-En este punto, reiniciamos el ordenador. Después del reinicio, instalamos el paquete de actualización del kernel de Linux, desde \href{https://wslstorestorage.blob.core.windows.netwslblob/wsl_update_x64.msi}{este enlace}.
+En este punto, reiniciamos el ordenador. Después del reinicio, instalamos el paquete de actualización del kernel de Linux, desde \href{https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi}{este enlace}.
 
 Abrimos otra Powershell como administrador y establecemos el uso de WSL2 por defecto:
 
-\texttt{wsl --set-default-version 2}
+\texttt{wsl -{}-set-default-version 2}
 
 \subsubsection{Instalación de Ubuntu para WSL}
 Para instalar Ubuntu en el Windows Subsystem for Linux, tenemos que descargarlo desde la Microsoft Store, accesible en \href{https://www.microsoft.com/es-es/p/ubuntu/9nblggh4msv6}{este enlace}. Una vez instalado, es probable que se abra de manera automática una terminal en la que se nos pedirá elegir un nombre de usuario y una contraseña. En el caso de que no se abra automáticamente, podremos abrirla desde el menú de inicio, en el acceso directo a Ubuntu.
 
-\subsubsection{Instalación de Pulseaudio y servidor X11}
-Para que el susbsistema pueda recibir sonido del micrófono y mostrar interfaces gráficas debemos instalar lo siguiente:
+En el caso de que no tengamos disponible la Microsoft Store en el ordenador, podemos descargar el paquete de Ubuntu desde \href{https://aka.ms/wslubuntu2004}{este enlace}. Una vez se haya descargado el archivo, abrimos una Powershell y escribimos el siguiente comando: \texttt{Add-AppxPackage .\textbackslash app\_name.appx}, donde app\_name.appx es el nombre del archivo descargado.
 
-VcXserv, descargable desde \href{https://sourceforge.net/projects/vcxsrv/}{este enlace}. Deberemos añadir al .bashrc del WSL las siguientes líneas:
+\subsubsection{Instalación de Pulseaudio y servidor X11}
+Para que el susbsistema pueda recibir sonido del micrófono y mostrar interfaces gráficas debemos instalar lo siguiente en Windows 10:
+
+VcXserv, descargable desde \href{https://sourceforge.net/projects/vcxsrv/}{este enlace}. Usando nano o cualquier otro editor de texto, deberemos añadir al \char`\~/.bashrc del WSL las siguientes líneas:
 
 \texttt{export DISPLAY=:0} (únicamente si no usamos WSL2)
 
-\texttt{export DISPLAY=\$(awk '/nameserver / \{print \$2; exit\}' \textbackslash\newline/etc/resolv.conf 2>/dev/null):0} (si usamos WSL2)
+\texttt{export DISPLAY=\$(awk \textquotesingle/nameserver / \{print \$2; exit\}\textquotesingle \newline/etc/resolv.conf 2>/dev/null):0} (si usamos WSL2)
 
 \texttt{export LIBGL\_ALWAYS\_INDIRECT=1}
 
-Pulseaudio, descargable desde \href{https://www.freedesktop.org/wiki/Software/PulseAudio/Ports/Windows/Support/}{este enlace}. Tendremos que editar los siguientes archivos:
+Abriremos VcXserv desde el menú de inicio en Windows, que aparecerá con el nombre ``XLaunch''. Se nos abrirá una ventana de configuración. En las dos primeras pantallas dejaremos las opciones que vienen seleccionadas por defecto, y en la tercera marcaremos la casilla de ``Disable access control''
+
+Pulseaudio, descargable desde \href{https://www.freedesktop.org/wiki/Software/PulseAudio/Ports/Windows/Support/}{este enlace}, haciendo click donde pone ``zipfile containing preview binaries''. Tendremos que editar los siguientes archivos:
 
 \texttt{etc/pulse/default.pa}, donde tendremos que añadir:
 
-\texttt{load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1}
+\texttt{load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1}
 
-\texttt{etc/pulse/daemon.conf}, donde cambiaremos el \texttt{exit-idle-time} a -1.
+\texttt{load-module module-waveout sink\_name=output source\_name=input record=1}
 
-Ejecutamos el programa bin/pulseaudio.exe y añadimos la siguiente línea al .bashrc:
-\texttt{export PULSE\_SERVER=tcp:127.0.0.1}
+\texttt{etc/pulse/daemon.conf}, donde introducimos lo siguiente:
+
+\texttt{exit-idle-time = -1}
+
+Añadimos lo siguiente  al \char`\~/.bashrc del WSL:
+
+\texttt{export PULSE\_SERVER=tcp:127.0.0.1} (WSL1)
+
+\texttt{export PULSE\_SERVER=tcp:\$(awk \textquotesingle/nameserver / \{print \$2; exit\}\textquotesingle \newline/etc/resolv.conf 2>/dev/null)} (si usamos WSL2)
+
+Ejecutamos el programa bin/pulseaudio.exe dentro de una terminal. Es probable que aparezcan varios errores o advertencias similares a las que se ven en la imagen, pero el programa funciona con normalidad.
+
+\imagen{pulsewin}{Errores que aparecen en la terminal al ejecutar Pulseaudio}
+
+Para continuar, es necesario cerrar y volver a abrir la ventana de Ubuntu
 
 \subsection{Descarga del repositorio}
 Para descargar el código de la aplicación se puede hacer usando un navegador o usando la terminal. En el caso de que estemos usando Windows Subsystem for Linux, es recomendable usar la terminal.
@@ -72,21 +112,32 @@ Allí, en la parte derecha, haz click en la sección ``Releases'' y, en el despl
 
 Una vez se complete la descarga, primero hay que descomprimirlo y luego abrir una terminal donde nos moveremos hasta la carpeta que se ha creado con el nombre de la versión usando el comando \texttt{cd}.
 
-Allí hay que ejecutar el comando ``sudo ./install.sh install'' y esperar a que termine. Puede que tarde varios minutos, dependiendo de la velocidad de internet y del equipo, ya que descarga y configura todos los componentes necesarios para ejecutar el programa.
+Allí hay que ejecutar el comando \texttt{sudo ./install.sh install} y esperar a que termine. Puede que tarde varios minutos, dependiendo de la velocidad de internet y del equipo, ya que descarga y configura todos los componentes necesarios para ejecutar el programa.
+
+En el caso de que el instalador se quede atascado en una sección interactiva, lee el último párrafo de la siguiente sección.
 
 \subsubsection{Usando la terminal}
 Desde una terminal, ejecutamos los siguientes comandos:
 \begin{itemize}
+    \item \texttt{sudo apt update}
     \item \texttt{sudo apt install git}
     \item \texttt{git clone https://github.com/rogama25/UBUVoiceAssistant.git}
     \item \texttt{cd UBUVoiceAssistant}
     \item \texttt{sudo ./install.sh install}
 \end{itemize}
 
+Este proceso puede tardar varios minutos, dependiendo de la velocidad del equipo y de la conexión a internet. En el caso de estar usando WSL, el tiempo es considerablemente más alto, ya que necesita instalar una serie de paquetes extra para que funcione correctamente.
+
+Bajo algunas circunstancias (habitualmente máquinas virtuales, debido a su menor velocidad), el instalador se puede quedar atascado en la parte de configuración de Mycroft, que hace una serie de preguntas de sí o no. En el caso de que esto ocurra, debemos pulsar Control + C para salir del instalador, ejecutar \texttt{sudo ./install.sh uninstall} y después \texttt{sudo ./install.sh install -{}-manual}. Usando este modo, se reiniciará la instalación, informando al usuario cómo responder las preguntas.
+
 \section{Manual del usuario}
 Después de haber completado la instalación, en el caso de que estemos usando Ubuntu como sistema operativo, tendremos un icono en su lanzador con el que podremos abrir nuestro programa. Si estamos usando el Windows Susbsystem for Linux o si no aparece el icono en el lanzador de aplicaciones, deberemos escribir \texttt{UBUVoiceAssistant} para ejecutar el programa.
 
+Si lo estamos ejecutando en WSL, en algunos casos puede aparecer un error que dice ``ImportError: libQt5Core.so.5: cannot open shared object file: No such file or directory''. Este es un \href{https://github.com/microsoft/WSL/issues/3023}{error conocido de WSL} y se soluciona ejecutando el siguiente comando: \newline \texttt{sudo strip -{}-remove-section=.note.ABI-tag \newline /usr/lib/x86\_64-linux-gnu/libQt5Core.so.5}
+
 La primera ventana que veremos es la de inicio de sesión. En la esquina superior derecha podemos elegir el idioma de la aplicación y en la parte inferior tendremos los campos donde debemos introducir los credenciales de Moodle. Deberemos especificar también la dirección web del servidor, siendo en nuestro caso \texttt{https://ubuvirtual.ubu.es}. Las direcciones deben incluir el protocolo http o https.
+
+\imagen{login}{Pantalla de inicio de sesión}
 
 Una vez hayamos iniciado sesión por primera vez (puede tardar varios minutos mientras Mycroft instala algunos de sus componentes), se nos mostrará la ventana de emparejamiento. En ella aparecen los pasos que debemos realizar para vincular el cliente de Mycroft que se ha instalado en el equipo con sus servicios web. El procedimiento es el siguiente:
 \begin{itemize}
@@ -94,9 +145,14 @@ Una vez hayamos iniciado sesión por primera vez (puede tardar varios minutos mi
     \item Registrarnos o iniciar sesión en una cuenta que ya tengamos.
     \item En la parte superior derecha, donde aparece el icono del perfil, hacer click en ``Add Device''.
     \item Escribir el código dicho por Mycroft en el campo que pone ``Pairing Code''.
+    \item Indicar un nombre para el equipo, a nuestra elección, en el campo ``Name''
     \item En la parte inferior, seleccionar ``Google Voice'' y guardar los cambios.
 \end{itemize}
 
+\imagen{pair}{Ventana de emparejamiento de UBUVoiceAssistant}
+
+\imagen{pairweb}{Formulario de emparejamiento}
+
 Pasados unos segundos, se debería abrir la ventana con la interfaz de chat. En ella se muestra la conversación que tengamos con el asistente de voz. A partir de este punto podremos decir nuestras órdenes a través del micrófono. Al decir ``Hey Mycroft'', deberíamos oír un sonido que significa que ha detectado la wake word y está grabando la siguiente frase que digamos. También podemos silenciar el micrófono mediante el botón que hay en la interfaz, o escribir nuestras órdenes por teclado en el campo inferior. Haciendo click en el botón de la parte superior derecha de la ventana, podemos activar y desactivar las skills que queramos.
 
--- Faltan imágenes --
+\imagen{chat}{Ventana de chat}
