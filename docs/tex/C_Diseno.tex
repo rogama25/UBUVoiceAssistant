@@ -73,8 +73,34 @@ El modelo de datos que se usa dentro de la aplicación está fuertemente ligado 
      & & La clave es el id del usuario \\
 }
 
-Las clases ``Forum'', ``Discussion'', ``GradeItem'' y ``Event'' no han sufrido cambios.
+Las clases ``Forum'', ``Discussion'', ``GradeItem'' y ``Event'' no han sufrido cambios con respecto a la versión anterior \cite{versionanterior}.
 
 \section{Diseño procedimental}
+Las peticiones que se habían creado en la anterior versión del proyecto \cite{versionanterior} no han sufrido cambios y, por tanto, no se van a dar muchos detalles.
+
+En primer lugar, al introducir los credenciales en la aplicación, se realiza una primera petición al \textit{webservice} de Moodle, para validar el usuario y la contraseña que hemos introducido, y obtener un token que nos identifique durante el resto de la aplicación. También se realiza una petición para recuperar algunos valores que son importantes más adelante, como la información de la plataforma, el identificador del usuario y también los cursos en los que se está matriculado.
+
+Para las interacciones del usuario con el asistente, en caso de realizarlas por voz, el componente \textit{Voice} graba unos segundos de sonido y lo envía al servidor de Speech-To-Text que tengamos configurado. Al recibir la respuesta del servidor con la frase del usuario (\textit{utterance}) ya transformada a texto, lo envía al componente \textit{Skills} a través del MessageBus, quien invoca a la \textit{skill} correspondiente y devuelve la respuesta, también a través del bus. Aquí, se realiza una petición al servidor de Text-To-Speech, quien devuelve la frase en forma de sonido. En el caso de que los servicios TTS y STT sean locales, todo ese proceso se realiza en la propia máquina. También, si el usuario introduce la entrada por texto, no se realiza el primer paso, sino que el mensaje se envía directamente de la interfaz gráfica al bus.
+
+Entre los procedimientos nuevos, tenemos la posibilidad de obtener los últimos mensajes privados que se han recibido a través de la plataforma. En este, una vez se activa la \textit{skill}, lo primero que se hace es enviar una petición al \textit{webservice} para obtener la lista de conversaciones del usuario. Después, debido a que a través de esa petición únicamente hemos obtenido el último mensaje de cada conversación, tenemos que realizar una petición por cada conversación, para obtener más mensajes. Una vez se ha recuperado la información de los mensajes, se van enviando de uno en uno a través del bus de Mycroft para que aparezcan en la interfaz y se lean en voz alta.
+
+\imagen{ultimosmensajes}{Diagrama de secuencia al consultar mensajes}
+
+También tenemos la posibilidad de enviar mensajes a otros usuarios de Moodle. Para esta funcionalidad, en primer lugar se descargará la lista de conversaciones y se preguntará al usuario cuál de las opciones quiere elegir, en caso de que haya varias parecidas. En caso de que ninguna de las opciones sea la que desea el usuario, se le preguntará un curso, del que se descargarán los participantes y se volverá a preguntar al usuario si una de las opciones es la que deseaba. Una vez seleccionada la persona, se preguntará al usuario el texto del mensaje, y tras una confirmación para que el usuario compruebe si el texto se ha entendido correctamente, se enviará el mensaje al destinatario.
+
+\imagen{enviarmensajes}{Diagrama de secuencia al enviar mensajes}
 
 \section{Diseño arquitectónico}
+El diseño arquitectónico de la aplicación no ha sufrido cambios con respecto a la anterior versión del programa \cite{versionanterior}.
+
+La aplicación está dividida en dos partes, siendo una de ellas la interfaz gráfica y la otra, Mycroft. En varias partes de la aplicación se usa una arquitectura cliente-servidor, donde el cliente realiza peticiones HTTP al servidor, y este envía la información solicitada en la respuesta.
+
+Al iniciar el programa, una vez se han introducido los credenciales en la interfaz, estos se transfieren a cada una de las \textit{skills} instaladas en Mycroft mediante un socket, siendo la interfaz gráfica el servidor y las \textit{skills} los clientes.
+
+A partir de este momento, también se crea un MessageBus entre la interfaz gráfica y Mycroft. Este componente se basa en un WebSocket que permite intercambiar mensajes de manera simple entre todos los componentes que forman Mycroft y también con programas de terceros.
+
+También, para hacer uso del Speech-To-Text o el Text-To-Speech, en caso de que estemos usando servicios que requieren conexión a internet, Mycroft realizará las peticiones correspondientes a los servicios necesarios.
+
+Finalmente, en el caso de las skills que interaccionan con Moodle, estas se comunican mediante una API REST con los \textit{web services} del servidor Moodle al que nos estemos conectando.
+
+\imagen{despliegue}{Diagrama de despliegue}

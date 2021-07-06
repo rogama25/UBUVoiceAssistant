@@ -1,3 +1,32 @@
 \capitulo{6}{Trabajos relacionados}
 
-Este apartado sería parecido a un estado del arte de una tesis o tesina. En un trabajo final grado no parece obligada su presencia, aunque se puede dejar a juicio del tutor el incluir un pequeño resumen comentado de los trabajos y proyectos ya realizados en el campo del proyecto en curso. 
+Si bien es cierto que este campo estaba prácticamente inexplorado hace unos pocos años, cada poco tiempo aparece algún proyecto que pone a prueba las capacidades de los asistentes en el campo de la educación. Algunos de los más interesantes son los siguientes:
+
+En primer lugar tenemos los predecesores del proyecto actual, realizados por la Universidad de Burgos. Podemos encontrar tanto \href{https://github.com/adp1002/UBUVoiceAssistant}{la versión anterior de este mismo proyecto} como \href{https://github.com/cgc0045/TFG-UBUassistant}{una aplicación para Android} que permite hacer preguntas sobre la información de la página web de la universidad.
+
+En segundo lugar podemos encontrar algunos \textit{chatbots} que permiten interactuar con Moodle de manera bastante similar al UBUVoiceAssistant. Entre los más destacables se encuentra \href{https://github.com/AnyTimeTraveler/moodlebot}{una integración con Telegram}, o \href{https://education.microsoft.com/en-us/resource/3dffb3a8}{el plugin para Microsoft Teams}, donde además del bot, encontramos la posibilidad de ver los cursos de manera visual en el cliente de mensajería. También podemos encontrar una \href{http://libres.uncg.edu/ir/asu/f/Melton_Michelle_2019_Thesis.pdf}{skill para Alexa}, que tiene un propósito y una funcionalidad parecida a nuestro proyecto.
+
+También podemos encontrar una serie de asistentes que permiten interactuar con otras plataformas universitarias. Por ejemplo, tenemos \href{https://www.admithub.com/case-study/how-georgia-state-university-supports-every-student-with-personalized-text-messaging/}{Pounce} para interactuar con la \textit{Georgia State University}, o \href{https://www.youtube.com/watch?v=zsRPuU53E74}{Genie} en la \textit{Deakin University}. Es necesario mencionar el caso de \textit{Georgia Tech} \cite{georgiatech}, en el que, durante uno de sus cursos online se usaron dos \textit{chatbots} que sustituyeron a profesores de apoyo para responder algunas de las preguntas más habituales.
+
+Finalmente, cabe destacar el proyecto de la \textit{Sant Louis University} \cite{alexauni}, donde instalaron un total de 2300 dispositivos \textit{Amazon Echo} con los que la comunidad universitaria puede hacer preguntas sobre la universidad a Alexa, sin necesidad de usar un dispositivo propio.
+
+\begin{landscape}
+Se puede ver una comparación de las características en la tabla \ref{tabla:CompCaracteristicas}
+
+\tablaSmall{Comparación de características}{c c c c c c}{CompCaracteristicas}{
+    Nombre del & Lenguaje de & Tipo de & Dispositivos & Complejidad de & Complejidad \\
+    proyecto & programación & información & compatibles & instalación & de uso \\
+}{
+    UBUVoiceAssistant 2 & Python & Dinámica (Moodle) & Windows y Linux & Baja & Moderada\\
+    UBUVoiceAssistant 1 & Python & Dinámica (Moodle) & Linux & Alta & Moderada \\
+    UBUAssistant & Java & Estática & Android & Baja & Moderada \\
+    Bot de Telegram & Java & Dinámica (Moodle) & PC y móvil & Alta & Alta \\
+    MS Teams & PHP & Dinámica (Moodle) & PC y móvil & Alta & Baja \\
+    Skill de Alexa & Java & Dinámica (Moodle) & Móvil & Moderada & Moderada \\
+    Georgia State University & Desconocido & Dinámica & Móvil & Baja & Baja \\
+    Deakin University & Desconocido & Estática & Móvil & Baja & Moderada \\
+    Georgia Tech & Desconocido & Estática & Aula virtual & Ninguna & Baja\\
+    Sant Louis University & Java & Estática & Amazon Echo/Dot & Ninguna & Moderada \\
+}
+
+\end{landscape}

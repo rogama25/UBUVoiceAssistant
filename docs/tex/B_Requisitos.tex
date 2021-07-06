@@ -1,10 +1,10 @@
 \apendice{Especificación de Requisitos}
 
 \section{Introducción}
-En este apéndice se explican los objetivos del proyecto y los requisitos que se han definido para llevarlo a cabo.
+En este anexo se explican los objetivos del proyecto y los requisitos que se han definido para llevarlo a cabo.
 
 \section{Objetivos generales}
-El principal objetivo del proyecto es mejorar la versión anterior del asistente del UBUVoiceAssistant. Para cumplirlo, se proponen algunas mejoras, como una mejora en el proceso de instalación y configuración inicial o en la interacción con el asistente. También se propone conseguir una mayor robustez en la aplicación, obtener más información de Moodle e incluso poder enviar datos a la plataforma.
+El principal objetivo del proyecto es mejorar la versión anterior del asistente del UBUVoiceAssistant. Para cumplirlo, se proponen algunas mejoras, como una importante simplificación en el proceso de instalación y configuración inicial o en la interacción con el asistente. También se propone conseguir una mayor robustez en la aplicación, obtener más información de Moodle e incluso poder enviar datos a la plataforma.
 
 \section{Catalogo de requisitos}
 Los nuevos requisitos que se han añadido a la aplicación son los siguientes:
@@ -37,3 +37,96 @@ Los nuevos requisitos que se han añadido a la aplicación son los siguientes:
 \end{itemize}
 
 \section{Especificación de requisitos}
+
+% Formato de tablas extraído de https://github.com/aog0036/TFG-SmartBeds/blob/master/doc/tex/B_Requisitos.tex
+En esta sección se detallan los casos de uso que se han añadido a los ya existentes en la versión anterior \cite{versionanterior}.
+
+\tablaSmallSinColores{Caso de uso 7: Consultar foros }{p{3cm} p{.75cm} p{9cm}}{tablaCU7}{
+	\multicolumn{3}{p{10.25cm}}{CU-7: Consultar foros} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario consulta los foros de una asignatura concreta} \\\hubu
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{El usuario se ha autenticado y puede acceder a la asignatura} \\\hubu
+	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & Se descarga la información de los cursos\\\cline{2-3}
+	& 2    & Se elige el curso más parecido al que ha dicho el usuario\\\cline{2-3}
+	& 3    & Se descargan los foros de ese curso\\\cline{2-3}
+	& 4    & Se lee el primer post disponible\\\cline{2-3}
+	& 5    & Se pregunta al usuario si quiere seguir leyendo. Si responde sí, se vuelve al paso 4. Si no, termina. \\\hubu
+	\multirow{2}{3.5cm}{Excepciones}       & Paso & Acción \\\cline{2-3}
+	& 2    & Si no hay ningún curso parecido, se emite un error. \\
+}
+
+\tablaSmallSinColores{Caso de uso 8: Consultar eventos }{p{3cm} p{.75cm} p{9cm}}{tablaCU8}{
+	\multicolumn{3}{p{10.25cm}}{CU-8: Consultar eventos} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario consulta los eventos futuros} \\\hubu
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{El usuario se ha autenticado y tiene al menos un evento futuro} \\\hubu
+	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & Se descarga la información del calendario\\\cline{2-3}
+	& 2    & Se leen los próximos eventos del calendario\\
+}
+
+\tablaSmallSinColores{Caso de uso 9: Consultar cambios }{p{3cm} p{.75cm} p{9cm}}{tablaCU9}{
+	\multicolumn{3}{p{10.25cm}}{CU-9: Consultar cambios} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario consulta las modificaciones recientes de una asignatura concreta} \\\hubu
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{El usuario se ha autenticado y puede acceder a la asignatura} \\\hubu
+	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & Se descarga la información de los cursos\\\cline{2-3}
+	& 2    & Se elige el curso más parecido al que ha dicho el usuario\\\cline{2-3}
+	& 3    & Se descargan los cambios de ese curso\\\cline{2-3}
+	& 4    & Se lee la información obtenida\\\hubu
+	\multirow{2}{3.5cm}{Excepciones}       & Paso & Acción \\\cline{2-3}
+	& 2    & Si no hay ningún curso parecido, se emite un error. \\
+}
+
+\tablaSmallSinColores{Caso de uso 10: Consultar calificaciones }{p{3cm} p{.75cm} p{9cm}}{tablaCU10}{
+	\multicolumn{3}{p{10.25cm}}{CU-10: Consultar calificaciones} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario consulta las notas de una asignatura concreta} \\\hubu
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{El usuario se ha autenticado y puede acceder a la asignatura} \\\hubu
+	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & Se descarga la información de los cursos\\\cline{2-3}
+	& 2    & Se elige el curso más parecido al que ha dicho el usuario\\\cline{2-3}
+	& 3    & Se descargan as notas de ese curso\\\cline{2-3}
+	& 4    & Se leen las notas obtenidas en voz alta\\\\\hubu
+	\multirow{2}{3.5cm}{Excepciones}       & Paso & Acción \\\cline{2-3}
+	& 2    & Si no hay ningún curso parecido, se emite un error. \\
+}
+
+\tablaSmallSinColores{Caso de uso 11: Consultar mensajes privados }{p{3cm} p{.75cm} p{9cm}}{tablaCU11}{
+	\multicolumn{3}{p{10.25cm}}{CU-11: Consultar mensajes privados} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario consulta los últimos mensajes privados} \\\hubu
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{El usuario se ha autenticado} \\\hubu
+	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & Se descarga la lista de conversaciones del usuario\\\cline{2-3}
+	& 2    & Se obtienen más mensajes en cada una de las conversaciones\\\cline{2-3}
+	& 3    & Se filtran los mensajes para mostrar solo los recibidos\\\cline{2-3}
+	& 4    & Se ordenan para obtener los más nuevos primero\\\cline{2-3}
+	& 5    & Se leen los cinco últimos mensajes recibidos al usuario\\
+}
+
+\tablaSmallSinColores{Caso de uso 12: Enviar mensajes privados }{p{3cm} p{.75cm} p{9cm}}{tablaCU12}{
+	\multicolumn{3}{p{10.25cm}}{CU-12: Enviar mensajes privados} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario envía un mensaje a otra persona} \\\hubu
+	Precondiciones                         & \multicolumn{2}{p{10.25cm}}{El usuario se ha autenticado y tiene una conversación abierta con la otra persona, o comparten un curso y puede ver su perfil} \\\hubu
+	\multirow{3}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & Se descarga la lista de conversaciones\\\cline{2-3}
+	& 2    & Se busca un usuario con nombre parecido al solicitado. Si no hay ninguno, se salta al paso 5\\\cline{2-3}
+	& 3    & Se pregunta al usuario si ese es el usuario deseado. En caso de serlo, se salta al paso 6\\\cline{2-3}
+	& 4    & De no serlo, se pregunta un curso que tengan en común.\\\cline{2-3}
+	& 5    & Se repite desde el paso 2 buscando en los participantes de ese curso\\\cline{2-3}
+	& 6    & Se pregunta el mensaje deseado al usuario\\\cline{2-3}
+	& 7    & Se lee el mensaje de nuevo y se espera confirmación del usuario\\\hubu
+	Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{El nuevo mensaje aparece reflejado en Moodle} \\\hubu
+	\multirow{2}{3.5cm}{Excepciones}       & Paso & Acción \\\cline{2-3}
+	& 4    & Si no hay ningún curso parecido, se emite un error. \\
+}

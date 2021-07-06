@@ -8,6 +8,7 @@
 \usepackage{lmodern} % Scalable font
 \usepackage{microtype}
 \usepackage{placeins}
+\usepackage{pdflscape}
 
 \RequirePackage{booktabs}
 \RequirePackage[table]{xcolor}
@@ -359,10 +360,21 @@
 \newcommand{\nombre}{Rodrigo Garcia Martin} %%% cambio de comando
 
 % Datos de portada
-\title{Asistente de voz para Moodle}
+\title{Asistente de voz para Moodle
+UBUVoiceAssistant 2.0}
 \author{\nombre}
 \tutor{Raúl Marticorena Sánchez}
-\date{\today}
+\date{Julio 2021}
+
+%in the preamble
+%--------------------------------
+  \usepackage[
+    backend=biber,
+    style=numeric,
+  ]{biblatex}
+
+ \addbibresource{bibliografia.bib}
+%--------------------------------
 
 \begin{document}
 
@@ -382,7 +394,7 @@
 
 \noindent Expone:
 
-\noindent Que el alumno D. \nombre, con DNI 71709733B, ha realizado el Trabajo final de Grado en Ingeniería Informática titulado UBUVoiceAssistantV2. 
+\noindent Que el alumno D. \nombre, con DNI 71709733B, ha realizado el Trabajo final de Grado en Ingeniería Informática titulado UBUVoiceAssistant 2.0. 
 
 \noindent Y que dicho trabajo ha sido realizado por el alumno bajo la dirección del que suscribe, en virtud de lo cual se autoriza su presentación y defensa.
 
@@ -428,9 +440,9 @@ D. Raúl Marticorena Sánchez
 \begin{abstract}
 Los asistentes de voz son una tecnología de reciente aparición que se puede ver cada vez en más aspectos de la vida cotidiana, como en nuestros móviles, algunas páginas web, e incluso en las cajas registradoras automáticas que hay en algunos supermercados. Nos permiten realizar una enorme cantidad de funciones, como buscar información, enviar mensajes o navegar por diferentes páginas web, intentando que el funcionamiento sea lo más natural posible para el usuario, como si estuviese interactuando con otra persona.
 
-En el campo de la educación se han visto muchas tecnologías diferentes hasta la fecha, siendo Moodle una de las más importantes, ya que permite ser un punto de unión entre alumnos y profesores, donde poder consultar todos los apuntes de las asignaturas, subir las tareas, realizar exámenes, comunicarse mediante foros y mensajería instantánea, y muchas otras funciones. También es importante destacar la facilidad para crear aplicaciones de terceros.
+En el campo de la educación se han utilizado muchas tecnologías diferentes hasta la fecha, siendo Moodle una de las más importantes, ya que permite ser un punto de unión entre alumnos y profesores, donde poder consultar todos los apuntes de las asignaturas, subir las tareas, realizar exámenes, comunicarse mediante foros y mensajería instantánea, y muchas otras funciones. También es importante destacar la facilidad para crear aplicaciones de terceros.
 
-Debido a esto, surgió la idea de crear un asistente de voz para Moodle, para intentar hacer la experiencia más agradable. UBU\-Voice\-Assistant está programado en Python, y usa el asistente de código abierto \textit{Mycroft}. Se parte de una versión inicial y se buscan incluir varias mejoras en diferentes partes de la aplicación, como en la instalación e interacción con el usuario.
+Debido a esto, surgió la idea de crear un asistente de voz para Moodle, para intentar hacer la experiencia más agradable. UBU\-Voice\-Assistant está programado en Python, y usa el asistente de código abierto \textit{Mycroft}. Se parte de una versión inicial y se buscan incluir varias mejoras en diferentes partes de la aplicación. En concreto, la instalación y configuración inicial se han simplificado en gran medida, se han realizado varios cambios en la interfaz para conseguir un aspecto más moderno, se han corregido una serie de errores y se han añadido algunas funcionalidades nuevas, como la posibilidad de interactuar con los mensajes privados de Moodle.
 \end{abstract}
 
 \renewcommand*\abstractname{Descriptores}
@@ -443,11 +455,11 @@ asistente de voz, Mycroft, TTS, STT, Moodle, skill, Python
 % Abstract en inglés
 \renewcommand*\abstractname{Abstract}
 \begin{abstract}
-Voice assistants are a recently emerging technology that each day is being incorporated into more aspects of the everyday life, such as cellphones, websites or even in the automatic cash registers in some supermarkets. They allow us to perform a huge number of actions, like looking for information, send text messages or browsing the web, while trying to be as natural to the user as talking to other person.
+Voice assistants are a recently emerging technology that each day is being incorporated into more aspects of everyday life, such as cellphones, websites or even in the automatic cash registers in some supermarkets. They allow us to perform a huge number of actions, like looking for information, sending text messages or browsing the web, while trying to be as natural to the user as talking to another person.
 
-In education, we have seen a lot of different technologies, staying Moodle as one of the most important ones, because it can be used as a nexus between students and teachers, where you can get the notes of the different subjects, upload assignments, take tests, chat with other people using forums and instant messaging, and many other things. Is worth noting the ease of creating third-party apps.
+In education, there are a lot of different technologies, staying Moodle as one of the most important ones, because students and teachers can use it as a nexus. There you can get the notes for the different subjects, upload assignments, take tests, chat with other people using forums and instant messaging, and many other things. Is worth noting the ease of creating third-party apps.
 
-Because of that, we came up with the idea of creating a voice assistant for Moodle, trying to get a better usage experience of the platform. UBUVoiceAssistant is coded in Python, and it uses the open-source assistant \textit{Mycroft}. I start from an initial version and I'm looking to include several improvements in different parts of the application, such as the installation and user interaction.
+Because of that, we had the idea of creating a voice assistant for Moodle, trying to get a better user experience on the platform. I coded \textit{UBUVoiceAssistant} in Python, and it uses the open-source assistant Mycroft. I started from an initial version and I’m looking to include several improvements in different parts of the application. The installation and initial configuration are now way easier than before, and I redesigned the interface to get a more modern appearance. I also fixed a bunch of errors and added some additional features, such as the interaction with private messaging in Moodle.
 \end{abstract}
 
 \renewcommand*\abstractname{Keywords}
@@ -479,7 +491,7 @@ voice assistant, Mycroft, TTS, STT, Moodle, skill, Python
 \include{./tex/7_Conclusiones_Lineas_de_trabajo_futuras}
 
 
-\bibliographystyle{plain}
-\bibliography{bibliografia}
+%Where the bibliography will be printed
+  \printbibliography
 
 \end{document}

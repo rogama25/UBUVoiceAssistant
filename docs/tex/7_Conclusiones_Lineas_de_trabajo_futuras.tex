@@ -1,11 +1,23 @@
 \capitulo{7}{Conclusiones y Líneas de trabajo futuras}
 
 \section{Conclusiones}
+La principal conclusión que he sacado de este proyecto es la gran dificultad que tiene trabajar con un código con una documentación pobre. Incluir comentarios a lo largo del código y, especialmente, dejar documentado lo que hacen todos los métodos que no son triviales es fundamental para que otra persona pueda retomar el trabajo más adelante. Esto también es imprescindible en el caso de usar APIs de terceros (como las de Mycroft o Moodle), cosa que no siempre se cumple.
 
+Relacionado con lo anterior, otra conclusión que se ha sacado de este proyecto es que en muchas ocasiones es considerablemente más lento y difícil de lo que parece en un primer momento conseguir cumplir las líneas de trabajo futuras de la versión anterior. Especialmente cuando en muchos casos tienes que probar varias alternativas para hacer una tarea hasta acertar con una que funcione exactamente como esperas.
+
+También es muy importante dejar en algún sitio accesible todos los archivos que se han usado en el proyecto, ya que puede que en el futuro haya que reescribir gran parte del código para conseguir algo similar pero con algunas modificaciones, como ha ocurrido en el caso de la interfaz.
+
+También me ha quedado claro que depender de algunas características de un programa de terceros que no están pensadas para que interactúes con ellas puede dar muchos problemas. Por ejemplo, en el caso de la obtención del código de emparejamiento a través de los registros, que puede romperse cuando cambien el formato.
+
+A lo largo del trabajo se han aplicado algunos de los conocimientos de la carrera, como es la interacción hombre-máquina, para intentar conseguir unos diálogos bastante naturales con el asistente o algunas buenas prácticas, como la creación de la documentación, seguir un estilo uniforme a lo largo de todo el código o el uso de tipado.
+
+Entre los puntos positivos de haber realizado el proyecto se encuentra el haber trabajado con varias tecnologías diferentes, integradas en un mismo programa, y la satisfacción al final de que todo va cobrando forma hasta convertirse en un proyecto que puede ser muy útil. Sin embargo, entre los puntos negativos se encuentra la frustración al ver la falta de documentación y tener que haber rehecho una parte del proyecto, lo que ha impedido poder trabajar en otras ideas interesantes.
 
 \section{Líneas de trabajo futuras}
 En este apartado se incluyen algunas de las ideas que surgieron en la anterior versión del proyecto que no se han podido cumplir, junto a otras  nuevas que han ido surgiendo a lo largo del desarrollo.
 
-Por el momento sólo es posible usar la aplicación en Linux o en Windows 10 mediante el WSL, pero no se puede usar en MacOS ni en móviles, donde quizá es más útil. Por el momento es necesario esperar a que avance el desarrollo de Mycroft para que sea viable usarlo en esas plataformas. También se podría optar por intentar conseguir una funcionalidad similar mediante otras tecnologías que sí sean multiplataforma, o crear una aplicación cliente ligero que se conecte a un servidor de la universidad donde se procesen todas las peticiones de los diferentes usuarios.
+Por el momento sólo es posible usar la aplicación en Linux o en Windows 10 mediante el WSL, pero no se puede usar en MacOS ni en móviles, donde quizá es más útil. Por el momento es necesario esperar a que avance el desarrollo de Mycroft para que sea viable usarlo en esas plataformas, ya que todavía no se ofrecen unas versiones estables. También se podría optar por intentar conseguir una funcionalidad similar mediante otras tecnologías que sí sean multiplataforma, o crear una aplicación cliente ligero que se conecte a un servidor de la universidad donde se procesen todas las peticiones de los diferentes usuarios.
 
 También podría ser interesante la posibilidad de trabajar sin conexión. Sería necesario descargar los datos obtenidos de Moodle a una serie de archivos o una base de datos local que se podrían consultar más adelante cuando no haya una conexión disponible.
+
+Finalmente, se podría plantear en un futuro ayudar a eliminar las limitaciones que trae Mycroft, como el mal funcionamiento que tiene la entrada por teclado cuando se pregunta al usuario para obtener datos adicionales, la imposibilidad de indicarle a Mycroft que pare a través de la voz, o la obligación de que el instalador que traen sea interactivo.

@@ -307,6 +307,8 @@
 
 \renewcommand*\cftappendixname{\appendixname\ }
 
+\newcommand{\hubu}{\hline \rule{0pt}{2.7ex}}
+
 % Formato de portada
 \makeatletter
 \usepackage{xcolor}
@@ -351,10 +353,20 @@
 
 
 % Datos de portada
-\title{UBUVoiceAssistant v2 \\Documentación Técnica}
+\title{UBUVoiceAssistant 2.0 \\Documentación Técnica}
 \author{Rodrigo Garcia Martin}
 \tutor{Raúl Marticorena Sánchez}
-\date{\today}
+\date{Julio 2021}
+
+%in the preamble
+%--------------------------------
+  \usepackage[
+    backend=biber,
+    style=numeric,
+  ]{biblatex}
+
+ \addbibresource{bibliografiaAnexos.bib}
+%--------------------------------
 
 \begin{document}
 
@@ -399,7 +411,7 @@
 \include{./tex/E_Manual_usuario}
 
 
-\bibliographystyle{plain}
-\bibliography{bibliografiaAnexos}
+%Where the bibliography will be printed
+  \printbibliography
 
 \end{document}

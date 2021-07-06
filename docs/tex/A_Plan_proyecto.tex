@@ -4,20 +4,106 @@
 En este apartado se detallan la planificación temporal que se ha seguido para realizar el proyecto, junto con la metodología utilizada, y la viabilidad del proyecto.
 
 \section{Planificación temporal}
-Para realizar el proyecto se ha usado una metodología ágil llamada SCRUM, pero reduciendo el número de personas a 1, y realizando reuniones semanales, para adaptarlo a las necesidades y a las características del trabajo.
+Para realizar el proyecto se ha usado una metodología ágil llamada SCRUM \cite{scrum}, pero reduciendo el número de personas a 1, y realizando reuniones semanales, para adaptarlo a las necesidades y a las características del trabajo.
 
-\subsection*{Sprint 1}
+\subsection{Sprint 1}
 El primer sprint duró aproximadamente dos semanas (del 12 al 24 de febrero).
 
 La reunión previa al sprint se dedicó para establecer los objetivos del proyecto.
-La mayor parte del sprint se dedicó a revisar el código inicial del proyecto, revisar errores, identificar posibilidades de mejora y oportunidades para incluir funcionalidades completamente nuevas. Principalmente, consultar cómo funciona el docker proporcionado por Mycroft y comprobar cómo se puede integrar e iniciar la documentación.
+La mayor parte del sprint se dedicó a revisar el código inicial del proyecto, revisar errores, identificar posibilidades de mejora y oportunidades para incluir funcionalidades completamente nuevas. Principalmente, consultar cómo funciona el \textit{Docker} proporcionado por \textit{Docker} y comprobar cómo se puede integrar e iniciar la documentación.
 
-\subsection*{Sprint 2}
-El segundo sprint dura dos semanas (del 24 de febrero al 10 de marzo)
+\subsection{Sprint 2}
+El segundo sprint dura dos semanas (del 25 de febrero al 10 de marzo).
 
+En este sprint se creó la primera versión del instalador, se empezó a reescribir el código de la interfaz, se dieron los primeros pasos para incluir un sistema de localización y se hicieron algunas correcciones menores de errores.
+\subsection{Sprint 3}
+El tercer sprint dura dos semanas (del 11 al 24 de marzo).
+
+En este sprint se añade una buena cantidad de documentación, se hacen una serie de mejoras de calidad al código existente de la versión anterior del proyecto y se sigue trabajando en la nueva interfaz, junto con arreglos de errores para intentar adaptarse al sistema de contenedores \textit{Docker}.
+\subsection{Sprint 4}
+El cuarto sprint dura dos semanas (del 25 de marzo al 7 de abril).
+
+A lo largo de este sprint se añadió el nuevo recuadro HTML para mostrar de forma más visual la interacción entre Mycroft y el usuario, se modificó el instalador para usar el proyecto de \textit{Mycroft} para Linux en lugar de \textit{Docker} y se hicieron varios arreglos al código para conseguir tener una primera versión con la nueva interfaz.
+\subsection{Sprint 5}
+El quinto sprint dura dos semanas (del 8 al 21 de abril).
+
+En este sprint se arreglan una serie de errores que han aparecido al programar la nueva interfaz, se hacen algunas mejoras para aumentar la vivacidad de la aplicación y se añaden los primeros apartados de la memoria.
+\subsection{Sprint 6}
+El sexto sprint dura dos semanas (del 22 de abril al 5 de mayo).
+
+A lo largo de este sprint se añaden múltiples apartados de la memoria del proyecto. Al mismo tiempo, se empieza a investigar el funcionamiento de Adapt como intent parser.
+\subsection{Sprint 7}
+El séptimo sprint dura una semana (del 5 al 12 de mayo).
+
+En este sprint se realizan algunas pruebas con Adapt para poder empezar a crear una skill nueva que lo aproveche. También se arreglan algunos errores en los anteriores apartados de la memoria.
+\subsection{Sprint 8}
+El octavo sprint dura una semana (del 13 al 19 de mayo).
+
+En este sprint se investigan algunos métodos disponibles en los \textit{webservices} que pueden ser útiles para añadir nuevas funcionalidades al proyecto, configurando una plataforma de Moodle en un servidor propio. También se añaden los apartados restantes de la memoria.
+\subsection{Sprint 9}
+El noveno sprint dura una semana (del 20 al 26 de mayo).
+
+Debido a problemas con el ordenador, se migra el proyecto de LaTeX a \href{https://overleaf.com}{Overleaf}. Desde esa plataforma se añaden el manual de programador y usuario a los anexos.
+\subsection{Sprint 10}
+El décimo sprint dura dos semanas (del 27 de mayo al 9 de junio).
+
+Se añaden la mayoría de apartados restantes a los anexos y se adaptan el modelo y los \textit{webservices} para dar soporte a las nuevas funcionalidades
+\subsection{Sprint 11}
+El undécimo sprint dura una semana (del 10 al 16 de junio).
+
+Se arreglan algunos errores con el proceso de emparejamiento debido a cambios de \textit{Mycroft} y se termina la \textit{skill} que permite interactuar con los mensajes privados de Moodle. En el proceso, se han movido las \textit{skills} a submódulos para poder instalar correctamente las dependencias.
+\subsection{Sprint 12}
+El duodécimo sprint dura una semana (del 17 al 23 de junio).
+
+Se realizan varias correcciones de errores en varios puntos del programa y se realizan varias mejoras en la interfaz.
+\subsection{Sprint 13}
+El penúltimo sprint dura una semana (del 24 al 30 de junio).
+
+Se realizan algunas correcciones de errores para conseguir soportar un mayor número de dispositivos que no funcionaban correctamente, se incluye un sistema de ayuda y se termina la documentación.
+\subsection{Sprint 14}
+El sprint final dura una semana (del 1 al 7 de julio).
+
+A lo largo de este sprint se realizan las últimas correcciones de errores, se añade la documentación al código y se revisa su calidad, se crea la versión final y se prepara para su entrega.
 
 \section{Estudio de viabilidad}
 
 \subsection{Viabilidad económica}
+\subsubsection{Costes de personal}
+Este proyecto ha sido desarrollado por una persona y ha dedicado aproximadamente 300 horas de tiempo de trabajo. Según \href{https://www.lainformacion.com/management/empleo-mejores-trabajos-junior-jovenes-sueldo-alto/6536295/}{este estudio}, el sueldo medio para un programador junior en España es de 19.787€ anuales. Si descontamos el IRPF (2.290,3€) y el impuesto que se paga a la Seguridad Social (1.256,5€), nos quedamos con un sueldo neto de 16.240€ anuales.
+
+Si dividimos las 300 horas de trabajo en jornadas de 8 horas, nos quedan un total de 38 días que se han dedicado para este proyecto. Si tenemos en cuenta que en un mes se trabajan aproximadamente 21 días, y teniendo en cuenta las vacaciones correspondientes a ese tiempo de trabajo, sería necesario contratar al programador durante dos meses completos.
+
+Durante estos dos meses, el programador cobraría aproximadamente 2.700€ pero, sumando los impuestos, el gasto que deberíamos asumir es de casi 3.300€.
+
+\subsubsection{Costes \textit{software}}
+Todos los programas y servicios que se han usado para el desarrollo del proyecto disponen de una versión gratuita, por lo que no tenemos ningún tipo de coste \textit{software}
+
+\subsubsection{Costes \textit{hardware}}
+Para desarrollar el proyecto se ha usado un ordenador portátil de gama media. El equipo cuesta 550€ y se amortiza a 5 años. Como sólo lo hemos usado durante 2 meses, el coste amortizado del equipo es de algo menos de 20€.
+
+Al ser código abierto, lo que se asume habitualmente es que debe ser gratuito siempre. Sin embargo, esto no es así para todos los proyectos. Por ejemplo, en el caso de Elementary OS, un sistema operativo basado en Linux, se da la opción de hacer una donación al descargar el sistema o algunas de sus aplicaciones. También existe Aseprite, cuya descarga es de pago, aunque también se puede obtener una versión de manera completamente legal si compilamos el código fuente.
+
+En nuestro proyecto, conseguiríamos cubrir gastos si 665 personas nos donan los 5€ que se suelen pedir en muchos proyectos open source que están disponibles por Internet.
 
 \subsection{Viabilidad legal}
+\subsubsection{Software}
+Este proyecto se ha licenciado pajo la licencia GPL-3.0 \cite{gpl3}. Esta licencia surge en 2007, como actualización de la GNU General Public License y sigue siendo de las más usadas en proyectos open source. Permite a todas las personas la posibilidad de usar, estudiar y redistribuir el software de manera libre, y además protege que ese código y modificaciones que se hagan del mismo puedan acabar siendo de código cerrado, ya que se debe seguir usando la misma licencia o una versión superior. Esto también afecta a programas que incluyen bibliotecas con licencia GPL3, como el nuestro. Esto se debe a que hemos usado las siguientes bibliotecas:
+\begin{itemize}
+    \item Mycroft, con licencia Apache-2.0 \cite{apache2}
+    \item Python, que usa tanto la Python Software Fundation License y la Zero Clause BSD License \cite{pythonlicense}
+    \item Las siguientes bibliotecas de Python:
+    \begin{itemize}
+        \item PyQt5, distribuido mediante GPL-3.0 en su versión gratuita
+        \item Requests, con licencia Apache-2.0
+        \item Babel usa la Babel License \cite{babel}
+        \item Fuzzywuzzy se distribuye bajo la GPL-2.0 \cite{gpl2}
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Documentación}
+La documentación de este proyecto se distribuye bajo la licencia Creative Commons Attribution ShareAlike 4.0 \cite{ccbysa4.0}. Es una licencia que se usa de manera habitual, y que otorga el permiso para redistribuir el contenido y modificarlo de cualquier manera, siempre que se mencione al autor original y se mantenga la misma licencia para las modificaciones que se realicen.
+
+\subsubsection{Imágenes}
+Los iconos que ya estaban incluidos en la anterior versión de la aplicación proceden de \href{https://fontawesome.com/icons?d=gallery}{fontawesome} y se distribuyen bajo la licencia Creative Commons 4.0
+
+El icono de la aplicación ha sido creado por \href{https://www.flaticon.com/authors/smashicons}{Smashicons} y se puede descargar en \href{www.flaticon.com}{www.flaticon.com}. En su licencia especifican la obligatoriedad de atribuir la creación del contenido, aunque este haya sido modificado posteriormente.

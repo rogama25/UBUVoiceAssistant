@@ -1,4 +1,5 @@
 \apendice{Documentación técnica de programación}
+\textbf{Nota importante a partir de este punto: Muchos lectores de PDF introducen saltos de línea que hacen que los comandos más largos dejen de funcionar. Cada comando debe introducirse por completo en una línea y luego pulsar Enter para ejecutarlo. Además, dependiendo del lector de PDF, puede que algunos comandos no contengan los caracteres correctos. Por ello, he dejado los comandos en \href{https://gist.github.com/rogama25/3f7754431ae2acbdcab625117e012432}{Github Gists}}
 
 \section{Introducción}
 En este capítulo se van a mencionar todos los aspectos relevantes que es necesario conocer para poder seguir trabajando en una versión futura de la aplicación.
@@ -6,33 +7,33 @@ En este capítulo se van a mencionar todos los aspectos relevantes que es necesa
 \section{Estructura de directorios}
 Para organizar el proyecto, se ha hecho de la siguiente manera:
 \begin{itemize}
-    \item /docs/: Carpeta que contiene todos los documentos e imágenes para generar los archivos PDF con la memoria y anexos.
-    \item /scripts/: Varios scripts que se han usado para automatizar algunas acciones frecuentes, como la ejecución del programa desde la versión en desarrollo, la generación de la plantilla para las traducciones, o para realizar las pruebas de calidad de código.
-    \item /testing/: Algunos archivos de prueba que he ido generando a lo largo del proyecto para probar algunas funcionalidades sin tener que lanzar el programa completo.
-    \item /src/UBUVoiceAssistant/: La carpeta base del código fuente del proyecto. Tiene las siguientes carpetas en su interior:
+    \item /docs/: carpeta que contiene todos los documentos e imágenes para generar los archivos PDF con la memoria y anexos.
+    \item /scripts/: varios scripts que se han usado para automatizar algunas acciones frecuentes, como la ejecución del programa desde la versión en desarrollo, la generación de la plantilla para las traducciones, o para realizar las pruebas de calidad de código.
+    \item /testing/: algunos archivos de prueba que he ido generando a lo largo del proyecto para probar algunas funcionalidades sin tener que lanzar el programa completo.
+    \item /src/UBUVoiceAssistant/: la carpeta base del código fuente del proyecto. Tiene las siguientes carpetas en su interior:
     \begin{itemize}
-        \item GUI: Contiene los archivos necesarios para la interfaz gráfica
-        \item GUI/old\_files: Archivos que hacían funcionar la anterior interfaz gráfica. No se usan, pero se han dejado como referencia.
-        \item GUI/forms: En esta carpeta se encuentran los formularios generados con QtDesigner.
-        \item GUI/forms/chat\_window\_html: Los documentos html, javascript y CSS necesarios para mostrar los bocadillos en la ventana de chat con el asistente.
-        \item imgs: Contiene las imágenes que se usan en la interfaz gráfica.
-        \item lang: Los archivos para traducir la interfaz gráfica. Tiene la plantilla llamada ``translation\_template.pot'' y las carpetas para cada uno de los idiomas. Siguen la estructura \textit{languageCode\_countryCode}/LC\_MESSAGES/UBUVoiceAssistant
-        \item model: Archivos que representan los datos de Moodle
-        \item prototipo: Archivos para un prototipo de skill para Alexa que se usaron en la anterior versión del proyecto.
-        \item skills: Contiene las \textit{Skills} del proyecto.
-        \item util: Archivos que ofrecen varias funcionalidades para el proyecto.
-        \item webservice: Código encargado de realizar las peticiones web al servidor de Moodle
+        \item GUI: contiene los archivos necesarios para la interfaz gráfica
+        \item GUI/old\_files: archivos que hacían funcionar la anterior interfaz gráfica. No se usan, pero se han dejado como referencia.
+        \item GUI/forms: en esta carpeta se encuentran los formularios generados con QtDesigner.
+        \item GUI/forms/chat\_window\_html: los documentos html, javascript y CSS necesarios para mostrar los bocadillos en la ventana de chat con el asistente.
+        \item imgs: contiene las imágenes que se usan en la interfaz gráfica.
+        \item lang: los archivos para traducir la interfaz gráfica. Tiene la plantilla llamada ``translation\_template.pot'' y las carpetas para cada uno de los idiomas. Siguen la estructura \textit{languageCode\_countryCode}/LC\_MESSAGES/UBUVoiceAssistant
+        \item model: archivos que representan los datos de Moodle
+        \item prototipo: archivos para un prototipo de skill para Alexa que se usaron en la anterior versión del proyecto.
+        \item skills: contiene las \textit{Skills} del proyecto.
+        \item util: archivos que ofrecen varias funcionalidades para el proyecto.
+        \item webservice: código encargado de realizar las peticiones web al servidor de Moodle
     \end{itemize}
 \end{itemize}
 
 \section{Manual del programador}
-Como entorno de programación se recomienda usar como sistema operativo la última versión normal de Ubuntu, aunque también es posible usar la última LTS o cualquiera de las distribuciones que derivan de ellas. Es necesario instalar las dependencias de python3 que hemos usado en el proyecto, Mycroft, QtDesigner, Poedit y un editor de código como Visual Studio Code con algunas extensiones recomendadas para facilitar el trabajo.
+Como entorno de programación se recomienda usar como sistema operativo la última versión estable de Ubuntu, aunque también es posible usar la última LTS o cualquiera de las distribuciones que derivan de ellas. Es necesario instalar las dependencias de python3 que hemos usado en el proyecto, Mycroft, QtDesigner, Poedit y un editor de código como Visual Studio Code con algunas extensiones recomendadas para facilitar el trabajo.
 
 \subsection{Python3}
 Python3 ya viene preinstalado en Ubuntu, pero para que la aplicación funcione correctamente necesitamos instalar las bibliotecas usadas en el proyecto. Esto se puede hacer escribiendo los siguientes comandos en una terminal:
 \begin{itemize}
-    \item \texttt{sudo apt-get install python3-pip python3-pyqt5 \textbackslash\newline python3-pyqt5.qtwebengine git gettext mypy pylint -y}
-    \item \texttt{sudo pip3 install mycroft-messagebus-client babel}
+    \item \texttt{sudo apt-get install python3-pip python3-pyqt5 \newline python3-pyqt5.qtwebengine git gettext mypy pylint -y}
+    \item \texttt{sudo pip3 install mycroft-messagebus-client babel bs4}
     
     En el caso de que se vayan a modificar o crear skills nuevas, es recomendable ejecutar los siguientes comandos para tener autocompletado dentro del IDE:
     \item \texttt{sudo apt-get install libfann-dev python3-dev swig -y}
@@ -40,11 +41,11 @@ Python3 ya viene preinstalado en Ubuntu, pero para que la aplicación funcione c
 \end{itemize}
 
 \subsection{Mycroft}
-Para poder usar Mycroft es necesario tener una cuenta en \href{https://mycroft.ai}{su página web}. También será necesario descargar el código de Mycroft desde \href{https://github.com/MycroftAI/mycroft-core}{su repositorio}. Lo podemos hacer ejecutando los siguientes comandos:
+Para poder usar Mycroft es necesario tener una cuenta en \href{https://mycroft.ai}{su página web}. También será necesario descargar el código de Mycroft desde \href{https://github.com/MycroftAI/mycroft-core}{su repositorio}. Lo podemos hacer ejecutando los siguientes comandos, donde sustituimos your\_user por tu usuario de Ubuntu:
 \begin{itemize}
     \item \texttt{sudo mkdir -p /usr/lib/mycroft-core}
-    \item \texttt{sudo chown SUDO\_USER /usr/lib/mycroft-core}
-    \item \texttt{git clone https://github.com/MycroftAI/mycroft-core.git \textbackslash\newline /usr/lib/mycroft-core}
+    \item \texttt{sudo chown your\_user /usr/lib/mycroft-core}
+    \item \texttt{git clone https://github.com/MycroftAI/mycroft-core.git \newline /usr/lib/mycroft-core}
     \item \texttt{/usr/lib/mycroft-core/dev\_setup.sh -sm}
 \end{itemize}
 Tras introducir el último comando se abrirá una instalación interactiva de Mycroft. En todas las preguntas deberemos responder escribiendo la letra Y en la terminal.
@@ -66,7 +67,9 @@ Para instalar QtDesigner deberemos escribir el siguiente comando en una terminal
 \end{itemize}
 Una vez hecho esto, podremos acceder al programa desde el menú de aplicaciones del sistema.
 
--- Completar explicación de uso --
+Aquí podemos crear una ventana de la lista de opciones que se nos ofrece al abrir el programa. Una vez lo hagamos, tendremos tres columnas. En la parte central se nos mostrará el diseño de lo que estamos creando y podremos reorganizar los elementos arrastrándolos. En la parte izquierda tendremos una serie de \textit{widgets} que podemos añadir a la ventana que hemos creado simplemente con arrastrarlos y soltarlos dentro de ella. Finalmente, en la parte derecha podremos configurar una serie de parámetros acerca del elemento que hayamos seleccionado (como el texto de una etiqueta o de un campo de texto)
+
+\imagen{qtdesigner}{Captura de pantalla de Qt Designer}
 
 \subsection{Poedit}
 Para editar los archivos de traducción de la interfaz es recomendable usar un programa que las muestre de forma visual y ofrezca algunas herramientas, como Poedit.
@@ -76,7 +79,7 @@ Para instalarlo, es tan sencillo como hacer:
     \item \texttt{sudo apt install poedit}
 \end{itemize}
 
--- Completar pequeño manual de uso --
+En la pantalla principal de la aplicación se nos mostrará la opción de editar una traducción existente o empezar una nueva a partir de una plantilla. Elegimos la que nos corresponda 
 
 \subsection{Visual Studio Code}
 Si bien es posible usar cualquier editor de texto, voy a describir el proceso para instalar Visual Studio Code, ya que es uno de los editores más completos que existen a día de hoy.
@@ -102,7 +105,8 @@ Posteriormente, debemos usar los siguientes comandos para crear las carpetas nec
     \item \texttt{mkdir -p \char`\~/.config/mycroft}
     \item \texttt{cp -r ./src/UBUVoiceAssistant/skills/. /opt/mycroft/skills}
     \item \texttt{sudo mkdir -p /usr/lib/UBUVoiceAssistant}
-    \item \texttt{sudo cp -r ./src/UBUVoiceAssistant/. /usr/lib/UBUVoiceAssistant}
+    \item \texttt{sudo chown your\_user /usr/lib/UBUVoiceAssistant}
+    \item \texttt{cp -r ./src/UBUVoiceAssistant/ /usr/lib/UBUVoiceAssistant}
 \end{itemize}
 
 Para ejecutarlo desde el entorno de desarrollo, escribimos:
